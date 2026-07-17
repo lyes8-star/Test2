@@ -804,6 +804,11 @@ navToggle.addEventListener('click', () => {
   const open = nav.classList.toggle('open');
   navToggle.setAttribute('aria-expanded', open);
   document.body.classList.toggle('nav-open', open);
+  if (open) {
+    header.classList.add('header--topbar-hidden');
+  } else {
+    updateScrollUI();
+  }
 });
 
 function closeMobileNav() {
@@ -814,6 +819,7 @@ function closeMobileNav() {
   servicesToggle?.setAttribute('aria-expanded', 'false');
   exploreDropdown?.classList.remove('open');
   exploreToggle?.setAttribute('aria-expanded', 'false');
+  updateScrollUI();
 }
 
 document.querySelectorAll('.nav__link:not(.nav__link--parent), .nav__mega-item, .nav__mega-all').forEach((link) => {

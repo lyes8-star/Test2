@@ -575,7 +575,7 @@ function articlePageHtml(item) {
   <link rel="preload" href="../../fonts/font-2.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../../fonts/font-5.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../../fonts/fonts.css?v=24">
-  <link rel="stylesheet" href="../../css/style.css?v=28">
+  <link rel="stylesheet" href="../../css/style.css?v=29">
 </head>
 <body class="page-service" data-news-slug="${esc(item.slug)}">
   <a class="skip-link" href="#main">Aller au contenu</a>
@@ -586,7 +586,6 @@ function articlePageHtml(item) {
         <span></span><span></span><span></span>
       </button>
       <nav class="nav" id="nav" aria-label="Navigation principale">
-        <p class="nav__mobile-banner">Menu Procept</p>
         <a href="../" class="nav__link">Actualités</a>
         <a href="../../#contact" class="nav__link">Contact</a>
         <div class="nav__mobile-cta">
