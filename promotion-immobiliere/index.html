@@ -14,7 +14,7 @@
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="../manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="../favicon.svg">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png">
 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
@@ -23,13 +23,18 @@
   <meta property="og:title" id="ogTitle" content="Votre Maison clé en main à Rueil-Malmaison : votre devis gratuit.">
   <meta property="og:description" id="ogDescription" content="Promoteur immobilier Procept : maisons haut de gamme, bioclimatiques et intelligentes dans l'ouest parisien, près de Versailles et Rueil-Malmaison. Devis gratuit.">
   <meta property="og:image" id="ogImage" content="https://www.procept.fr/contenu/photos/services/promotion.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Procept : Promotion immobilière autour de Versailles — Procept">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" id="twTitle" content="Votre Maison clé en main à Rueil-Malmaison : votre devis gratuit.">
   <meta name="twitter:description" id="twDescription" content="Promoteur immobilier Procept : maisons haut de gamme, bioclimatiques et intelligentes dans l'ouest parisien, près de Versailles et Rueil-Malmaison. Devis gratuit.">
   <meta name="twitter:image" id="twImage" content="https://www.procept.fr/contenu/photos/services/promotion.jpg">
-  <link rel="stylesheet" href="../fonts/fonts.css?v=21">
-<link rel="stylesheet" href="../css/style.css?v=22">
+  <link rel="preload" href="../fonts/font-2.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/font-5.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../fonts/fonts.css?v=23">
+<link rel="stylesheet" href="../css/style.css?v=23">
     <script>
     (function () {
       try {
@@ -45,10 +50,8 @@
     })();
   </script>
 <link rel="preload" as="image" href="../contenu/photos/services/promotion.jpg" fetchpriority="high">
-  <script type="application/ld+json" id="jsonldService"></script>
-  <script type="application/ld+json" id="jsonldBreadcrumb"></script>
   <!-- SEO:JSONLD:BEGIN -->
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Procept : Promotion immobilière autour de Versailles","description":"Promoteur immobilier Procept : maisons haut de gamme, bioclimatiques et intelligentes dans l'ouest parisien, près de Versailles et Rueil-Malmaison.","provider":{"@id":"https://www.procept.fr/#business"},"areaServed":{"@type":"AdministrativeArea","name":"Île-de-France"},"url":"https://www.procept.fr/promotion-immobiliere/"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Procept : Promotion immobilière autour de Versailles","description":"Promoteur immobilier Procept : maisons haut de gamme, bioclimatiques et intelligentes dans l'ouest parisien, près de Versailles et Rueil-Malmaison. Devis gratuit.","provider":{"@id":"https://www.procept.fr/#business"},"areaServed":{"@type":"AdministrativeArea","name":"Île-de-France"},"url":"https://www.procept.fr/promotion-immobiliere/"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://www.procept.fr/"},{"@type":"ListItem","position":2,"name":"Promotion immobilière","item":"https://www.procept.fr/promotion-immobiliere/"}]}</script>
 <!-- SEO:JSONLD:END -->
 </head>
@@ -160,7 +163,7 @@
 
   <main id="main">
     <section class="page-hero" id="top">
-      <img class="page-hero__image" id="pageHeroImage" src="../contenu/photos/services/promotion.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
+      <picture>   <source type="image/webp" srcset="../contenu/photos/services/promotion-800w.webp 800w, ../contenu/photos/services/promotion-1200w.webp 1200w" sizes="100vw">   <img class="page-hero__image" id="pageHeroImage" src="../contenu/photos/services/promotion.jpg" alt="Procept : Promotion immobilière autour de Versailles — Procept" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high"> </picture>
       <div class="page-hero__overlay"></div>
       <div class="page-hero__content container">
         <nav class="breadcrumb" aria-label="Fil d'Ariane">
@@ -168,10 +171,10 @@
           <span aria-hidden="true">/</span>
           <span>Promotion immobilière</span>
         </nav>
-        <p class="page-hero__eyebrow" id="pageEyebrow"></p>
-        <p class="page-hero__brand" id="pageBrand">PROCEPT</p>
-        <h1 class="page-hero__title" id="pageTitle"></h1>
-        <p class="page-hero__desc" id="pageDesc"></p>
+        <p class="page-hero__eyebrow" id="pageEyebrow">Promotion immobilière</p>
+        <p class="page-hero__brand" id="pageBrand">Procept</p>
+        <h1 class="page-hero__title" id="pageTitle">Procept : Promotion immobilière autour de Versailles</h1>
+        <p class="page-hero__desc" id="pageDesc">Maison sur-mesure, bioclimatique, intelligente et personnalisée — du terrain à la commercialisation.</p>
         <div class="page-hero__actions">
           <a href="#realisations" class="btn btn--outline">Nos réalisations</a>
         </div>
@@ -179,7 +182,7 @@
     </section>
 
     <section class="section page-intro reveal" id="intro">
-      <div class="container page-intro__inner" id="pageIntro"></div>
+      <div class="container page-intro__inner" id="pageIntro"><p class="page-intro__p">Procept conçoit des maisons sur-mesure, bioclimatiques, intelligentes et personnalisées. En tant que promoteur immobilier, nous accompagnons chaque programme de l'étude de marché à la commercialisation, dans un cadre contractuel clair.</p><p class="page-intro__p">Le contrat de promotion immobilière formalise notre engagement : étude de faisabilité, recherche et sécurisation du terrain, travail avec les architectes, obtention des permis de construire, puis réalisation et livraison.</p><p class="page-intro__p">Faire confiance à Procept, c'est s'appuyer sur une entreprise familiale de l'ouest parisien, proche de Versailles et de Rueil-Malmaison, pour un projet clé en main maîtrisé de bout en bout.</p></p><p class="page-intro__p">Le contrat de promotion immobilière formalise notre engagement : étude de faisabilité, recherche et sécurisation du terrain, travail avec les architectes, obtention des permis de construire, puis réalisation et livraison.</p><p class="page-intro__p">Faire confiance à Procept, c'est s'appuyer sur une entreprise familiale de l'ouest parisien, proche de Versailles et de Rueil-Malmaison, pour un projet clé en main maîtrisé de bout en bout.</p></div>
     </section>
 
     <section class="section page-highlights reveal" id="atouts">
@@ -299,7 +302,7 @@
 <script defer src="../js/chat.js?v=14"></script>
   <script defer src="../js/pwa-install.js?v=4"></script>
   <script defer src="../js/search.js?v=14"></script>
-  <script defer src="../js/content-loader.js?v=14"></script>
-  <script defer src="../js/page.js?v=21"></script>
+  <script defer src="../js/content-loader.js?v=5"></script>
+  <script defer src="../js/page.js?v=22"></script>
 </body>
 </html>

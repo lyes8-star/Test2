@@ -1,6 +1,6 @@
 /**
- * Charge le contenu éditable depuis contenu/*.json (GitHub-friendly),
- * avec repli sur data/content.json puis /api/content.
+ * Charge le contenu : monolithe data/content.json d’abord (1 requête),
+ * puis contenu/*.json, puis /api/content.
  */
 (function (global) {
   const PART_FILES = [
@@ -51,13 +51,13 @@
     const basePath = (options && options.basePath) || '';
 
     try {
-      return await loadFromContenu(basePath);
+      return await loadFromMonolith(basePath);
     } catch (err) {
-      console.warn('Contenu fractionné indisponible, repli content.json', err);
+      console.warn('content.json indisponible, repli contenu/*.json', err);
     }
 
     try {
-      return await loadFromMonolith(basePath);
+      return await loadFromContenu(basePath);
     } catch (_) { /* try API */ }
 
     try {
@@ -67,5 +67,27 @@
     throw new Error('Impossible de charger le contenu du site');
   }
 
-  global.ProceptContent = { load, PART_FILES };
+  /** WebP srcset helpers for JPG assets */
+  function webpSrcset(path) {
+    if (!path || !/\.jpe?g$/i.test(path)) return '';
+    const base = path.replace(/\.jpe?g$/i, '');
+    return `${base}-800w.webp 800w, ${base}-1200w.webp 1200w`;
+  }
+
+  function pictureHtml(path, alt, opts) {
+    const o = opts || {};
+    const width = o.width || 640;
+    const height = o.height || 480;
+    const loading = o.loading || 'lazy';
+    const decoding = o.decoding || 'async';
+    const fetchpriority = o.fetchpriority ? ` fetchpriority="${o.fetchpriority}"` : '';
+    const cls = o.className ? ` class="${o.className}"` : '';
+    const sizes = o.sizes || '(max-width: 900px) 100vw, 640px';
+    const srcset = webpSrcset(path);
+    const img = `<img${cls} src="${path}" alt="${alt}" width="${width}" height="${height}" loading="${loading}" decoding="${decoding}"${fetchpriority}>`;
+    if (!srcset) return img;
+    return `<picture><source type="image/webp" srcset="${srcset}" sizes="${sizes}">${img}</picture>`;
+  }
+
+  global.ProceptContent = { load, PART_FILES, webpSrcset, pictureHtml };
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -135,117 +135,29 @@ function absoluteUrl(path) {
 
 function setMeta(selector, attr, value) {
   const el = document.querySelector(selector);
-  if (el && value != null) el.setAttribute(attr, value);
+  if (!el || value == null) return;
+  if (el.getAttribute(attr) !== String(value)) el.setAttribute(attr, value);
 }
 
 function applySeo(data) {
-  const { site, faq, zones } = data;
+  const { site } = data;
   const title = `${site.name} — ${site.tagline}`;
   const desc = site.description;
   const url = site.url || 'https://www.procept.fr/';
   const image = absoluteUrl(site.ogImage || 'contenu/photos/hero/slide-1.jpg');
 
-  document.title = title;
+  if (document.title !== title) document.title = title;
   setMeta('meta[name="description"]', 'content', desc);
   setMeta('#canonicalLink', 'href', url);
   setMeta('#ogUrl', 'content', url);
   setMeta('#ogTitle', 'content', title);
   setMeta('#ogDescription', 'content', desc);
   setMeta('#ogImage', 'content', image);
+  setMeta('meta[property="og:image:alt"]', 'content', title);
   setMeta('#twTitle', 'content', title);
   setMeta('#twDescription', 'content', desc);
   setMeta('#twImage', 'content', image);
-
-  const phone = `+33${site.phone.replace(/\s/g, '').replace(/^0/, '')}`;
-  const business = {
-    '@context': 'https://schema.org',
-    '@type': 'HomeAndConstructionBusiness',
-    '@id': `${url}#business`,
-    name: site.name,
-    description: desc,
-    url,
-    telephone: phone,
-    email: site.email,
-    image,
-    logo: absoluteUrl('favicon.svg'),
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: site.address.split(',')[0]?.trim() || site.address,
-      addressLocality: site.city || 'Mareil-Marly',
-      postalCode: site.postalCode || '78750',
-      addressRegion: site.region || 'Île-de-France',
-      addressCountry: site.country || 'FR',
-    },
-    geo: site.geo ? {
-      '@type': 'GeoCoordinates',
-      latitude: site.geo.lat,
-      longitude: site.geo.lng,
-    } : undefined,
-    openingHoursSpecification: {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '09:00',
-      closes: '18:00',
-    },
-    areaServed: (zones?.cities || site.keywords || []).map((city) => ({
-      '@type': 'City',
-      name: city,
-    })),
-    publishingPrinciples: absoluteUrl('confidentialite/'),
-    privacyPolicy: absoluteUrl('confidentialite/'),
-    priceRange: '€€€',
-    logo: {
-      '@type': 'ImageObject',
-      url: absoluteUrl(site.ogImage || 'contenu/photos/hero/slide-1.jpg'),
-      width: 1200,
-      height: 630,
-    },
-    sameAs: Object.values(site.social || {}).filter((u) => {
-      if (!u || !/^https?:\/\//i.test(u)) return false;
-      const cleaned = u.replace(/\/$/, '');
-      const placeholders = [
-        'https://www.facebook.com',
-        'https://facebook.com',
-        'https://www.instagram.com',
-        'https://instagram.com',
-        'https://www.linkedin.com',
-        'https://linkedin.com',
-        'https://www.youtube.com',
-        'https://youtube.com',
-      ];
-      return !placeholders.includes(cleaned) && cleaned.split('/').length > 3;
-    }),
-  };
-
-  document.getElementById('jsonldBusiness').textContent = JSON.stringify(business);
-
-  const websiteLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    '@id': `${url}#website`,
-    name: site.name,
-    url,
-    description: desc,
-    publisher: { '@id': `${url}#business` },
-  };
-  const elWebsite = document.getElementById('jsonldWebsite');
-  if (elWebsite) elWebsite.textContent = JSON.stringify(websiteLd);
-
-  if (faq?.length) {
-    const faqLd = {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faq.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answer,
-        },
-      })),
-    };
-    document.getElementById('jsonldFaq').textContent = JSON.stringify(faqLd);
-  }
+  // JSON-LD is injected statically by generate-seo.js (SEO:JSONLD blocks).
 }
 
 function renderSite() {
@@ -469,10 +381,21 @@ function renderHero(slides) {
   const container = document.getElementById('heroSlides');
   const dots = document.getElementById('heroDots');
   const frame = document.getElementById('heroFrame');
+  const lcp = document.getElementById('heroLcp');
 
-  container.innerHTML = slides.map((slide, i) =>
-    `<div class="hero__slide${i === 0 ? ' active' : ''}" style="background-image:url('${slide.image}')" data-index="${i}" role="img" aria-label="${escapeHtml(slide.title)}"></div>`
-  ).join('');
+  container.innerHTML = slides.map((slide, i) => {
+    const webp = window.ProceptContent?.webpSrcset?.(slide.image) || '';
+    const bg = webp
+      ? ''
+      : `style="background-image:url('${slide.image}')"`;
+    const picture = webp
+      ? `<picture><source type="image/webp" srcset="${webp}" sizes="(max-width: 900px) 100vw, 60vw"><img src="${slide.image}" alt="" width="1200" height="750" decoding="async"></picture>`
+      : '';
+    return `<div class="hero__slide${i === 0 ? ' active' : ''}" ${bg} data-index="${i}" role="img" aria-label="${escapeHtml(slide.title)}">${picture}</div>`;
+  }).join('');
+
+  if (lcp) lcp.hidden = true;
+  if (frame) frame.classList.add('hero__frame--ready');
 
   dots.innerHTML = slides.map((_, i) =>
     `<button type="button" class="hero__dot${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="Slide ${i + 1}"></button>`
@@ -644,7 +567,9 @@ function renderGallery() {
     const category = item.category || 'autre';
     return `
     <button type="button" class="gallery__item reveal${hide ? ' hidden' : ''}" data-index="${i}" data-id="${item.id}" data-category="${category}" data-status="${status}" aria-label="${escapeHtml(item.caption)}">
-      <img src="${item.image}" alt="${escapeHtml(item.caption)} — ${escapeHtml(categoryLabel(category))} Procept" width="640" height="480" loading="lazy" decoding="async">
+      ${window.ProceptContent?.pictureHtml
+        ? window.ProceptContent.pictureHtml(item.image, `${escapeHtml(item.caption)} — ${escapeHtml(categoryLabel(category))} Procept`, { width: 640, height: 480, sizes: '(max-width: 900px) 50vw, 320px' })
+        : `<img src="${item.image}" alt="${escapeHtml(item.caption)} — ${escapeHtml(categoryLabel(category))} Procept" width="640" height="480" loading="lazy" decoding="async">`}
       <span class="gallery__caption">
         <span class="gallery__meta">
           <span class="gallery__cat">${escapeHtml(categoryLabel(category))}</span>

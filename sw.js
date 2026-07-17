@@ -1,10 +1,12 @@
 /* Service worker Procept — cache app shell (chemins relatifs pour GitHub Pages) */
-const CACHE = 'procept-shell-v21';
+const CACHE = 'procept-shell-v22';
 
 function shellUrls() {
   const base = self.registration.scope;
   return [
     './',
+    'offline.html',
+    'data/content.json',
     'css/style.css',
     'js/main.js',
     'js/page.js',
@@ -15,13 +17,20 @@ function shellUrls() {
     'js/social.js',
     'js/analytics.js',
     'js/consent.js',
+    'js/content-loader.js',
     'js/map-google.js',
     'js/pwa-install.js',
+    'js/protect.js',
     'fonts/fonts.css',
+    'fonts/font-2.woff2',
+    'fonts/font-5.woff2',
     'manifest.webmanifest',
     'favicon.svg',
     'icons/icon-192.png',
     'icons/icon-512.png',
+    'contenu/photos/hero/slide-1.jpg',
+    'contenu/photos/hero/slide-1-800w.webp',
+    'contenu/photos/hero/slide-1-1200w.webp',
   ].map((path) => new URL(path, base).href);
 }
 
@@ -88,7 +97,11 @@ self.addEventListener('fetch', (event) => {
         .catch(() =>
           caches.match(req).then((r) => {
             if (r) return r;
-            if (isHtml) return caches.match(new URL('./', self.registration.scope).href);
+            if (isHtml) {
+              return caches
+                .match(new URL('offline.html', self.registration.scope).href)
+                .then((offline) => offline || caches.match(new URL('./', self.registration.scope).href));
+            }
             return undefined;
           })
         )
