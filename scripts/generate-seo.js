@@ -575,7 +575,7 @@ function articlePageHtml(item) {
   <link rel="preload" href="../../fonts/font-2.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../../fonts/font-5.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../../fonts/fonts.css?v=24">
-  <link rel="stylesheet" href="../../css/style.css?v=25">
+  <link rel="stylesheet" href="../../css/style.css?v=26">
 </head>
 <body class="page-service" data-news-slug="${esc(item.slug)}">
   <a class="skip-link" href="#main">Aller au contenu</a>
@@ -641,7 +641,7 @@ function articlePageHtml(item) {
     </div>
   </footer>
   <script src="../../js/consent.js?v=4" defer></script>
-  <script src="../../js/social.js?v=4" defer></script>
+  <script src="../../js/social.js?v=5" defer></script>
   <script src="../../js/analytics.js?v=4" defer></script>
   <script src="../../js/a11y.js?v=14" defer></script>
   <script src="../../js/protect.js?v=19" defer></script>

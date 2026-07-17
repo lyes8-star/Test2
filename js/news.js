@@ -112,6 +112,7 @@
       });
     }
     if (window.ProceptSocial) window.ProceptSocial.render(content.site?.social || {}, '../');
+    if (window.ProceptCopy) window.ProceptCopy.bind();
     if (window.ProceptAnalytics) {
       window.ProceptAnalytics.init({
         adsId: content.site?.adsId || '',
@@ -283,6 +284,7 @@
       el.href = phoneHref;
     });
     if (window.ProceptSocial) window.ProceptSocial.render(site.social || {}, '../');
+    if (window.ProceptCopy) window.ProceptCopy.bind();
   }
 
   function renderList() {
