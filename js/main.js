@@ -399,7 +399,7 @@ function renderFaqTicker(items) {
   const root = document.getElementById('faqTicker');
   const qEl = document.getElementById('faqTickerQuestion');
   const aEl = document.getElementById('faqTickerAnswer');
-  const content = document.querySelector('.faq-ticker__content');
+  const panel = document.querySelector('.faq-ticker__content');
   if (!root || !qEl || !aEl) return;
 
   const list = (items || []).filter((item) => item && item.question && item.answer);
@@ -416,11 +416,11 @@ function renderFaqTicker(items) {
   };
 
   const goNext = () => {
-    if (content) content.classList.add('is-swap');
+    if (panel) panel.classList.add('is-swap');
     window.setTimeout(() => {
       faqTickerIndex = (faqTickerIndex + 1) % list.length;
       show(faqTickerIndex);
-      if (content) content.classList.remove('is-swap');
+      if (panel) panel.classList.remove('is-swap');
     }, 420);
   };
 
