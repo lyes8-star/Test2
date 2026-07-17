@@ -27,6 +27,7 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
   '.woff2': 'font/woff2',
+  '.webmanifest': 'application/manifest+json',
 };
 
 function readContent() {
@@ -35,6 +36,14 @@ function readContent() {
 
 function writeContent(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+  try {
+    require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'scripts', 'generate-seo.js')], {
+      cwd: __dirname,
+      stdio: 'pipe',
+    });
+  } catch (err) {
+    console.warn('generate-seo failed:', err.message);
+  }
 }
 
 function hashPassword(password) {
@@ -122,7 +131,7 @@ function sendJson(res, status, data) {
   res.end(JSON.stringify(data));
 }
 
-function sendFile(res, filePath) {
+function sendFile(res, filePath, extraHeaders = {}) {
   const ext = path.extname(filePath).toLowerCase();
   const mime = MIME_TYPES[ext] || 'application/octet-stream';
   fs.readFile(filePath, (err, data) => {
@@ -131,7 +140,19 @@ function sendFile(res, filePath) {
       res.end('Not found');
       return;
     }
-    res.writeHead(200, { 'Content-Type': mime, 'Cache-Control': ext.match(/\.(css|js)$/) ? 'no-cache' : 'public, max-age=86400' });
+    let cache = 'public, max-age=86400';
+    if (ext === '.html' || ext === '.json' || ext === '.webmanifest') {
+      cache = 'no-cache';
+    } else if (ext === '.css' || ext === '.js') {
+      cache = 'public, max-age=3600';
+    } else if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.ico', '.woff2'].includes(ext)) {
+      cache = 'public, max-age=604800';
+    }
+    res.writeHead(200, {
+      'Content-Type': mime,
+      'Cache-Control': cache,
+      ...extraHeaders,
+    });
     res.end(data);
   });
 }
@@ -301,12 +322,14 @@ const server = http.createServer(async (req, res) => {
   if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
     const indexPath = path.join(filePath, 'index.html');
     if (fs.existsSync(indexPath)) {
-      sendFile(res, indexPath);
+      const headers = pathname.startsWith('/admin') ? { 'X-Robots-Tag': 'noindex, nofollow' } : {};
+      sendFile(res, indexPath, headers);
       return;
     }
   }
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    sendFile(res, filePath);
+    const headers = pathname.startsWith('/admin') ? { 'X-Robots-Tag': 'noindex, nofollow' } : {};
+    sendFile(res, filePath, headers);
     return;
   }
   // Trailing-slash optional: /constructeur → constructeur/index.html
@@ -322,7 +345,7 @@ const server = http.createServer(async (req, res) => {
   if (pathname.startsWith('/admin')) {
     const adminPath = path.join(ROOT_DIR, 'admin', 'index.html');
     if (fs.existsSync(adminPath)) {
-      sendFile(res, adminPath);
+      sendFile(res, adminPath, { 'X-Robots-Tag': 'noindex, nofollow' });
       return;
     }
   }

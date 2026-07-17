@@ -68,6 +68,9 @@
         phone: content.site?.phone,
       });
     }
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../sw.js').catch(() => {});
+    }
     initReveal();
     initNav();
     initScrollUI();
@@ -349,6 +352,16 @@
       e.preventDefault();
       const open = servicesDropdown.classList.toggle('open');
       servicesToggle.setAttribute('aria-expanded', open);
+    });
+
+    nav?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('open');
+        document.body.classList.remove('nav-open');
+        toggle?.setAttribute('aria-expanded', 'false');
+        servicesDropdown?.classList.remove('open');
+        servicesToggle?.setAttribute('aria-expanded', 'false');
+      });
     });
 
     document.addEventListener('click', (e) => {

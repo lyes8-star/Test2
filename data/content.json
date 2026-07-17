@@ -33,9 +33,9 @@
     "country": "FR",
     "ogImage": "images/hero/slide-1.jpg",
     "social": {
-      "facebook": "https://www.facebook.com/",
-      "instagram": "https://www.instagram.com/",
-      "linkedin": "https://www.linkedin.com/",
+      "facebook": "",
+      "instagram": "",
+      "linkedin": "",
       "youtube": ""
     }
   },
@@ -769,8 +769,8 @@
       "slug": "promotion-immobiliere",
       "label": "Promotion immobilière",
       "seo": {
-        "title": "Votre Maison clé en main à Rueil-Malmaison : votre devis gratuit.",
-        "description": "Promoteur immobilier Procept : maisons haut de gamme, bioclimatiques et intelligentes dans l'ouest parisien, près de Versailles et Rueil-Malmaison. Devis gratuit."
+        "title": "Promotion immobilière et maisons clé en main près de Rueil-Malmaison — Procept",
+        "description": "Promoteur immobilier Procept : maisons haut de gamme, bioclimatiques et intelligentes dans l'ouest parisien, près de Versailles et Rueil-Malmaison."
       },
       "hero": {
         "image": "images/services/promotion.jpg",
@@ -862,9 +862,11 @@
       "date": "2026-06-15",
       "excerpt": "Procept vient de livrer une maison individuelle basse consommation, conçue sur-mesure près de Saint-Germain-en-Laye.",
       "body": [
-        "Notre équipe vient d’achever la livraison clé en main d’une maison individuelle certifiée RE2020 à Mareil-Marly.",
+        "Notre équipe vient d’achever la livraison clé en main d’une maison individuelle certifiée RE2020 à Mareil-Marly, à proximité de Saint-Germain-en-Laye.",
         "Le projet a mobilisé notre bureau d’études et nos partenaires architectes pour allier performances énergétiques, matériaux haut de gamme et grandes ouvertures lumineuses.",
-        "Vous avez un terrain dans l’ouest parisien ? Contactez Procept pour un devis gratuit."
+        "Isolation, menuiseries et systèmes de chauffage ont été choisis pour respecter la réglementation environnementale tout en préservant le confort au quotidien.",
+        "Ce type de construction illustre l’accompagnement Procept : étude du terrain, plans, permis, suivi de chantier et remise des clés.",
+        "Vous avez un terrain dans l’ouest parisien ? Contactez Procept pour une étude et un devis gratuits."
       ],
       "image": "images/gallery/gal-01.jpg",
       "published": true
@@ -876,9 +878,10 @@
       "date": "2026-05-02",
       "excerpt": "Agrandissement d’une maison familiale avec extension bois et terrasse, dans le respect du bâti existant.",
       "body": [
-        "Procept a réalisé une extension en ossature bois pour une famille proche de Versailles, avec vérification structurelle et diagnostic préalable.",
-        "Le chantier a intégré une terrasse et une continuité visuelle avec les espaces de vie existants.",
-        "Rénovation, agrandissement ou surélévation : nous intervenons dans tout l’ouest parisien."
+        "Procept a réalisé une extension en ossature bois pour une famille proche de Versailles, avec vérification structurelle et diagnostic préalable du bâti existant.",
+        "Le chantier a intégré une terrasse et une continuité visuelle avec les espaces de vie, tout en respectant les contraintes urbanistiques locales.",
+        "L’ossature bois permet un chantier plus rapide, une bonne performance thermique et une extension légère adaptée aux maisons de l’ouest parisien.",
+        "Rénovation, agrandissement ou surélévation : nous intervenons à Versailles, Rueil-Malmaison, Marly-le-Roi et dans les Yvelines."
       ],
       "image": "images/gallery/gal-19.jpg",
       "published": true
@@ -890,9 +893,10 @@
       "date": "2026-03-20",
       "excerpt": "Étude de faisabilité et montage d’un programme de maisons haut de gamme clé en main dans l’ouest parisien.",
       "body": [
-        "En tant que promoteur, Procept accompagne le montage de programmes immobiliers : terrain, permis, coordination et commercialisation.",
-        "Un nouveau projet près de Rueil-Malmaison illustre notre approche en deux phases — montage puis réalisation.",
-        "Pour toute demande de promotion immobilière, notre équipe reste à votre écoute."
+        "En tant que promoteur, Procept accompagne le montage de programmes immobiliers : recherche de terrain, étude de faisabilité, permis, coordination et commercialisation.",
+        "Un nouveau projet près de Rueil-Malmaison illustre notre approche en deux phases — montage puis réalisation — pour des maisons haut de gamme clé en main.",
+        "Le contrat de promotion immobilière formalise les engagements : délais, qualité et accompagnement des acquéreurs jusqu’à la livraison.",
+        "Pour toute demande de promotion immobilière dans l’ouest parisien, notre équipe reste à votre écoute à Mareil-Marly."
       ],
       "image": "images/services/promotion.jpg",
       "published": true
@@ -904,8 +908,10 @@
       "date": "2026-07-01",
       "excerpt": "Suivi de gros œuvre et plancher chauffant sur un chantier de construction individuelle.",
       "body": [
-        "Plusieurs chantiers sont actuellement en cours dans les Yvelines, avec un suivi quotidien par nos équipes.",
-        "Gros œuvre, charpente et finitions : chaque étape est contrôlée pour respecter délais et qualités attendues."
+        "Plusieurs chantiers sont actuellement en cours dans les Yvelines, avec un suivi quotidien par nos équipes de conducteurs de travaux.",
+        "Gros œuvre, charpente, plancher chauffant et finitions : chaque étape est contrôlée pour respecter délais, normes et qualité attendue.",
+        "Nos photos « En cours » sur le site montrent l’avancement réel des projets de construction et de rénovation autour de Saint-Germain-en-Laye.",
+        "Vous souhaitez suivre un projet similaire ? Demandez un devis via l’assistant chantier ou le formulaire de contact Procept."
       ],
       "image": "images/gallery/gal-44.jpg",
       "published": true

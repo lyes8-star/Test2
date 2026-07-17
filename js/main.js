@@ -36,6 +36,9 @@ function afterLoad() {
       phone: content.site?.phone,
     });
   }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
   initReveal();
   initScrollSpy();
   initGalleryFilters();
@@ -108,7 +111,27 @@ function applySeo(data) {
       name: city,
     })),
     priceRange: '€€€',
-    sameAs: Object.values(site.social || {}).filter(Boolean),
+    logo: {
+      '@type': 'ImageObject',
+      url: absoluteUrl(site.ogImage || 'images/hero/slide-1.jpg'),
+      width: 1200,
+      height: 630,
+    },
+    sameAs: Object.values(site.social || {}).filter((u) => {
+      if (!u || !/^https?:\/\//i.test(u)) return false;
+      const cleaned = u.replace(/\/$/, '');
+      const placeholders = [
+        'https://www.facebook.com',
+        'https://facebook.com',
+        'https://www.instagram.com',
+        'https://instagram.com',
+        'https://www.linkedin.com',
+        'https://linkedin.com',
+        'https://www.youtube.com',
+        'https://youtube.com',
+      ];
+      return !placeholders.includes(cleaned) && cleaned.split('/').length > 3;
+    }),
   };
 
   document.getElementById('jsonldBusiness').textContent = JSON.stringify(business);
@@ -121,14 +144,6 @@ function applySeo(data) {
     url,
     description: desc,
     publisher: { '@id': `${url}#business` },
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${url}?q={search_term_string}`,
-      },
-      'query-input': 'required name=search_term_string',
-    },
   };
   const elWebsite = document.getElementById('jsonldWebsite');
   if (elWebsite) elWebsite.textContent = JSON.stringify(websiteLd);
@@ -255,13 +270,13 @@ function renderNewsHome(items) {
 
   grid.innerHTML = published.map((n) => `
     <article class="news-card reveal">
-      <a href="actualites/?slug=${encodeURIComponent(n.slug || n.id)}" class="news-card__media">
+      <a href="actualites/${encodeURIComponent(n.slug || n.id)}/" class="news-card__media">
         <img src="${n.image}" alt="" width="640" height="400" loading="lazy" decoding="async">
       </a>
       <div class="news-card__body">
         <time class="news-card__date" datetime="${escapeHtml(n.date || '')}">${escapeHtml(formatNewsDate(n.date))}</time>
         <h3 class="news-card__title">
-          <a href="actualites/?slug=${encodeURIComponent(n.slug || n.id)}">${escapeHtml(n.title)}</a>
+          <a href="actualites/${encodeURIComponent(n.slug || n.id)}/">${escapeHtml(n.title)}</a>
         </h3>
         <p class="news-card__excerpt">${escapeHtml(n.excerpt || '')}</p>
       </div>
@@ -332,7 +347,9 @@ function renderHero(slides) {
 
 function updateHeroText(slide) {
   document.getElementById('heroDesc').textContent = slide.description;
-  document.getElementById('heroTitle').textContent = slide.title;
+  const subtitle = document.getElementById('heroSubtitle');
+  if (subtitle) subtitle.textContent = slide.title;
+  // H1 (#heroTitle) reste la marque Procept — ne pas l'écraser
 }
 
 function goToSlide(index, total) {
