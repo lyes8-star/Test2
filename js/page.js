@@ -308,15 +308,36 @@
       countEl.textContent = `${items.length} photo${items.length > 1 ? 's' : ''}`;
     }
 
+    const categoryLabels = {
+      construction: 'Construction',
+      renovation: 'Rénovation',
+      extension: 'Extension',
+      chantier: 'Chantier',
+      promotion: 'Promotion',
+      autre: 'Réalisation',
+    };
+    const statusLabels = {
+      'en-cours': 'En cours',
+      termine: 'Livré',
+    };
+
     const visible = items.slice(0, 9);
     grid.innerHTML = visible
-      .map(
-        (item, i) => `
-      <button type="button" class="gallery__item reveal" data-index="${i}">
+      .map((item, i) => {
+        const category = item.category || 'autre';
+        const status = item.status || 'termine';
+        return `
+      <button type="button" class="gallery__item reveal" data-index="${i}" aria-label="${escapeHtml(item.caption)}">
         <img src="${asset(item.image)}" alt="${escapeHtml(item.caption)} — Procept" width="640" height="480" loading="lazy" decoding="async">
-        <span class="gallery__caption">${escapeHtml(item.caption)}</span>
-      </button>`
-      )
+        <span class="gallery__caption">
+          <span class="gallery__meta">
+            <span class="gallery__cat">${escapeHtml(categoryLabels[category] || 'Réalisation')}</span>
+            <span class="gallery__status">${statusLabels[status] || 'Livré'}</span>
+          </span>
+          <span class="gallery__title">${escapeHtml(item.caption)}</span>
+        </span>
+      </button>`;
+      })
       .join('');
 
     grid.querySelectorAll('.gallery__item').forEach((el) => {
