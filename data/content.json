@@ -119,6 +119,7 @@
     "zone": "Nous sommes situés à Mareil-Marly et nous intervenons dans l'ouest parisien : Yvelines, Hauts-de-Seine, Marly-le-Roi, Saint-Germain-en-Laye, Versailles, Rueil-Malmaison.",
     "image": "images/gallery/gal-43-full.jpg"
   },
+  "contactImage": "images/gallery/gal-43-full.jpg",
   "services": [
     {
       "id": "construction",
@@ -541,69 +542,69 @@
       "status": "en-cours"
     }
   ],
-  "process": [
+  "news": [
     {
-      "id": "etude",
-      "title": "Étude",
-      "description": "Analyse de vos besoins, du terrain et du budget pour un avant-projet sur mesure.",
-      "image": "images/gallery/gal-01.jpg"
+      "id": "news-1",
+      "slug": "maison-re2020-mareil-marly",
+      "title": "Livraison d’une maison RE2020 à Mareil-Marly",
+      "date": "2026-06-15",
+      "excerpt": "Procept vient de livrer une maison individuelle basse consommation, conçue sur-mesure près de Saint-Germain-en-Laye.",
+      "body": [
+        "Notre équipe vient d’achever la livraison clé en main d’une maison individuelle certifiée RE2020 à Mareil-Marly, à proximité de Saint-Germain-en-Laye.",
+        "Le projet a mobilisé notre bureau d’études et nos partenaires architectes pour allier performances énergétiques, matériaux haut de gamme et grandes ouvertures lumineuses.",
+        "Isolation, menuiseries et systèmes de chauffage ont été choisis pour respecter la réglementation environnementale tout en préservant le confort au quotidien.",
+        "Ce type de construction illustre l’accompagnement Procept : étude du terrain, plans, permis, suivi de chantier et remise des clés.",
+        "Vous avez un terrain dans l’ouest parisien ? Contactez Procept pour une étude et un devis gratuits."
+      ],
+      "image": "images/gallery/gal-01.jpg",
+      "published": true
     },
     {
-      "id": "plans",
-      "title": "Plans",
-      "description": "Conception des plans, permis de construire et choix des matériaux haut de gamme.",
-      "image": "images/gallery/gal-38.jpg"
+      "id": "news-2",
+      "slug": "extension-ossature-bois-versailles",
+      "title": "Extension ossature bois près de Versailles",
+      "date": "2026-05-02",
+      "excerpt": "Agrandissement d’une maison familiale avec extension bois et terrasse, dans le respect du bâti existant.",
+      "body": [
+        "Procept a réalisé une extension en ossature bois pour une famille proche de Versailles, avec vérification structurelle et diagnostic préalable du bâti existant.",
+        "Le chantier a intégré une terrasse et une continuité visuelle avec les espaces de vie, tout en respectant les contraintes urbanistiques locales.",
+        "L’ossature bois permet un chantier plus rapide, une bonne performance thermique et une extension légère adaptée aux maisons de l’ouest parisien.",
+        "Rénovation, agrandissement ou surélévation : nous intervenons à Versailles, Rueil-Malmaison, Marly-le-Roi et dans les Yvelines."
+      ],
+      "image": "images/gallery/gal-19.jpg",
+      "published": true
     },
     {
-      "id": "chantier",
-      "title": "Chantier",
-      "description": "Suivi de chantier par des professionnels avertis, du gros œuvre aux finitions.",
-      "image": "images/gallery/gal-08.jpg"
+      "id": "news-3",
+      "slug": "programme-promotion-rueil",
+      "title": "Nouveau programme de promotion près de Rueil-Malmaison",
+      "date": "2026-03-20",
+      "excerpt": "Étude de faisabilité et montage d’un programme de maisons haut de gamme clé en main dans l’ouest parisien.",
+      "body": [
+        "En tant que promoteur, Procept accompagne le montage de programmes immobiliers : recherche de terrain, étude de faisabilité, permis, coordination et commercialisation.",
+        "Un nouveau projet près de Rueil-Malmaison illustre notre approche en deux phases — montage puis réalisation — pour des maisons haut de gamme clé en main.",
+        "Le contrat de promotion immobilière formalise les engagements : délais, qualité et accompagnement des acquéreurs jusqu’à la livraison.",
+        "Pour toute demande de promotion immobilière dans l’ouest parisien, notre équipe reste à votre écoute à Mareil-Marly."
+      ],
+      "image": "images/services/promotion.jpg",
+      "published": true
     },
     {
-      "id": "livraison",
-      "title": "Livraison",
-      "description": "Remise des clés et livraison clé en main de votre maison ou rénovation.",
-      "image": "images/gallery/gal-01.jpg"
+      "id": "news-4",
+      "slug": "chantier-en-cours-yvelines",
+      "title": "Chantier en cours dans les Yvelines",
+      "date": "2026-07-01",
+      "excerpt": "Suivi de gros œuvre et plancher chauffant sur un chantier de construction individuelle.",
+      "body": [
+        "Plusieurs chantiers sont actuellement en cours dans les Yvelines, avec un suivi quotidien par nos équipes de conducteurs de travaux.",
+        "Gros œuvre, charpente, plancher chauffant et finitions : chaque étape est contrôlée pour respecter délais, normes et qualité attendue.",
+        "Nos photos « En cours » sur le site montrent l’avancement réel des projets de construction et de rénovation autour de Saint-Germain-en-Laye.",
+        "Vous souhaitez suivre un projet similaire ? Demandez un devis via l’assistant chantier ou le formulaire de contact Procept."
+      ],
+      "image": "images/gallery/gal-44.jpg",
+      "published": true
     }
   ],
-  "contactImage": "images/gallery/gal-43-full.jpg",
-  "zones": {
-    "title": "Zones d'intervention",
-    "intro": "Basés à Mareil-Marly, nous intervenons dans l'ouest parisien : Yvelines, Hauts-de-Seine et communes limitrophes.",
-    "cities": [
-      "Mareil-Marly",
-      "Saint-Germain-en-Laye",
-      "Versailles",
-      "Rueil-Malmaison",
-      "Marly-le-Roi",
-      "Le Vésinet",
-      "Chatou",
-      "Croissy-sur-Seine",
-      "Le Pecq",
-      "Maisons-Laffitte",
-      "Poissy",
-      "La Celle-Saint-Cloud",
-      "Louveciennes",
-      "Bougival",
-      "Le Chesnay-Rocquencourt",
-      "Vélizy-Villacoublay",
-      "Saint-Cloud",
-      "Garches",
-      "Nanterre",
-      "Suresnes",
-      "Boulogne-Billancourt",
-      "Meudon",
-      "Sèvres",
-      "Chaville",
-      "Viroflay",
-      "Plaisir",
-      "Montigny-le-Bretonneux",
-      "Guyancourt",
-      "Orgeval",
-      "Chambourcy"
-    ]
-  },
   "faq": [
     {
       "question": "Procept construit-il des maisons neuves à Saint-Germain-en-Laye ?",
@@ -650,6 +651,42 @@
       "answer": "Utilisez l'assistant chantier (bouton Devis en bas à droite) : indiquez le type de projet, votre commune et vos coordonnées. Un email prérempli s'ouvre vers procept@procept.fr, ou poursuivez via le formulaire de contact."
     }
   ],
+  "zones": {
+    "title": "Zones d'intervention",
+    "intro": "Basés à Mareil-Marly, nous intervenons dans l'ouest parisien : Yvelines, Hauts-de-Seine et communes limitrophes.",
+    "cities": [
+      "Mareil-Marly",
+      "Saint-Germain-en-Laye",
+      "Versailles",
+      "Rueil-Malmaison",
+      "Marly-le-Roi",
+      "Le Vésinet",
+      "Chatou",
+      "Croissy-sur-Seine",
+      "Le Pecq",
+      "Maisons-Laffitte",
+      "Poissy",
+      "La Celle-Saint-Cloud",
+      "Louveciennes",
+      "Bougival",
+      "Le Chesnay-Rocquencourt",
+      "Vélizy-Villacoublay",
+      "Saint-Cloud",
+      "Garches",
+      "Nanterre",
+      "Suresnes",
+      "Boulogne-Billancourt",
+      "Meudon",
+      "Sèvres",
+      "Chaville",
+      "Viroflay",
+      "Plaisir",
+      "Montigny-le-Bretonneux",
+      "Guyancourt",
+      "Orgeval",
+      "Chambourcy"
+    ]
+  },
   "pages": {
     "construction": {
       "slug": "constructeur",
@@ -900,67 +937,30 @@
       "galleryFilter": "construction"
     }
   },
-  "news": [
+  "process": [
     {
-      "id": "news-1",
-      "slug": "maison-re2020-mareil-marly",
-      "title": "Livraison d’une maison RE2020 à Mareil-Marly",
-      "date": "2026-06-15",
-      "excerpt": "Procept vient de livrer une maison individuelle basse consommation, conçue sur-mesure près de Saint-Germain-en-Laye.",
-      "body": [
-        "Notre équipe vient d’achever la livraison clé en main d’une maison individuelle certifiée RE2020 à Mareil-Marly, à proximité de Saint-Germain-en-Laye.",
-        "Le projet a mobilisé notre bureau d’études et nos partenaires architectes pour allier performances énergétiques, matériaux haut de gamme et grandes ouvertures lumineuses.",
-        "Isolation, menuiseries et systèmes de chauffage ont été choisis pour respecter la réglementation environnementale tout en préservant le confort au quotidien.",
-        "Ce type de construction illustre l’accompagnement Procept : étude du terrain, plans, permis, suivi de chantier et remise des clés.",
-        "Vous avez un terrain dans l’ouest parisien ? Contactez Procept pour une étude et un devis gratuits."
-      ],
-      "image": "images/gallery/gal-01.jpg",
-      "published": true
+      "id": "etude",
+      "title": "Étude",
+      "description": "Analyse de vos besoins, du terrain et du budget pour un avant-projet sur mesure.",
+      "image": "images/gallery/gal-01.jpg"
     },
     {
-      "id": "news-2",
-      "slug": "extension-ossature-bois-versailles",
-      "title": "Extension ossature bois près de Versailles",
-      "date": "2026-05-02",
-      "excerpt": "Agrandissement d’une maison familiale avec extension bois et terrasse, dans le respect du bâti existant.",
-      "body": [
-        "Procept a réalisé une extension en ossature bois pour une famille proche de Versailles, avec vérification structurelle et diagnostic préalable du bâti existant.",
-        "Le chantier a intégré une terrasse et une continuité visuelle avec les espaces de vie, tout en respectant les contraintes urbanistiques locales.",
-        "L’ossature bois permet un chantier plus rapide, une bonne performance thermique et une extension légère adaptée aux maisons de l’ouest parisien.",
-        "Rénovation, agrandissement ou surélévation : nous intervenons à Versailles, Rueil-Malmaison, Marly-le-Roi et dans les Yvelines."
-      ],
-      "image": "images/gallery/gal-19.jpg",
-      "published": true
+      "id": "plans",
+      "title": "Plans",
+      "description": "Conception des plans, permis de construire et choix des matériaux haut de gamme.",
+      "image": "images/gallery/gal-38.jpg"
     },
     {
-      "id": "news-3",
-      "slug": "programme-promotion-rueil",
-      "title": "Nouveau programme de promotion près de Rueil-Malmaison",
-      "date": "2026-03-20",
-      "excerpt": "Étude de faisabilité et montage d’un programme de maisons haut de gamme clé en main dans l’ouest parisien.",
-      "body": [
-        "En tant que promoteur, Procept accompagne le montage de programmes immobiliers : recherche de terrain, étude de faisabilité, permis, coordination et commercialisation.",
-        "Un nouveau projet près de Rueil-Malmaison illustre notre approche en deux phases — montage puis réalisation — pour des maisons haut de gamme clé en main.",
-        "Le contrat de promotion immobilière formalise les engagements : délais, qualité et accompagnement des acquéreurs jusqu’à la livraison.",
-        "Pour toute demande de promotion immobilière dans l’ouest parisien, notre équipe reste à votre écoute à Mareil-Marly."
-      ],
-      "image": "images/services/promotion.jpg",
-      "published": true
+      "id": "chantier",
+      "title": "Chantier",
+      "description": "Suivi de chantier par des professionnels avertis, du gros œuvre aux finitions.",
+      "image": "images/gallery/gal-08.jpg"
     },
     {
-      "id": "news-4",
-      "slug": "chantier-en-cours-yvelines",
-      "title": "Chantier en cours dans les Yvelines",
-      "date": "2026-07-01",
-      "excerpt": "Suivi de gros œuvre et plancher chauffant sur un chantier de construction individuelle.",
-      "body": [
-        "Plusieurs chantiers sont actuellement en cours dans les Yvelines, avec un suivi quotidien par nos équipes de conducteurs de travaux.",
-        "Gros œuvre, charpente, plancher chauffant et finitions : chaque étape est contrôlée pour respecter délais, normes et qualité attendue.",
-        "Nos photos « En cours » sur le site montrent l’avancement réel des projets de construction et de rénovation autour de Saint-Germain-en-Laye.",
-        "Vous souhaitez suivre un projet similaire ? Demandez un devis via l’assistant chantier ou le formulaire de contact Procept."
-      ],
-      "image": "images/gallery/gal-44.jpg",
-      "published": true
+      "id": "livraison",
+      "title": "Livraison",
+      "description": "Remise des clés et livraison clé en main de votre maison ou rénovation.",
+      "image": "images/gallery/gal-01.jpg"
     }
   ]
 }

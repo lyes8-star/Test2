@@ -63,6 +63,16 @@
 
   async function loadContent() {
     try {
+      if (window.ProceptContent?.load) {
+        content = await window.ProceptContent.load({ basePath: '../' });
+        afterLoad();
+        return;
+      }
+    } catch (err) {
+      console.warn('ProceptContent.load a échoué', err);
+    }
+
+    try {
       const res = await fetch('../data/content.json');
       if (res.ok) {
         content = await res.json();
@@ -80,7 +90,7 @@
       }
     } catch (_) { /* static */ }
 
-    console.error('Impossible de charger content.json');
+    console.error('Impossible de charger le contenu');
   }
 
   function afterLoad() {
@@ -108,7 +118,7 @@
       });
     }
     if ('serviceWorker' in navigator) {
-      const RELOAD_KEY = 'procept-sw-reloaded-v11';
+      const RELOAD_KEY = 'procept-sw-reloaded-v13';
       const swUrl = new URL('../sw.js', document.baseURI).href;
       navigator.serviceWorker
         .register(swUrl)

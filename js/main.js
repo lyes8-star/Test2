@@ -22,7 +22,7 @@ function siteBasePath() {
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
 
-  const RELOAD_KEY = 'procept-sw-reloaded-v11';
+  const RELOAD_KEY = 'procept-sw-reloaded-v13';
 
   const swUrl = new URL('sw.js', document.baseURI || window.location.href);
   navigator.serviceWorker
@@ -60,10 +60,21 @@ function registerServiceWorker() {
 }
 
 async function loadContent() {
-  // Prefer local JSON on static hosts (GitHub Pages); try API only as secondary
-  const candidates = ['data/content.json', './data/content.json'];
   const base = siteBasePath();
-  if (base !== '/') candidates.push(`${base}data/content.json`.replace(/\/+/g, '/'));
+  const basePath = base === '/' ? '' : base;
+
+  try {
+    if (window.ProceptContent?.load) {
+      content = await window.ProceptContent.load({ basePath });
+      afterLoad();
+      return;
+    }
+  } catch (err) {
+    console.warn('ProceptContent.load a échoué', err);
+  }
+
+  const candidates = ['data/content.json', './data/content.json'];
+  if (basePath) candidates.push(`${basePath}data/content.json`.replace(/\/+/g, '/'));
 
   for (const url of candidates) {
     try {
@@ -85,7 +96,7 @@ async function loadContent() {
     }
   } catch (_) { /* no API */ }
 
-  console.error('Impossible de charger content.json');
+  console.error('Impossible de charger le contenu');
 }
 
 function afterLoad() {

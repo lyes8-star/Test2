@@ -6,6 +6,19 @@ const { URL } = require('url');
 
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data', 'content.json');
+const CONTENU_DIR = path.join(__dirname, 'contenu');
+const CONTENU_FILES = {
+  'site.json': (data) => ({ site: data.site }),
+  'diaporama.json': (data) => ({ hero: data.hero }),
+  'a-propos.json': (data) => ({ about: data.about, contactImage: data.contactImage }),
+  'services.json': (data) => ({ services: data.services }),
+  'galerie.json': (data) => ({ gallery: data.gallery }),
+  'actualites.json': (data) => ({ news: data.news }),
+  'faq.json': (data) => ({ faq: data.faq }),
+  'zones.json': (data) => ({ zones: data.zones }),
+  'pages.json': (data) => ({ pages: data.pages }),
+  'process.json': (data) => ({ process: data.process }),
+};
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const ROOT_DIR = __dirname;
 const MAX_BODY_BYTES = 5 * 1024 * 1024;
@@ -70,12 +83,44 @@ function applySecurityHeaders(res) {
   Object.entries(headers).forEach(([k, v]) => res.setHeader(k, v));
 }
 
+function readContentFromContenu() {
+  const merged = {};
+  for (const file of Object.keys(CONTENU_FILES)) {
+    const full = path.join(CONTENU_DIR, file);
+    if (!fs.existsSync(full)) throw new Error(`Missing ${file}`);
+    Object.assign(merged, JSON.parse(fs.readFileSync(full, 'utf8')));
+  }
+  return merged;
+}
+
 function readContent() {
+  try {
+    if (fs.existsSync(CONTENU_DIR)) {
+      return readContentFromContenu();
+    }
+  } catch (err) {
+    console.warn('Lecture contenu/ échouée, repli data/content.json', err.message);
+  }
   return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
 }
 
+function writeContenuParts(data) {
+  if (!fs.existsSync(CONTENU_DIR)) {
+    fs.mkdirSync(CONTENU_DIR, { recursive: true });
+  }
+  for (const [file, pick] of Object.entries(CONTENU_FILES)) {
+    const payload = pick(data);
+    fs.writeFileSync(
+      path.join(CONTENU_DIR, file),
+      JSON.stringify(payload, null, 2) + '\n',
+      'utf8'
+    );
+  }
+}
+
 function writeContent(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+  writeContenuParts(data);
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2) + '\n', 'utf8');
   try {
     require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'scripts', 'generate-seo.js')], {
       cwd: __dirname,

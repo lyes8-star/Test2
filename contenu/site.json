@@ -1,0 +1,52 @@
+{
+  "site": {
+    "name": "Procept",
+    "tagline": "Constructeur de maisons autour de Saint-Germain-en-Laye",
+    "description": "Procept est un promoteur immobilier, constructeur de maisons neuves. Il rénove des bâtiments anciens, réalise l'extension de maisons près de Versailles.",
+    "phone": "01 39 58 28 23",
+    "fax": "01 39 58 33 93",
+    "email": "procept@procept.fr",
+    "address": "29 Rue des Closeaux, 78750 Mareil-Marly",
+    "hours": "Lun - Ven : 9h00 - 18h00",
+    "keywords": [
+      "construction",
+      "rénovation",
+      "extension",
+      "promotion immobilière",
+      "Versailles",
+      "Saint-Germain-en-Laye",
+      "Rueil-Malmaison",
+      "Marly-le-Roi",
+      "Yvelines",
+      "RE2020",
+      "clé en main",
+      "Mareil-Marly"
+    ],
+    "url": "https://www.procept.fr/",
+    "adsId": "",
+    "gaId": "",
+    "legal": {
+      "raisonSociale": "Procept",
+      "forme": "À compléter (ex. SAS, SARL, EI)",
+      "capital": "À compléter",
+      "siret": "À compléter",
+      "responsablePublication": "Responsable de publication Procept",
+      "hebergeur": "GitHub Pages (GitHub Inc., 88 Colin P. Kelly Jr Street, San Francisco, CA 94107, USA) et/ou serveur Node.js selon le déploiement."
+    },
+    "geo": {
+      "lat": 48.885845,
+      "lng": 2.0763435
+    },
+    "postalCode": "78750",
+    "city": "Mareil-Marly",
+    "region": "Île-de-France",
+    "country": "FR",
+    "ogImage": "images/hero/slide-1.jpg",
+    "social": {
+      "facebook": "",
+      "instagram": "",
+      "linkedin": "",
+      "youtube": ""
+    }
+  }
+}

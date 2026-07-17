@@ -363,8 +363,8 @@ function articlePageHtml(item) {
   <meta name="twitter:image" content="${esc(image)}">
   <script type="application/ld+json">${JSON.stringify(articleLd)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
-  <link rel="stylesheet" href="../../fonts/fonts.css?v=13">
-  <link rel="stylesheet" href="../../css/style.css?v=13">
+  <link rel="stylesheet" href="../../fonts/fonts.css?v=14">
+  <link rel="stylesheet" href="../../css/style.css?v=14">
 </head>
 <!--a11y-->
 <body class="page-service" data-news-slug="${esc(item.slug)}">
@@ -433,9 +433,9 @@ function articlePageHtml(item) {
   <script src="../../js/consent.js?v=4" defer></script>
   <script src="../../js/social.js?v=4" defer></script>
   <script src="../../js/analytics.js?v=4" defer></script>
-  <script src="../../js/a11y.js?v=13" defer></script>
-  <script src="../../js/chat.js?v=13" defer></script>
-  <script src="../../js/search.js?v=13" defer></script>
+  <script src="../../js/a11y.js?v=14" defer></script>
+  <script src="../../js/chat.js?v=14" defer></script>
+  <script src="../../js/search.js?v=14" defer></script>
   <script src="../../js/pwa-install.js?v=4" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
