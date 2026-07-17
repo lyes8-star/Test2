@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Procept est un promoteur immobilier, constructeur de maisons neuves à Saint-Germain-en-Laye. Rénovation et extension près de Versailles.">
+  <title>Procept — Constructeur de maisons à Saint-Germain-en-Laye</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Quattrocento:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="/" class="logo">
+        <span class="logo__mark">P</span>
+        <span class="logo__text">PROCEPT</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav">
+        <a href="#accueil">Accueil</a>
+        <a href="#services">Services</a>
+        <a href="#realisations">Réalisations</a>
+        <a href="#apropos">À propos</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a href="tel:0139582823" class="header__phone" id="headerPhone">01 39 58 28 23</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="accueil">
+      <div class="hero__slides" id="heroSlides"></div>
+      <div class="hero__overlay"></div>
+      <div class="hero__content container">
+        <p class="hero__eyebrow" id="heroEyebrow">Constructeur de maisons</p>
+        <h1 class="hero__title" id="heroTitle">PROCEPT</h1>
+        <p class="hero__desc" id="heroDesc"></p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary">Demander un devis</a>
+          <a href="#services" class="btn btn--outline">Nos services</a>
+        </div>
+      </div>
+      <div class="hero__nav">
+        <button class="hero__arrow hero__arrow--prev" id="heroPrev" aria-label="Précédent">&#8592;</button>
+        <div class="hero__dots" id="heroDots"></div>
+        <button class="hero__arrow hero__arrow--next" id="heroNext" aria-label="Suivant">&#8594;</button>
+      </div>
+    </section>
+
+    <section class="section services" id="services">
+      <div class="container">
+        <div class="section__header">
+          <span class="section__label">Nos expertises</span>
+          <h2 class="section__title">Des solutions complètes pour votre habitat</h2>
+        </div>
+        <div class="services__grid" id="servicesGrid"></div>
+      </div>
+    </section>
+
+    <section class="section about" id="apropos">
+      <div class="container about__grid">
+        <div class="about__content">
+          <span class="section__label">À propos</span>
+          <h2 class="section__title" id="aboutTitle">Votre projet, notre expertise</h2>
+          <p class="about__text" id="aboutText"></p>
+          <div class="about__zone">
+            <h3>Où intervenons-nous ?</h3>
+            <p id="aboutZone"></p>
+          </div>
+        </div>
+        <div class="about__stats">
+          <div class="stat">
+            <span class="stat__number">30+</span>
+            <span class="stat__label">Années d'expérience</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number">RE2020</span>
+            <span class="stat__label">Certification</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number">100%</span>
+            <span class="stat__label">Clé en main</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gallery" id="realisations">
+      <div class="container">
+        <div class="section__header">
+          <span class="section__label">Portfolio</span>
+          <h2 class="section__title">Nos réalisations</h2>
+        </div>
+        <div class="gallery__grid" id="galleryGrid"></div>
+        <div class="gallery__more">
+          <button class="btn btn--outline" id="galleryMore">Voir plus de photos</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div class="container contact__grid">
+        <div class="contact__info">
+          <span class="section__label">Contact</span>
+          <h2 class="section__title">Parlons de votre projet</h2>
+          <ul class="contact__list">
+            <li>
+              <strong>Adresse</strong>
+              <span id="contactAddress"></span>
+            </li>
+            <li>
+              <strong>Téléphone</strong>
+              <a href="tel:0139582823" id="contactPhone"></a>
+            </li>
+            <li>
+              <strong>Fax</strong>
+              <span id="contactFax"></span>
+            </li>
+            <li>
+              <strong>Email</strong>
+              <a href="mailto:procept@procept.fr" id="contactEmail"></a>
+            </li>
+            <li>
+              <strong>Horaires</strong>
+              <span id="contactHours"></span>
+            </li>
+          </ul>
+        </div>
+        <form class="contact__form" id="contactForm">
+          <h3>Formulaire de devis</h3>
+          <div class="form-group">
+            <label for="name">Nom complet</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Téléphone</label>
+              <input type="tel" id="phone" name="phone">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="message">Votre projet</label>
+            <textarea id="message" name="message" rows="5" required placeholder="Décrivez votre projet de construction, rénovation ou extension..."></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full">Envoyer ma demande</button>
+          <p class="form-success" id="formSuccess" hidden>Merci ! Nous reviendrons vers vous dès que possible.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <span class="logo__text">PROCEPT</span>
+        <p id="footerAddress"></p>
+      </div>
+      <div class="footer__links">
+        <a href="#services">Services</a>
+        <a href="#realisations">Réalisations</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <p class="footer__copy">&copy; 2026 Procept — Constructeur de maisons en Île-de-France</p>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" hidden>
+    <button class="lightbox__close" id="lightboxClose" aria-label="Fermer">&times;</button>
+    <img src="" alt="" id="lightboxImg">
+    <p class="lightbox__caption" id="lightboxCaption"></p>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
