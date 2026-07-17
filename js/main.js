@@ -277,7 +277,7 @@ function renderSite() {
   renderServices(services);
   renderProcess(process || []);
   renderGallery();
-  renderMarquee(site.keywords || []);
+  renderFaqTicker(faq || []);
   renderNewsHome(news || []);
   renderZones(zones);
   renderFaq(faq || []);
@@ -392,16 +392,60 @@ function initFaqAccordion() {
   }, true);
 }
 
-function renderMarquee(keywords) {
-  const track = document.getElementById('marqueeTrack');
-  if (!track) return;
-  const words = keywords.length
-    ? keywords
-    : ['Construction', 'Rénovation', 'Extension', 'Promotion immobilière', 'Versailles', 'Saint-Germain-en-Laye', 'RE2020', 'Clé en main'];
+let faqTickerTimer = null;
+let faqTickerIndex = 0;
 
-  const items = words.map((w) => `<span class="marquee__item">${escapeHtml(w)}</span>`).join('<span class="marquee__sep">·</span>');
-  track.innerHTML = `${items}<span class="marquee__sep">·</span>${items}<span class="marquee__sep">·</span>${items}<span class="marquee__sep">·</span>${items}`;
+function renderFaqTicker(items) {
+  const root = document.getElementById('faqTicker');
+  const qEl = document.getElementById('faqTickerQuestion');
+  const aEl = document.getElementById('faqTickerAnswer');
+  const panel = document.querySelector('.faq-ticker__content');
+  if (!root || !qEl || !aEl) return;
+
+  const list = (items || []).filter((item) => item && item.question && item.answer);
+  if (!list.length) {
+    root.hidden = true;
+    return;
+  }
+  root.hidden = false;
+
+  const show = (index) => {
+    const item = list[((index % list.length) + list.length) % list.length];
+    qEl.textContent = item.question;
+    aEl.textContent = item.answer;
+  };
+
+  const goNext = () => {
+    if (panel) panel.classList.add('is-swap');
+    window.setTimeout(() => {
+      faqTickerIndex = (faqTickerIndex + 1) % list.length;
+      show(faqTickerIndex);
+      if (panel) panel.classList.remove('is-swap');
+    }, 420);
+  };
+
+  if (faqTickerTimer) {
+    clearInterval(faqTickerTimer);
+    faqTickerTimer = null;
+  }
+
+  faqTickerIndex = 0;
+  show(0);
+
+  const reduceMotion =
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    document.documentElement.classList.contains('a11y-motion');
+  if (reduceMotion) return;
+
+  faqTickerTimer = setInterval(goNext, 7000);
 }
+
+window.addEventListener('procept:a11y-motion', () => {
+  if (document.documentElement.classList.contains('a11y-motion') && faqTickerTimer) {
+    clearInterval(faqTickerTimer);
+    faqTickerTimer = null;
+  }
+});
 
 function escapeHtml(str) {
   const div = document.createElement('div');

@@ -28,8 +28,8 @@
   <meta name="twitter:title" id="twTitle" content="Procept — Constructeur de maisons à Saint-Germain-en-Laye">
   <meta name="twitter:description" id="twDescription" content="Procept est un promoteur immobilier, constructeur de maisons neuves à Saint-Germain-en-Laye. Rénovation et extension près de Versailles.">
   <meta name="twitter:image" id="twImage" content="https://www.procept.fr/contenu/photos/hero/slide-1.jpg">
-  <link rel="stylesheet" href="fonts/fonts.css?v=19">
-<link rel="stylesheet" href="css/style.css?v=19">
+  <link rel="stylesheet" href="fonts/fonts.css?v=20">
+<link rel="stylesheet" href="css/style.css?v=20">
     <script>
     (function () {
       try {
@@ -188,9 +188,16 @@
       </div>
     </section>
 
-    <div class="marquee" id="marquee" aria-hidden="true">
-      <div class="marquee__track" id="marqueeTrack"></div>
-    </div>
+    <aside class="faq-ticker" id="faqTicker" aria-label="Questions fréquentes en bref">
+      <div class="container faq-ticker__inner">
+        <p class="faq-ticker__label">FAQ</p>
+        <div class="faq-ticker__content" aria-live="polite">
+          <p class="faq-ticker__question" id="faqTickerQuestion"></p>
+          <p class="faq-ticker__answer" id="faqTickerAnswer"></p>
+        </div>
+        <a class="faq-ticker__link" href="#faq">Voir toute la FAQ</a>
+      </div>
+    </aside>
 
     <section class="section services reveal" id="services">
       <div class="container">
@@ -423,6 +430,6 @@
   <script defer src="js/search.js?v=14"></script>
   <script defer src="js/pwa-install.js?v=4"></script>
   <script defer src="js/content-loader.js?v=14"></script>
-  <script defer src="js/main.js?v=17"></script>
+  <script defer src="js/main.js?v=20"></script>
 </body>
 </html>
