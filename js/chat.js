@@ -222,8 +222,8 @@ window.ProceptChat = (function () {
       <div class="chat__panel" id="chatPanel" role="dialog" aria-modal="true" aria-labelledby="chatTitle" hidden>
         <header class="chat__header">
           <div class="chat__header-brand">
-            ${robotSvg()}
-            <div>
+            <span class="chat__avatar" aria-hidden="true">${robotSvg()}</span>
+            <div class="chat__header-text">
               <p class="chat__title" id="chatTitle">Assistant chantier</p>
               <p class="chat__subtitle">Procept — devis gratuit</p>
             </div>
