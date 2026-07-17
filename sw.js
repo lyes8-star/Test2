@@ -1,5 +1,5 @@
 /* Service worker Procept — cache app shell (chemins relatifs pour GitHub Pages) */
-const CACHE = 'procept-shell-v3';
+const CACHE = 'procept-shell-v4';
 
 function shellUrls() {
   const base = self.registration.scope;
@@ -13,8 +13,10 @@ function shellUrls() {
     'js/chat.js',
     'js/social.js',
     'js/analytics.js',
+    'js/consent.js',
     'js/map-google.js',
     'js/pwa-install.js',
+    'fonts/fonts.css',
     'manifest.webmanifest',
     'favicon.svg',
     'icons/icon-192.png',

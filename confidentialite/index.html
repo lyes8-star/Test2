@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Politique de confidentialité RGPD — traitement des données personnelles Procept.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#2c4a3e">
+  <title>Politique de confidentialité — Procept</title>
+  <link rel="canonical" href="https://www.procept.fr/confidentialite/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../fonts/fonts.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=4">
+</head>
+<body class="page-legal">
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="../" class="logo"><span class="logo__mark">P</span><span class="logo__text">PROCEPT</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav" aria-label="Navigation principale">
+        <p class="nav__mobile-banner">Menu Procept</p>
+        <a href="../" class="nav__link">Accueil</a>
+        <a href="../mentions-legales/" class="nav__link">Mentions légales</a>
+        <a href="../confidentialite/" class="nav__link">Confidentialité</a>
+        <a href="../cookies/" class="nav__link">Cookies</a>
+        <div class="nav__mobile-cta">
+          <a href="../#devis" class="btn btn--primary" data-open-chat>Demander un devis</a>
+        </div>
+      </nav>
+      <a href="../#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
+    </div>
+  </header>
+  <main>
+    <section class="section legal-page">
+      <div class="container legal-page__inner">
+        <nav class="breadcrumb" aria-label="Fil d'Ariane">
+          <a href="../">Accueil</a> <span aria-hidden="true">/</span> <span>Politique de confidentialité</span>
+        </nav>
+        <article class="legal">
+
+        <h1>Politique de confidentialité</h1>
+        <p class="legal__updated">Conformément au RGPD (UE 2016/679) et à la loi Informatique et Libertés.</p>
+
+        <h2>Responsable du traitement</h2>
+        <p><strong>Procept</strong> — 29 Rue des Closeaux, 78750 Mareil-Marly — <a href="mailto:procept@procept.fr">procept@procept.fr</a> — 01 39 58 28 23.</p>
+
+        <h2>Données collectées</h2>
+        <ul>
+          <li><strong>Demandes de devis / contact</strong> : nom, email, téléphone, message (via messagerie mailto ou assistant devis). Aucune base de leads n’est stockée sur nos serveurs publics.</li>
+          <li><strong>Brouillon devis</strong> : copie locale dans votre navigateur (<code>sessionStorage</code>), effacée à la fermeture de l’onglet.</li>
+          <li><strong>Mesure d’audience / publicité</strong> (si vous acceptez) : identifiants cookies Google Analytics / Ads.</li>
+          <li><strong>Carte</strong> (si vous acceptez les contenus tiers) : chargement Google Maps.</li>
+        </ul>
+
+        <h2>Finalités et bases légales</h2>
+        <ul>
+          <li>Répondre à vos demandes de devis / information — <em>intérêt légitime / mesures précontractuelles</em>.</li>
+          <li>Mesure d’audience et publicité — <em>consentement</em> (bandeau cookies).</li>
+          <li>Sécurité du site et administration — <em>intérêt légitime</em>.</li>
+        </ul>
+
+        <h2>Destinataires</h2>
+        <p>Procept ; prestataires techniques (hébergeur) ; Google (Analytics, Ads, Maps) uniquement si vous y avez consenti.</p>
+
+        <h2>Durées de conservation</h2>
+        <ul>
+          <li>Emails de contact / devis : durée nécessaire au suivi commercial (max. 3 ans après le dernier contact, sauf obligation légale).</li>
+          <li>Consentement cookies : 12 mois.</li>
+          <li>Logs techniques serveur : durée limitée à la sécurité.</li>
+        </ul>
+
+        <h2>Vos droits</h2>
+        <p>Accès, rectification, effacement, opposition, limitation, portabilité. Contact : <a href="mailto:procept@procept.fr">procept@procept.fr</a>. Réclamation possible auprès de la <a href="https://www.cnil.fr" rel="noopener noreferrer" target="_blank">CNIL</a>.</p>
+
+        <h2>Cookies</h2>
+        <p>Voir la <a href="../cookies/">politique cookies</a> et le bouton « Gérer les cookies » en bas de page.</p>
+    
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand"><span class="logo__text">PROCEPT</span><p>29 Rue des Closeaux, 78750 Mareil-Marly</p></div>
+      <div class="footer__links">
+        <a href="../constructeur/">Construction</a>
+        <a href="../renovation/">Rénovation</a>
+        <a href="../#contact">Contact</a>
+        <a href="../mentions-legales/">Mentions légales</a>
+        <a href="../confidentialite/">Confidentialité</a>
+        <a href="../cookies/">Cookies</a>
+        <a href="#" data-manage-cookies>Gérer les cookies</a>
+      </div>
+      <p class="footer__copy">&copy; 2026 Procept</p>
+    </div>
+  </footer>
+  <script defer src="../js/consent.js?v=4"></script>
+  <script defer src="../js/analytics.js?v=4"></script>
+  <script defer src="../js/chat.js?v=4"></script>
+  <script>
+    document.getElementById('navToggle')?.addEventListener('click', function () {
+      var nav = document.getElementById('nav');
+      var open = nav.classList.toggle('open');
+      this.setAttribute('aria-expanded', open);
+      document.body.classList.toggle('nav-open', open);
+    });
+    fetch('../data/content.json').then(function (r) { return r.json(); }).then(function (data) {
+      var s = data.site || {};
+      var L = s.legal || {};
+      var set = function (id, v) { var el = document.getElementById(id); if (el && v) el.textContent = v; };
+      set('legalName', L.raisonSociale || s.name);
+      set('legalForme', L.forme);
+      set('legalCapital', L.capital);
+      set('legalSiret', L.siret);
+      set('legalAddress', s.address);
+      set('legalResp', L.responsablePublication);
+      set('legalHost', L.hebergeur);
+      var phone = document.getElementById('legalPhone');
+      if (phone && s.phone) { phone.textContent = s.phone; phone.href = 'tel:' + s.phone.replace(/\s/g, ''); }
+      var email = document.getElementById('legalEmail');
+      if (email && s.email) { email.textContent = s.email; email.href = 'mailto:' + s.email; }
+      if (window.ProceptAnalytics) window.ProceptAnalytics.init({ adsId: s.adsId || '', gaId: s.gaId || '' });
+      if (window.ProceptChat) window.ProceptChat.init({ email: s.email, phone: s.phone });
+    }).catch(function () {});
+  </script>
+</body>
+</html>

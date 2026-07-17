@@ -25,6 +25,14 @@
     "url": "https://www.procept.fr/",
     "adsId": "",
     "gaId": "",
+    "legal": {
+      "raisonSociale": "Procept",
+      "forme": "À compléter (ex. SAS, SARL, EI)",
+      "capital": "À compléter",
+      "siret": "À compléter",
+      "responsablePublication": "Responsable de publication Procept",
+      "hebergeur": "GitHub Pages (GitHub Inc., 88 Colin P. Kelly Jr Street, San Francisco, CA 94107, USA) et/ou serveur Node.js selon le déploiement."
+    },
     "geo": {
       "lat": 48.885845,
       "lng": 2.0763435

@@ -146,6 +146,8 @@ function applySeo(data) {
       '@type': 'City',
       name: city,
     })),
+    publishingPrinciples: absoluteUrl('confidentialite/'),
+    privacyPolicy: absoluteUrl('confidentialite/'),
     priceRange: '€€€',
     logo: {
       '@type': 'ImageObject',

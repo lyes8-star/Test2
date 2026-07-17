@@ -67,6 +67,10 @@ window.ProceptMapGoogle = (function () {
     return fallback;
   }
 
+  function allowsMaps() {
+    return !!window.ProceptConsent?.allowsContent?.();
+  }
+
   function render(container, cities, options = {}) {
     if (!container) return;
 
@@ -79,7 +83,8 @@ window.ProceptMapGoogle = (function () {
     const cityList = cities || [];
     const listEl = options.listEl || document.getElementById('zonesList');
 
-    container.innerHTML = `
+    function mountMap() {
+      container.innerHTML = `
       <div class="gmap">
         <div class="gmap__frame-wrap">
           <iframe
@@ -108,51 +113,103 @@ window.ProceptMapGoogle = (function () {
       </div>
     `;
 
-    const iframe = container.querySelector('#gmapIframe');
-    const hint = container.querySelector('#gmapHint');
-    const external = container.querySelector('#gmapExternal');
+      const iframe = container.querySelector('#gmapIframe');
+      const hint = container.querySelector('#gmapHint');
+      const external = container.querySelector('#gmapExternal');
 
-    function focusCity(city) {
-      const coords = resolveCoords(city, center);
-      const [lat, lng] = coords;
-      if (iframe) iframe.src = embedUrl(lat, lng, CITY_ZOOM);
-      if (hint) hint.textContent = city ? `Zone : ${city}` : 'Siège Procept — Mareil-Marly';
-      if (external) {
-        external.href = mapsLink(lat, lng, city || hqLabel);
+      function focusCity(city) {
+        if (!allowsMaps()) return;
+        const coords = resolveCoords(city, center);
+        const [lat, lng] = coords;
+        if (iframe) iframe.src = embedUrl(lat, lng, CITY_ZOOM);
+        if (hint) hint.textContent = city ? `Zone : ${city}` : 'Siège Procept — Mareil-Marly';
+        if (external) {
+          external.href = mapsLink(lat, lng, city || hqLabel);
+        }
+        if (listEl) {
+          listEl.querySelectorAll('.zones__item').forEach((li) => {
+            li.classList.toggle('is-active', li.dataset.city === city);
+          });
+        }
+        track('select_content', { content_type: 'zone_city', item_id: city || 'hq' });
       }
-      if (listEl) {
-        listEl.querySelectorAll('.zones__item').forEach((li) => {
-          li.classList.toggle('is-active', li.dataset.city === city);
-        });
-      }
-      track('select_content', { content_type: 'zone_city', item_id: city || 'hq' });
-    }
 
-    if (listEl) {
-      listEl.innerHTML = cityList
-        .map(
-          (city) =>
-            `<li class="zones__item" data-city="${escapeHtml(city)}">
+      if (listEl && !listEl.dataset.wired) {
+        listEl.dataset.wired = '1';
+        listEl.innerHTML = cityList
+          .map(
+            (city) =>
+              `<li class="zones__item" data-city="${escapeHtml(city)}">
               <button type="button" class="zones__city" data-city="${escapeHtml(city)}">${escapeHtml(city)}</button>
             </li>`
-        )
-        .join('');
+          )
+          .join('');
 
-      listEl.querySelectorAll('.zones__city').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          focusCity(btn.dataset.city);
+        listEl.querySelectorAll('.zones__city').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            if (!allowsMaps()) {
+              window.ProceptConsent?.openManager?.();
+              return;
+            }
+            focusCity(btn.dataset.city);
+          });
         });
+      }
+
+      external?.addEventListener('click', () => {
+        track('map_open_external', { method: 'google_maps' });
       });
+
+      if (cityList.includes(hqLabel)) {
+        listEl?.querySelector(`[data-city="${hqLabel}"]`)?.classList.add('is-active');
+      }
     }
 
-    external?.addEventListener('click', () => {
-      track('map_open_external', { method: 'google_maps' });
+    function mountPlaceholder() {
+      container.innerHTML = `
+        <div class="gmap gmap--consent">
+          <div class="gmap__consent">
+            <p><strong>Carte Google Maps</strong></p>
+            <p>L’affichage de la carte charge des services Google. Acceptez les cookies « Contenus tiers » pour l’afficher, ou ouvrez Google Maps dans un nouvel onglet.</p>
+            <div class="gmap__consent-actions">
+              <button type="button" class="btn btn--primary btn--sm" id="gmapConsentBtn">Afficher la carte</button>
+              <a class="btn btn--outline btn--sm gmap__consent-ext" href="${mapsLink(center[0], center[1], hqLabel)}" target="_blank" rel="noopener noreferrer">Ouvrir dans Google Maps</a>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('gmapConsentBtn')?.addEventListener('click', () => {
+        const cur = window.ProceptConsent?.get?.() || {};
+        window.ProceptConsent?.save?.({
+          analytics: !!cur.analytics,
+          ads: !!cur.ads,
+          content: true,
+        });
+        mountMap();
+      });
+
+      if (listEl && !listEl.dataset.wired) {
+        listEl.dataset.wired = '1';
+        listEl.innerHTML = cityList
+          .map(
+            (city) =>
+              `<li class="zones__item" data-city="${escapeHtml(city)}">
+              <button type="button" class="zones__city" data-city="${escapeHtml(city)}">${escapeHtml(city)}</button>
+            </li>`
+          )
+          .join('');
+        listEl.querySelectorAll('.zones__city').forEach((btn) => {
+          btn.addEventListener('click', () => window.ProceptConsent?.openManager?.());
+        });
+      }
+    }
+
+    if (allowsMaps()) mountMap();
+    else mountPlaceholder();
+
+    document.addEventListener('procept:consent', () => {
+      if (allowsMaps() && !container.querySelector('#gmapIframe')) mountMap();
     });
-
-    // Highlight HQ city if present
-    if (cityList.includes(hqLabel)) {
-      listEl?.querySelector(`[data-city="${hqLabel}"]`)?.classList.add('is-active');
-    }
   }
 
   return { render, CITY_COORDS, embedUrl, mapsLink };

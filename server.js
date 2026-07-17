@@ -8,12 +8,17 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data', 'content.json');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const ROOT_DIR = __dirname;
+const MAX_BODY_BYTES = 5 * 1024 * 1024;
+const LOGIN_MAX_ATTEMPTS = 5;
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'procept2026';
-const SESSION_SECRET = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const PASSWORD_FILE = path.join(__dirname, 'data', '.admin-hash');
 
 const sessions = new Map();
+const loginAttempts = new Map();
+
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -26,9 +31,44 @@ const MIME_TYPES = {
   '.gif': 'image/gif',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
+  '.woff': 'font/woff',
   '.woff2': 'font/woff2',
+  '.txt': 'text/plain; charset=utf-8',
   '.webmanifest': 'application/manifest+json',
+  '.xml': 'application/xml; charset=utf-8',
 };
+
+const CSP =
+  "default-src 'self'; " +
+  "base-uri 'self'; " +
+  "object-src 'none'; " +
+  "frame-ancestors 'none'; " +
+  "form-action 'self' mailto:; " +
+  "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; " +
+  "style-src 'self' 'unsafe-inline'; " +
+  "img-src 'self' data: https: blob:; " +
+  "font-src 'self' data:; " +
+  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com; " +
+  "frame-src 'self' https://maps.google.com https://www.google.com https://maps.googleapis.com; " +
+  "upgrade-insecure-requests";
+
+function securityHeaders() {
+  return {
+    'Content-Security-Policy': CSP,
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()',
+    'X-DNS-Prefetch-Control': 'off',
+    'Cross-Origin-Opener-Policy': 'same-origin',
+  };
+}
+
+function applySecurityHeaders(res) {
+  const headers = securityHeaders();
+  Object.entries(headers).forEach(([k, v]) => res.setHeader(k, v));
+}
 
 function readContent() {
   return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -54,18 +94,27 @@ function hashPassword(password) {
 
 function verifyPassword(password, stored) {
   const [salt, hash] = stored.split(':');
+  if (!salt || !hash) return false;
   const test = crypto.scryptSync(password, salt, 64).toString('hex');
-  return crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(test, 'hex'));
+  try {
+    return crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(test, 'hex'));
+  } catch {
+    return false;
+  }
 }
-
-const PASSWORD_FILE = path.join(__dirname, 'data', '.admin-hash');
 
 function getStoredPasswordHash() {
   if (fs.existsSync(PASSWORD_FILE)) {
     return fs.readFileSync(PASSWORD_FILE, 'utf8').trim();
   }
+  if (!ADMIN_PASSWORD || ADMIN_PASSWORD.length < 12) {
+    console.error(
+      'Sécurité : définissez ADMIN_PASSWORD (min. 12 caractères) ou placez data/.admin-hash. Aucun mot de passe par défaut.'
+    );
+    process.exit(1);
+  }
   const hash = hashPassword(ADMIN_PASSWORD);
-  fs.writeFileSync(PASSWORD_FILE, hash);
+  fs.writeFileSync(PASSWORD_FILE, hash, { mode: 0o600 });
   return hash;
 }
 
@@ -93,6 +142,53 @@ function parseCookies(cookieHeader) {
     cookies[key] = decodeURIComponent(rest.join('='));
   });
   return cookies;
+}
+
+function clientIp(req) {
+  const xf = req.headers['x-forwarded-for'];
+  if (xf) return String(xf).split(',')[0].trim();
+  return req.socket.remoteAddress || 'unknown';
+}
+
+function isHttpsRequest(req) {
+  if (process.env.FORCE_SECURE_COOKIES === '1') return true;
+  if (req.headers['x-forwarded-proto'] === 'https') return true;
+  return false;
+}
+
+function sessionCookie(token, req, maxAge = 86400) {
+  const parts = [`session=${token}`, 'HttpOnly', 'Path=/', `Max-Age=${maxAge}`, 'SameSite=Strict'];
+  if (isHttpsRequest(req) || process.env.NODE_ENV === 'production') {
+    parts.push('Secure');
+  }
+  return parts.join('; ');
+}
+
+function checkLoginRateLimit(ip) {
+  const now = Date.now();
+  let entry = loginAttempts.get(ip);
+  if (!entry || entry.reset < now) {
+    entry = { count: 0, reset: now + LOGIN_WINDOW_MS };
+    loginAttempts.set(ip, entry);
+  }
+  if (entry.count >= LOGIN_MAX_ATTEMPTS) {
+    return false;
+  }
+  return true;
+}
+
+function recordLoginFailure(ip) {
+  const now = Date.now();
+  let entry = loginAttempts.get(ip);
+  if (!entry || entry.reset < now) {
+    entry = { count: 0, reset: now + LOGIN_WINDOW_MS };
+  }
+  entry.count += 1;
+  loginAttempts.set(ip, entry);
+}
+
+function clearLoginFailures(ip) {
+  loginAttempts.delete(ip);
 }
 
 function parseMultipart(buffer, boundary) {
@@ -126,7 +222,28 @@ function parseMultipart(buffer, boundary) {
   return parts;
 }
 
+function detectImageExt(buf) {
+  if (!buf || buf.length < 12) return null;
+  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return '.jpg';
+  if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) return '.png';
+  if (buf[0] === 0x47 && buf[1] === 0x49 && buf[2] === 0x46) return '.gif';
+  if (
+    buf[0] === 0x52 &&
+    buf[1] === 0x49 &&
+    buf[2] === 0x46 &&
+    buf[3] === 0x46 &&
+    buf[8] === 0x57 &&
+    buf[9] === 0x45 &&
+    buf[10] === 0x42 &&
+    buf[11] === 0x50
+  ) {
+    return '.webp';
+  }
+  return null;
+}
+
 function sendJson(res, status, data) {
+  applySecurityHeaders(res);
   res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' });
   res.end(JSON.stringify(data));
 }
@@ -136,18 +253,20 @@ function sendFile(res, filePath, extraHeaders = {}) {
   const mime = MIME_TYPES[ext] || 'application/octet-stream';
   fs.readFile(filePath, (err, data) => {
     if (err) {
+      applySecurityHeaders(res);
       res.writeHead(404);
       res.end('Not found');
       return;
     }
     let cache = 'public, max-age=86400';
-    if (ext === '.html' || ext === '.json' || ext === '.webmanifest') {
+    if (ext === '.html' || ext === '.json' || ext === '.webmanifest' || ext === '.txt' || ext === '.xml') {
       cache = 'no-cache';
     } else if (ext === '.css' || ext === '.js') {
       cache = 'public, max-age=3600';
-    } else if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.ico', '.woff2'].includes(ext)) {
+    } else if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.ico', '.woff', '.woff2'].includes(ext)) {
       cache = 'public, max-age=604800';
     }
+    applySecurityHeaders(res);
     res.writeHead(200, {
       'Content-Type': mime,
       'Cache-Control': cache,
@@ -169,19 +288,29 @@ function requireAuth(req, res) {
 function collectBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
-    req.on('data', (chunk) => chunks.push(chunk));
+    let size = 0;
+    req.on('data', (chunk) => {
+      size += chunk.length;
+      if (size > MAX_BODY_BYTES) {
+        reject(Object.assign(new Error('Payload trop volumineux'), { code: 'PAYLOAD_TOO_LARGE' }));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
     req.on('end', () => resolve(Buffer.concat(chunks)));
     req.on('error', reject);
   });
 }
 
+// Ensure password hash is available at boot (exits if misconfigured)
+getStoredPasswordHash();
+
 const server = http.createServer(async (req, res) => {
+  applySecurityHeaders(res);
+
   const url = new URL(req.url, `http://${req.headers.host}`);
   const pathname = url.pathname;
-
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -197,19 +326,32 @@ const server = http.createServer(async (req, res) => {
 
   // API: login
   if (pathname === '/api/admin/login' && req.method === 'POST') {
-    const body = await collectBody(req);
+    const ip = clientIp(req);
+    if (!checkLoginRateLimit(ip)) {
+      sendJson(res, 429, { error: 'Trop de tentatives. Réessayez dans 15 minutes.' });
+      return;
+    }
+    let body;
+    try {
+      body = await collectBody(req);
+    } catch (err) {
+      sendJson(res, err.code === 'PAYLOAD_TOO_LARGE' ? 413 : 400, { error: 'Requête invalide' });
+      return;
+    }
     try {
       const { username, password } = JSON.parse(body.toString());
       const storedHash = getStoredPasswordHash();
-      if (username === ADMIN_USER && verifyPassword(password, storedHash)) {
+      if (username === ADMIN_USER && typeof password === 'string' && verifyPassword(password, storedHash)) {
+        clearLoginFailures(ip);
         const token = createSession();
         res.writeHead(200, {
           'Content-Type': 'application/json',
-          'Set-Cookie': `session=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict`,
+          'Set-Cookie': sessionCookie(token, req),
         });
         res.end(JSON.stringify({ success: true }));
         return;
       }
+      recordLoginFailure(ip);
       sendJson(res, 401, { error: 'Identifiants incorrects' });
     } catch {
       sendJson(res, 400, { error: 'Requête invalide' });
@@ -223,7 +365,7 @@ const server = http.createServer(async (req, res) => {
     if (cookies.session) sessions.delete(cookies.session);
     res.writeHead(200, {
       'Content-Type': 'application/json',
-      'Set-Cookie': 'session=; HttpOnly; Path=/; Max-Age=0',
+      'Set-Cookie': sessionCookie('', req, 0),
     });
     res.end(JSON.stringify({ success: true }));
     return;
@@ -239,7 +381,13 @@ const server = http.createServer(async (req, res) => {
   // API: update content
   if (pathname === '/api/admin/content' && req.method === 'PUT') {
     if (!requireAuth(req, res)) return;
-    const body = await collectBody(req);
+    let body;
+    try {
+      body = await collectBody(req);
+    } catch (err) {
+      sendJson(res, err.code === 'PAYLOAD_TOO_LARGE' ? 413 : 400, { error: 'Requête invalide' });
+      return;
+    }
     try {
       const data = JSON.parse(body.toString());
       writeContent(data);
@@ -260,7 +408,13 @@ const server = http.createServer(async (req, res) => {
     }
 
     const boundary = contentType.split('boundary=')[1];
-    const buffer = await collectBody(req);
+    let buffer;
+    try {
+      buffer = await collectBody(req);
+    } catch (err) {
+      sendJson(res, err.code === 'PAYLOAD_TOO_LARGE' ? 413 : 400, { error: 'Fichier trop volumineux (max 5 Mo)' });
+      return;
+    }
     const parts = parseMultipart(buffer, boundary);
     const filePart = parts.find((p) => p.filename);
 
@@ -269,14 +423,13 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    const allowed = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
-    const ext = path.extname(filePart.filename).toLowerCase();
-    if (!allowed.includes(ext)) {
-      sendJson(res, 400, { error: 'Type de fichier non autorisé' });
+    const magicExt = detectImageExt(filePart.data);
+    if (!magicExt) {
+      sendJson(res, 400, { error: 'Type de fichier non autorisé (image requise)' });
       return;
     }
 
-    const filename = `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${ext}`;
+    const filename = `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${magicExt}`;
     const filepath = path.join(UPLOADS_DIR, filename);
     fs.writeFileSync(filepath, filePart.data);
 
@@ -303,9 +456,22 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // Block sensitive files
-  const blocked = ['/server.js', '/package.json', '/.gitignore', '/data/.admin-hash'];
-  if (blocked.includes(pathname) || pathname.startsWith('/.git')) {
+  // Block sensitive files / dirs
+  const blockedExact = [
+    '/server.js',
+    '/package.json',
+    '/package-lock.json',
+    '/.gitignore',
+    '/README.md',
+    '/data/.admin-hash',
+  ];
+  if (
+    blockedExact.includes(pathname) ||
+    pathname.startsWith('/.git') ||
+    pathname.startsWith('/scripts/') ||
+    pathname.startsWith('/node_modules/') ||
+    pathname.includes('..')
+  ) {
     res.writeHead(404);
     res.end('Not found');
     return;
@@ -313,7 +479,6 @@ const server = http.createServer(async (req, res) => {
 
   // Static files from repo root (GitHub Pages layout)
   let filePath = path.join(ROOT_DIR, pathname === '/' ? 'index.html' : pathname);
-  // Prevent path traversal
   if (!filePath.startsWith(ROOT_DIR)) {
     res.writeHead(403);
     res.end('Forbidden');
@@ -332,7 +497,6 @@ const server = http.createServer(async (req, res) => {
     sendFile(res, filePath, headers);
     return;
   }
-  // Trailing-slash optional: /constructeur → constructeur/index.html
   if (!pathname.endsWith('/')) {
     const dirIndex = path.join(ROOT_DIR, pathname, 'index.html');
     if (dirIndex.startsWith(ROOT_DIR) && fs.existsSync(dirIndex)) {
@@ -341,7 +505,6 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // SPA fallback for admin
   if (pathname.startsWith('/admin')) {
     const adminPath = path.join(ROOT_DIR, 'admin', 'index.html');
     if (fs.existsSync(adminPath)) {
@@ -357,5 +520,5 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log(`Procept website running at http://localhost:${PORT}`);
   console.log(`Admin panel: http://localhost:${PORT}/admin`);
-  console.log(`Default login: ${ADMIN_USER} / ${ADMIN_PASSWORD}`);
+  console.log('Auth: utilisez ADMIN_USER / ADMIN_PASSWORD (ou data/.admin-hash existant).');
 });

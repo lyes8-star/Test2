@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Politique cookies Procept — traceurs, finalités, consentement ePrivacy / CNIL.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#2c4a3e">
+  <title>Politique cookies — Procept</title>
+  <link rel="canonical" href="https://www.procept.fr/cookies/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../fonts/fonts.css?v=4">
+  <link rel="stylesheet" href="../css/style.css?v=4">
+</head>
+<body class="page-legal">
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="../" class="logo"><span class="logo__mark">P</span><span class="logo__text">PROCEPT</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav" aria-label="Navigation principale">
+        <p class="nav__mobile-banner">Menu Procept</p>
+        <a href="../" class="nav__link">Accueil</a>
+        <a href="../mentions-legales/" class="nav__link">Mentions légales</a>
+        <a href="../confidentialite/" class="nav__link">Confidentialité</a>
+        <a href="../cookies/" class="nav__link">Cookies</a>
+        <div class="nav__mobile-cta">
+          <a href="../#devis" class="btn btn--primary" data-open-chat>Demander un devis</a>
+        </div>
+      </nav>
+      <a href="../#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
+    </div>
+  </header>
+  <main>
+    <section class="section legal-page">
+      <div class="container legal-page__inner">
+        <nav class="breadcrumb" aria-label="Fil d'Ariane">
+          <a href="../">Accueil</a> <span aria-hidden="true">/</span> <span>Politique cookies</span>
+        </nav>
+        <article class="legal">
+
+        <h1>Politique cookies</h1>
+        <p class="legal__updated">Conformément à la directive ePrivacy et aux recommandations de la CNIL.</p>
+
+        <h2>Qu’est-ce qu’un cookie / traceur ?</h2>
+        <p>Fichier ou technologie déposée sur votre terminal pour faire fonctionner le site, mesurer l’audience ou afficher des contenus tiers.</p>
+
+        <h2>Catégories utilisées</h2>
+        <table class="legal__table">
+          <thead><tr><th>Catégorie</th><th>Exemples</th><th>Base</th></tr></thead>
+          <tbody>
+            <tr><td>Nécessaires</td><td>Session admin, mémorisation du choix cookies, service worker technique</td><td>Exemptés / intérêt légitime</td></tr>
+            <tr><td>Mesure d’audience</td><td>Google Analytics 4 (si activé et consenti)</td><td>Consentement</td></tr>
+            <tr><td>Publicité</td><td>Google Ads (si activé et consenti)</td><td>Consentement</td></tr>
+            <tr><td>Contenus tiers</td><td>Google Maps embed</td><td>Consentement</td></tr>
+            <tr><td>Stockage local</td><td>Brouillon devis (<code>sessionStorage</code>), choix CMP (<code>localStorage</code>)</td><td>Technique / consentement selon cas</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Votre choix</h2>
+        <p>À la première visite, un bandeau vous permet d’<strong>accepter</strong>, de <strong>refuser</strong> (aussi simple) ou de <strong>personnaliser</strong>. Vous pouvez modifier votre choix à tout moment :</p>
+        <p><button type="button" class="btn btn--primary btn--sm" data-manage-cookies>Gérer les cookies</button></p>
+        <p>Durée du consentement : 12 mois.</p>
+
+        <h2>Google Consent Mode</h2>
+        <p>Les balises Google (si configurées) démarrent en mode refusé par défaut et ne se chargent qu’après votre accord (Consent Mode v2).</p>
+    
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand"><span class="logo__text">PROCEPT</span><p>29 Rue des Closeaux, 78750 Mareil-Marly</p></div>
+      <div class="footer__links">
+        <a href="../constructeur/">Construction</a>
+        <a href="../renovation/">Rénovation</a>
+        <a href="../#contact">Contact</a>
+        <a href="../mentions-legales/">Mentions légales</a>
+        <a href="../confidentialite/">Confidentialité</a>
+        <a href="../cookies/">Cookies</a>
+        <a href="#" data-manage-cookies>Gérer les cookies</a>
+      </div>
+      <p class="footer__copy">&copy; 2026 Procept</p>
+    </div>
+  </footer>
+  <script defer src="../js/consent.js?v=4"></script>
+  <script defer src="../js/analytics.js?v=4"></script>
+  <script defer src="../js/chat.js?v=4"></script>
+  <script>
+    document.getElementById('navToggle')?.addEventListener('click', function () {
+      var nav = document.getElementById('nav');
+      var open = nav.classList.toggle('open');
+      this.setAttribute('aria-expanded', open);
+      document.body.classList.toggle('nav-open', open);
+    });
+    fetch('../data/content.json').then(function (r) { return r.json(); }).then(function (data) {
+      var s = data.site || {};
+      var L = s.legal || {};
+      var set = function (id, v) { var el = document.getElementById(id); if (el && v) el.textContent = v; };
+      set('legalName', L.raisonSociale || s.name);
+      set('legalForme', L.forme);
+      set('legalCapital', L.capital);
+      set('legalSiret', L.siret);
+      set('legalAddress', s.address);
+      set('legalResp', L.responsablePublication);
+      set('legalHost', L.hebergeur);
+      var phone = document.getElementById('legalPhone');
+      if (phone && s.phone) { phone.textContent = s.phone; phone.href = 'tel:' + s.phone.replace(/\s/g, ''); }
+      var email = document.getElementById('legalEmail');
+      if (email && s.email) { email.textContent = s.email; email.href = 'mailto:' + s.email; }
+      if (window.ProceptAnalytics) window.ProceptAnalytics.init({ adsId: s.adsId || '', gaId: s.gaId || '' });
+      if (window.ProceptChat) window.ProceptChat.init({ email: s.email, phone: s.phone });
+    }).catch(function () {});
+  </script>
+</body>
+</html>

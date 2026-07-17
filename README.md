@@ -26,7 +26,13 @@ node server.js
 | Rénovation | http://localhost:3000/renovation/ |
 | Admin | http://localhost:3000/admin |
 
-Identifiants : `admin` / `procept2026`
+Identifiants admin : définir les variables d’environnement `ADMIN_USER` et `ADMIN_PASSWORD` (min. 12 caractères) avant le premier démarrage. Aucun mot de passe par défaut n’est fourni.
+
+```bash
+ADMIN_PASSWORD='votre-mot-de-passe-fort' node server.js
+```
+
+Sur HTTPS (production), le cookie de session est marqué `Secure` automatiquement (`X-Forwarded-Proto` ou `NODE_ENV=production`).
 
 ## Structure
 
