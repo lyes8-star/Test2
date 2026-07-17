@@ -1,48 +1,64 @@
-# Procept — Site web (compatible GitHub Pages)
+# Procept — Site web
 
-> **`index.html` à la racine** — priorité GitHub Pages.
+## Pour mettre à jour le site (sans coder)
 
-## SEO Google (conforme)
+➡️ **[Guide simple : dossier `contenu/`](contenu/LIRE-MOI.md)**
+
+Vous modifiez uniquement les fichiers dans **`contenu/`** (téléphone, textes, galerie, actualités…) directement sur GitHub.  
+Ne touchez pas à `js/`, `css/`, `server.js`, etc.
+
+| Besoin | Fichier |
+|--------|---------|
+| Coordonnées | [`contenu/site.json`](contenu/site.json) |
+| Bandeau d’accueil | [`contenu/diaporama.json`](contenu/diaporama.json) |
+| Galerie | [`contenu/galerie.json`](contenu/galerie.json) |
+| Actualités | [`contenu/actualites.json`](contenu/actualites.json) |
+
+Images : dossiers `images/hero/`, `images/gallery/`, `images/services/` (ne pas renommer ces dossiers).
+
+---
+
+## Pour les développeurs
+
+Site compatible **GitHub Pages** (`index.html` à la racine).
+
+### SEO
 
 - `robots.txt` + `sitemap.xml`
 - Meta canonical, Open Graph, Twitter Card
-- JSON-LD `HomeAndConstructionBusiness` + `FAQPage` + `Service` / `BreadcrumbList` (pages métier)
-- Pages dédiées **`/constructeur/`** et **`/renovation/`**
-- Sections visibles **Zones** + **FAQ** (contenu indexable)
-- Lexique `data/seo-keywords.json` (~4500 termes) pour la **recherche interne** uniquement — **aucun stuffing caché**
+- JSON-LD métier / FAQ / fil d’Ariane
+- Lexique `data/seo-keywords.json` (recherche interne uniquement)
 
-Soumettez le sitemap dans [Google Search Console](https://search.google.com/search-console) après déploiement.
+### Contenu technique
 
-## Lancer en local
+- Source éditable : `contenu/*.json`
+- Assemblage : `node scripts/sync-content.js` → `data/content.json`
+- Chargement navigateur : `js/content-loader.js` (repli sur `data/content.json`)
+
+### Lancer en local
 
 ```bash
-node server.js
+ADMIN_PASSWORD='votre-mot-de-passe-fort' node server.js
 ```
 
 | Page | URL |
 |------|-----|
 | Accueil | http://localhost:3000 |
 | Construction | http://localhost:3000/constructeur/ |
-| Rénovation | http://localhost:3000/renovation/ |
 | Admin | http://localhost:3000/admin |
 
-Identifiants admin : définir les variables d’environnement `ADMIN_USER` et `ADMIN_PASSWORD` (min. 12 caractères) avant le premier démarrage. Aucun mot de passe par défaut n’est fourni.
+L’admin enregistre à la fois `contenu/` et `data/content.json`.
 
-```bash
-ADMIN_PASSWORD='votre-mot-de-passe-fort' node server.js
-```
-
-Sur HTTPS (production), le cookie de session est marqué `Secure` automatiquement (`X-Forwarded-Proto` ou `NODE_ENV=production`).
-
-## Structure
+### Structure
 
 ```
-├── index.html
-├── constructeur/index.html
-├── renovation/index.html
-├── robots.txt / sitemap.xml / favicon.svg
-├── css/ js/ images/ admin/
-├── data/content.json
-├── data/seo-keywords.json
+├── contenu/          ← À MODIFIER (éditeurs)
+│   └── LIRE-MOI.md
+├── images/           ← photos (hero, gallery, services)
+├── index.html        ← pages publiques (ne pas déplacer)
+├── constructeur/ renovation/ …
+├── css/ js/          ← technique (ne pas toucher)
+├── data/content.json ← copie synchronisée
+├── admin/
 └── server.js
 ```

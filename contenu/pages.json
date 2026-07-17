@@ -1,0 +1,252 @@
+{
+  "pages": {
+    "construction": {
+      "slug": "constructeur",
+      "label": "Construction",
+      "seo": {
+        "title": "Construction maisons RE2020 près de Versailles — Procept",
+        "description": "Constructeur de maisons individuelles à Saint-Germain-en-Laye et près de Versailles. Maisons sur-mesure, HQE, RE2020, ossature bois, clé en main. Devis gratuit."
+      },
+      "hero": {
+        "image": "images/hero/slide-1.jpg",
+        "eyebrow": "Constructeur de maisons",
+        "title": "Construction maisons norme RE2020 près de Versailles",
+        "desc": "Vous avez un terrain ? Vous cherchez un constructeur ? Nous concevons sur plan la maison de vos rêves."
+      },
+      "intro": [
+        "La construction d'une maison est l'un des investissements les plus importants qu'une famille fera dans sa vie. Une maison, c'est le lieu où l'on passe une grande partie de son temps, un endroit pour se reposer, pour recevoir la famille et les amis — un lieu qui nous représente.",
+        "Choisir un constructeur de maison sur qui compter n'est pas une mince affaire. Réputation, expérience, éthique, recommandations, maisons-témoins, performances techniques et écoute : le bon constructeur mène le projet à terme en respectant les coûts, avant, pendant et après les travaux.",
+        "Le bureau d'études Procept est CE constructeur : soyez exigeant pour votre maison. Nous réalisons des maisons sur-mesure pour particuliers, avec des matériaux haut de gamme, et concevons de grandes maisons contemporaines avec de larges ouvertures pour des espaces lumineux."
+      ],
+      "highlights": [
+        {
+          "title": "Maison personnalisée",
+          "text": "Conception sur plan adaptée à votre personnalité et à l'ergonomie du terrain."
+        },
+        {
+          "title": "Produit haut de gamme",
+          "text": "Matériaux soigneusement sélectionnés pour un confort durable."
+        },
+        {
+          "title": "Construction HQE",
+          "text": "Performances environnementales et énergétiques aux meilleures pratiques."
+        },
+        {
+          "title": "Basse consommation RE2020",
+          "text": "Norme environnementale favorisant les économies et les énergies renouvelables."
+        },
+        {
+          "title": "Ossature bois",
+          "text": "Maisons et extensions en ossature bois, légères et performantes."
+        },
+        {
+          "title": "Toiture-terrasse végétalisée",
+          "text": "Solutions contemporaines pour toitures et espaces extérieurs."
+        },
+        {
+          "title": "Maisons individuelles",
+          "text": "Constructeur de maisons individuelles depuis plus de 20 ans."
+        },
+        {
+          "title": "Clé en main",
+          "text": "De l'avant-projet à la remise des clés, un interlocuteur unique."
+        }
+      ],
+      "secondary": {
+        "title": "Constructeur de lofts et maisons modernes près de Saint-Germain-en-Laye",
+        "text": "Depuis 2010, la demande pour la construction de maisons modernes se fait sentir. Procept travaille avec de nombreux architectes pour la conception, l'estimation, la gestion de projets et la construction clé en main de maisons contemporaines. Notre entreprise est membre de la Fédération Française du Bâtiment depuis 2003 et détient les certifications BBC, HQE et RE2020 pour maisons, immeubles, bureaux, logements collectifs et bâtiments commerciaux."
+      },
+      "steps": [
+        {
+          "title": "Étude de votre projet",
+          "description": "Analyse de vos souhaits, du terrain et de votre budget pour un avant-projet clair."
+        },
+        {
+          "title": "Conseils personnalisés",
+          "description": "Accompagnement sur les matériaux, les normes et les choix techniques."
+        },
+        {
+          "title": "Faisabilité",
+          "description": "Études, plans et démarches administratives jusqu'au permis de construire."
+        },
+        {
+          "title": "Construction",
+          "description": "Suivi de chantier par des professionnels avertis, du gros œuvre aux finitions."
+        },
+        {
+          "title": "Livraison",
+          "description": "Remise des clés et livraison clé en main de votre maison."
+        }
+      ],
+      "cta": {
+        "title": "Parlons de votre maison",
+        "text": "Pour tout renseignement, conseils personnalisés, études et devis gratuits, contactez Procept — une entreprise familiale à votre service."
+      },
+      "galleryFilter": "construction"
+    },
+    "renovation": {
+      "slug": "renovation",
+      "label": "Rénovation",
+      "seo": {
+        "title": "Rénovation & agrandissement près de Saint-Germain-en-Laye — Procept",
+        "description": "Rénovation, extension et agrandissement de maisons à Versailles et Saint-Germain-en-Laye. Maçonnerie, charpente, couverture, surélévation. Devis gratuit."
+      },
+      "hero": {
+        "image": "images/hero/slide-2.jpg",
+        "eyebrow": "Rénovation & extension",
+        "title": "Rénovation de maisons près de Saint-Germain-en-Laye",
+        "desc": "Architecture au service de votre projet de vie — envies, terrain et budget réunis."
+      },
+      "intro": [
+        "Ce qui nous démarque des autres créateurs de maisons contemporaines, c'est notre vision de l'architecture : nous la mettons au service de votre projet de vie en prenant en compte vos envies, les spécificités de votre terrain et vos contraintes budgétaires. Une maison Procept est unique, parce qu'elle porte notre signature — et surtout la vôtre.",
+        "Nous effectuons la rénovation et les extensions de maisons : clôtures, rentes de garage, piscines, vérandas, terrasses, couverture en tuiles plates mécaniques ou en ardoise. La conception se fait sur plans avec un diagnostic que nous effectuons avec vous.",
+        "Tous les travaux sont exécutés dans le strict respect des normes techniques en vigueur. Chaque corps d'état apporte sa technologie et son savoir-faire. Nous intervenons dans tout l'ouest parisien : Versailles, Saint-Germain-en-Laye, Paris (75), les Yvelines (78), l'Essonne (91), Rueil-Malmaison…"
+      ],
+      "highlights": [
+        {
+          "title": "Agrandissement de maison",
+          "text": "Extensions au sol et surélévations pour gagner de l'espace de vie."
+        },
+        {
+          "title": "Extension de maison",
+          "text": "Vérandas, terrasses et extensions bois conçues sur mesure."
+        },
+        {
+          "title": "Maçonnerie",
+          "text": "Gros œuvre et structure pour particuliers et professionnels."
+        },
+        {
+          "title": "Charpente",
+          "text": "Charpentes traditionnelles ou contemporaines, soigneusement réalisées."
+        },
+        {
+          "title": "Couverture",
+          "text": "Tuiles plates mécaniques, ardoise et toitures végétalisées."
+        },
+        {
+          "title": "Surélévation",
+          "text": "Ajout d'étages pour valoriser votre bien existant."
+        },
+        {
+          "title": "Rénovation complète",
+          "text": "Modernisation de l'habitat du diagnostic à la livraison."
+        },
+        {
+          "title": "Particuliers & professionnels",
+          "text": "Maisons, écoles, immeubles et marchés publics."
+        }
+      ],
+      "secondary": {
+        "title": "Agrandissement de maisons autour de Versailles",
+        "text": "Procept effectue également la construction et la rénovation de bâtiments divers comme les écoles, les immeubles, les bâtiments industriels, et réalise des maisons basse consommation certifiées RE2020. Des maisons bioclimatiques, intelligentes, personnalisées… Nos travaux touchent toute activité générale, pour les particuliers ou professionnels ainsi que les marchés publics. Nous créons aussi des extensions à ossature bois ainsi que des terrasses."
+      },
+      "steps": [
+        {
+          "title": "Devis gratuits",
+          "description": "Étude de votre projet de rénovation ou d'agrandissement sans engagement."
+        },
+        {
+          "title": "Déplacements",
+          "description": "Visite sur site dans l'ouest parisien pour un diagnostic précis."
+        },
+        {
+          "title": "Conseils personnalisés",
+          "description": "Accompagnement sur les normes, les matériaux et le phasage des travaux."
+        }
+      ],
+      "cta": {
+        "title": "Faites-nous part de votre projet",
+        "text": "Contactez Procept pour une rénovation, une extension ou un agrandissement près de Versailles et Saint-Germain-en-Laye."
+      },
+      "galleryFilter": "renovation"
+    },
+    "promotion": {
+      "slug": "promotion-immobiliere",
+      "label": "Promotion immobilière",
+      "seo": {
+        "title": "Promotion immobilière et maisons clé en main près de Rueil-Malmaison — Procept",
+        "description": "Promoteur immobilier Procept : maisons haut de gamme, bioclimatiques et intelligentes dans l'ouest parisien, près de Versailles et Rueil-Malmaison."
+      },
+      "hero": {
+        "image": "images/services/promotion.jpg",
+        "eyebrow": "Promotion immobilière",
+        "title": "Procept : Promotion immobilière autour de Versailles",
+        "desc": "Maison sur-mesure, bioclimatique, intelligente et personnalisée — du terrain à la commercialisation."
+      },
+      "intro": [
+        "Procept conçoit des maisons sur-mesure, bioclimatiques, intelligentes et personnalisées. En tant que promoteur immobilier, nous accompagnons chaque programme de l'étude de marché à la commercialisation, dans un cadre contractuel clair.",
+        "Le contrat de promotion immobilière formalise notre engagement : étude de faisabilité, recherche et sécurisation du terrain, travail avec les architectes, obtention des permis de construire, puis réalisation et livraison.",
+        "Faire confiance à Procept, c'est s'appuyer sur une entreprise familiale de l'ouest parisien, proche de Versailles et de Rueil-Malmaison, pour un projet clé en main maîtrisé de bout en bout."
+      ],
+      "highlights": [
+        {
+          "title": "Maison sur-mesure",
+          "text": "Conception personnalisée adaptée à votre programme et à votre terrain."
+        },
+        {
+          "title": "Bioclimatique",
+          "text": "Maisons pensées pour le confort et la performance énergétique."
+        },
+        {
+          "title": "Maison intelligente",
+          "text": "Solutions contemporaines pour un habitat connecté et confortable."
+        },
+        {
+          "title": "Étude de faisabilité",
+          "text": "Analyse du marché, du terrain et des contraintes avant engagement."
+        },
+        {
+          "title": "Terrain & architectes",
+          "text": "Recherche foncière et conception avec des architectes partenaires."
+        },
+        {
+          "title": "Permis de construire",
+          "text": "Constitution et suivi des dossiers administratifs jusqu'à l'obtention."
+        },
+        {
+          "title": "Contrat de promotion",
+          "text": "Cadre juridique sécurisant pour le montage et la réalisation du programme."
+        },
+        {
+          "title": "Clé en main",
+          "text": "De l'initiation à l'achèvement, un interlocuteur unique Procept."
+        }
+      ],
+      "secondary": {
+        "title": "Votre maison clé en main près de Rueil-Malmaison",
+        "text": "La promotion immobilière chez Procept s'organise en deux phases : le montage du programme (terrain, faisabilité, financements, permis) puis sa réalisation (coordination de la construction, commercialisation et achèvement). Nous créons des maisons haut de gamme clé en main dans l'ouest parisien, autour de Versailles et de Rueil-Malmaison."
+      },
+      "steps": [
+        {
+          "title": "Initiation & terrain",
+          "description": "Identification du projet, recherche et sécurisation du terrain adapté."
+        },
+        {
+          "title": "Faisabilité",
+          "description": "Études techniques, urbanistiques et économiques pour valider le programme."
+        },
+        {
+          "title": "Financements",
+          "description": "Structuration du montage financier et accompagnement des partenaires."
+        },
+        {
+          "title": "Coordination construction",
+          "description": "Pilotage des travaux et des corps d'état jusqu'à la livraison."
+        },
+        {
+          "title": "Commercialisation",
+          "description": "Mise en marché du programme et relation avec les acquéreurs."
+        },
+        {
+          "title": "Achèvement",
+          "description": "Réception, livraisons et finalisation du programme immobilier."
+        }
+      ],
+      "cta": {
+        "title": "Votre projet de promotion immobilière",
+        "text": "Contactez Procept pour une étude de faisabilité, un terrain ou une maison clé en main près de Versailles et Rueil-Malmaison. Devis gratuit."
+      },
+      "galleryFilter": "construction"
+    }
+  }
+}

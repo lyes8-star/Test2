@@ -1,0 +1,38 @@
+{
+  "zones": {
+    "title": "Zones d'intervention",
+    "intro": "Basés à Mareil-Marly, nous intervenons dans l'ouest parisien : Yvelines, Hauts-de-Seine et communes limitrophes.",
+    "cities": [
+      "Mareil-Marly",
+      "Saint-Germain-en-Laye",
+      "Versailles",
+      "Rueil-Malmaison",
+      "Marly-le-Roi",
+      "Le Vésinet",
+      "Chatou",
+      "Croissy-sur-Seine",
+      "Le Pecq",
+      "Maisons-Laffitte",
+      "Poissy",
+      "La Celle-Saint-Cloud",
+      "Louveciennes",
+      "Bougival",
+      "Le Chesnay-Rocquencourt",
+      "Vélizy-Villacoublay",
+      "Saint-Cloud",
+      "Garches",
+      "Nanterre",
+      "Suresnes",
+      "Boulogne-Billancourt",
+      "Meudon",
+      "Sèvres",
+      "Chaville",
+      "Viroflay",
+      "Plaisir",
+      "Montigny-le-Bretonneux",
+      "Guyancourt",
+      "Orgeval",
+      "Chambourcy"
+    ]
+  }
+}

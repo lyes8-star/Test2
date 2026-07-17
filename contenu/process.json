@@ -1,0 +1,28 @@
+{
+  "process": [
+    {
+      "id": "etude",
+      "title": "Étude",
+      "description": "Analyse de vos besoins, du terrain et du budget pour un avant-projet sur mesure.",
+      "image": "images/gallery/gal-01.jpg"
+    },
+    {
+      "id": "plans",
+      "title": "Plans",
+      "description": "Conception des plans, permis de construire et choix des matériaux haut de gamme.",
+      "image": "images/gallery/gal-38.jpg"
+    },
+    {
+      "id": "chantier",
+      "title": "Chantier",
+      "description": "Suivi de chantier par des professionnels avertis, du gros œuvre aux finitions.",
+      "image": "images/gallery/gal-08.jpg"
+    },
+    {
+      "id": "livraison",
+      "title": "Livraison",
+      "description": "Remise des clés et livraison clé en main de votre maison ou rénovation.",
+      "image": "images/gallery/gal-01.jpg"
+    }
+  ]
+}

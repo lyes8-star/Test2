@@ -54,11 +54,19 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 });
 
 async function loadContent() {
-  // API locale si serveur Node, sinon fichier statique (GitHub Pages)
+  // API locale si serveur Node, sinon fichiers contenu/ (GitHub Pages)
   try {
     const apiRes = await fetch('/api/content');
     if (apiRes.ok) {
       content = await apiRes.json();
+      populateForms();
+      return;
+    }
+  } catch (_) { /* ignore */ }
+
+  try {
+    if (window.ProceptContent?.load) {
+      content = await window.ProceptContent.load({ basePath: '../' });
       populateForms();
       return;
     }
