@@ -1,0 +1,115 @@
+{
+  "site": {
+    "name": "Procept",
+    "tagline": "Constructeur de maisons autour de Saint-Germain-en-Laye",
+    "description": "Procept est un promoteur immobilier, constructeur de maisons neuves. Il rénove des bâtiments anciens, réalise l'extension de maisons près de Versailles.",
+    "phone": "01 39 58 28 23",
+    "fax": "01 39 58 33 93",
+    "email": "procept@procept.fr",
+    "address": "29 Rue des Closeaux, 78750 Mareil-Marly",
+    "hours": "Lun - Ven : 9h00 - 18h00"
+  },
+  "hero": {
+    "slides": [
+      {
+        "id": "slide-1",
+        "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/5ca7941c54234e65ae41dd620cd6b0f7-1920w.jpg",
+        "title": "Construction de maisons près de Saint-Germain-en-Laye",
+        "description": "La société Procept emploie les techniques les plus appropriées pour chaque domaine de compétences et met à votre service des professionnels avertis."
+      },
+      {
+        "id": "slide-2",
+        "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/b389dd517e0c46b497dd8721b695a663-1920w.jpg",
+        "title": "Rénovation de maisons à proximité de Saint-Germain-en-Laye",
+        "description": "Rénovation complète, agrandissement et modernisation de votre habitat avec des matériaux haut de gamme."
+      },
+      {
+        "id": "slide-3",
+        "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/4710d65295264608b7c358e609dfabcf-1920w.jpg",
+        "title": "Extension de maisons aux alentours de Rueil-Malmaison",
+        "description": "Extensions sur mesure, vérandas, terrasses et toits-terrasses végétalisés pour agrandir votre espace de vie."
+      },
+      {
+        "id": "slide-4",
+        "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/022c32a2ced24e7d8d6e8f91d4b4fb72-1920w.jpg",
+        "title": "Promotion immobilière près de Versailles",
+        "description": "Achat de terrain, conception des plans, permis de construire — nous vous accompagnons dans votre projet immobilier."
+      }
+    ]
+  },
+  "about": {
+    "title": "Votre projet, notre expertise",
+    "text": "Nous élaborons ensemble votre projet, en étudiant vos souhaits, le terrain, votre budget, afin de réaliser un avant-projet correspondant à vos attentes. Nous réalisons des maisons neuves clé en main pour particuliers et professionnels, avec des matériaux haut de gamme de qualité, dans l'ouest parisien autour de Saint-Germain-en-Laye, Versailles, Marly-le-Roi, Rueil-Malmaison, les Yvelines, Paris et les Hauts-de-Seine.",
+    "zone": "Nous sommes situés à Mareil-Marly et nous intervenons dans l'ouest parisien : Yvelines, Hauts-de-Seine, Marly-le-Roi, Saint-Germain-en-Laye, Versailles, Rueil-Malmaison."
+  },
+  "services": [
+    {
+      "id": "construction",
+      "title": "Construction",
+      "description": "Maisons neuves clé en main pour particuliers et professionnels. Matériaux haut de gamme, certification RE2020. De l'avant-projet à la livraison, nous construisons la maison de vos rêves.",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/d087c20bb4ca4f8d9a3cb5c3fd8f2204-960w.jpg",
+      "link": "#construction"
+    },
+    {
+      "id": "renovation",
+      "title": "Rénovation",
+      "description": "Rénovation, agrandissement de maisons, construction de piscines, toits-terrasses végétalisés, terrasses et vérandas. Nous concevons sur plans avec diagnostic au préalable.",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/8d166e67a73c450dbdf3612d4bcbb75e-960w.jpg",
+      "link": "#renovation"
+    },
+    {
+      "id": "promotion",
+      "title": "Promotion immobilière",
+      "description": "Acteur de la construction immobilière, Procept est également promoteur : achat de terrain, conception des plans, permis de construire. Création de maisons haut de gamme clé en main.",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/71b1908f8e2547c1840f2df3fe31d69a-960w.jpg",
+      "link": "#promotion"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gal-1",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/d087c20bb4ca4f8d9a3cb5c3fd8f2204-640w.jpg",
+      "caption": "Construction grande maison de luxe"
+    },
+    {
+      "id": "gal-2",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/b0344c01605a40899e9b31e56581f8d7-640w.jpg",
+      "caption": "Construction de maison neuve"
+    },
+    {
+      "id": "gal-3",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/765ebfc3faf249f3bbb7ca313d8e8f14-640w.jpg",
+      "caption": "Rénovation intérieure"
+    },
+    {
+      "id": "gal-4",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/7f52b7da969b4475a0c468552ee06697-640w.jpg",
+      "caption": "Extension en bois"
+    },
+    {
+      "id": "gal-5",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/87d4d9cb18434173a7e591a214a6dee4-640w.jpg",
+      "caption": "Maison contemporaine"
+    },
+    {
+      "id": "gal-6",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/f1f8fe5285bf42eb86da139a54c3c71d-640w.jpg",
+      "caption": "Chantier construction"
+    },
+    {
+      "id": "gal-7",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/06b3ac1c29d94c7d8fbec24542fbd161-640w.jpg",
+      "caption": "Finitions haut de gamme"
+    },
+    {
+      "id": "gal-8",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/01839411c60f416d8cdf4757c0ce558a-640w.jpg",
+      "caption": "Rénovation façade"
+    },
+    {
+      "id": "gal-9",
+      "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/b78b3bdda0d44c51aa79c1349999b24f-640w.jpg",
+      "caption": "Maison traditionnelle"
+    }
+  ]
+}

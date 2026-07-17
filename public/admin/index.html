@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration — Procept</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&family=Quattrocento:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div id="loginScreen" class="login-screen">
+    <form class="login-form" id="loginForm">
+      <h1>Procept Admin</h1>
+      <p>Connectez-vous pour gérer le contenu du site</p>
+      <div class="form-group">
+        <label for="username">Identifiant</label>
+        <input type="text" id="username" name="username" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn--primary btn--full">Se connecter</button>
+      <p class="login-error" id="loginError" hidden>Identifiants incorrects</p>
+    </form>
+  </div>
+
+  <div id="adminPanel" class="admin" hidden>
+    <aside class="admin__sidebar">
+      <div class="admin__brand">
+        <span class="logo__mark">P</span>
+        <span>Admin Procept</span>
+      </div>
+      <nav class="admin__nav">
+        <button class="admin__nav-btn active" data-tab="site">Informations</button>
+        <button class="admin__nav-btn" data-tab="hero">Diaporama</button>
+        <button class="admin__nav-btn" data-tab="services">Services</button>
+        <button class="admin__nav-btn" data-tab="gallery">Galerie</button>
+        <button class="admin__nav-btn" data-tab="about">À propos</button>
+      </nav>
+      <div class="admin__sidebar-footer">
+        <a href="/" target="_blank" class="btn btn--outline btn--sm">Voir le site</a>
+        <button class="btn btn--ghost btn--sm" id="logoutBtn">Déconnexion</button>
+      </div>
+    </aside>
+
+    <main class="admin__main">
+      <header class="admin__header">
+        <h2 id="panelTitle">Informations du site</h2>
+        <button class="btn btn--primary" id="saveBtn">
+          <span id="saveBtnText">Enregistrer</span>
+        </button>
+      </header>
+
+      <div class="admin__content">
+        <div class="tab-panel active" id="tab-site">
+          <div class="card">
+            <h3>Coordonnées</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Nom du site</label>
+                <input type="text" id="siteName">
+              </div>
+              <div class="form-group">
+                <label>Slogan</label>
+                <input type="text" id="siteTagline">
+              </div>
+              <div class="form-group form-group--full">
+                <label>Description (SEO)</label>
+                <textarea id="siteDescription" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Téléphone</label>
+                <input type="text" id="sitePhone">
+              </div>
+              <div class="form-group">
+                <label>Fax</label>
+                <input type="text" id="siteFax">
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="siteEmail">
+              </div>
+              <div class="form-group">
+                <label>Horaires</label>
+                <input type="text" id="siteHours">
+              </div>
+              <div class="form-group form-group--full">
+                <label>Adresse</label>
+                <input type="text" id="siteAddress">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-hero">
+          <div class="card">
+            <div class="card__header">
+              <h3>Slides du diaporama</h3>
+              <button class="btn btn--outline btn--sm" id="addSlide">+ Ajouter un slide</button>
+            </div>
+            <div id="heroEditor"></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-services">
+          <div id="servicesEditor"></div>
+        </div>
+
+        <div class="tab-panel" id="tab-gallery">
+          <div class="card">
+            <div class="card__header">
+              <h3>Photos des réalisations</h3>
+              <button class="btn btn--outline btn--sm" id="addGallery">+ Ajouter une photo</button>
+            </div>
+            <div class="gallery-editor" id="galleryEditor"></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-about">
+          <div class="card">
+            <h3>Section À propos</h3>
+            <div class="form-group">
+              <label>Titre</label>
+              <input type="text" id="aboutTitle">
+            </div>
+            <div class="form-group">
+              <label>Texte de présentation</label>
+              <textarea id="aboutText" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Zone d'intervention</label>
+              <textarea id="aboutZone" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast" hidden></div>
+    </main>
+  </div>
+
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

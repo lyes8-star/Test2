@@ -1,0 +1,15 @@
+{
+  "name": "procept-website",
+  "version": "1.0.0",
+  "description": "Site Procept - constructeur de maisons avec interface admin",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+  }
+}
