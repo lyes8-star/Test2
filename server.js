@@ -236,6 +236,73 @@ function clearLoginFailures(ip) {
   loginAttempts.delete(ip);
 }
 
+/* —— Anti-bot (Node only ; inactive on GitHub Pages static) —— */
+const scrapeHits = new Map();
+const bannedIps = new Map();
+const SCRAPE_WINDOW_MS = 60 * 1000;
+const SCRAPE_MAX_PHOTOS = 90;
+const SCRAPE_MAX_JSON = 40;
+const SCRAPE_MAX_GLOBAL = 180;
+const BAN_MS = 15 * 60 * 1000;
+
+const BAD_UA_RE =
+  /(?:wget|curl|python-requests|scrapy|httpclient|libwww|httrack|nikto|sqlmap|masscan|bytespider|petalsearch|semrushbot|ahrefsbot|dotbot|mj12bot|dataforseobot)/i;
+const GOOD_BOT_RE =
+  /(?:googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|applebot|facebookexternalhit|twitterbot|linkedinbot)/i;
+
+function isBanned(ip) {
+  const until = bannedIps.get(ip);
+  if (!until) return false;
+  if (Date.now() > until) {
+    bannedIps.delete(ip);
+    return false;
+  }
+  return true;
+}
+
+function banIp(ip, ms = BAN_MS) {
+  bannedIps.set(ip, Date.now() + ms);
+}
+
+function recordScrape(ip, bucket) {
+  const now = Date.now();
+  let entry = scrapeHits.get(ip);
+  if (!entry || entry.reset < now) {
+    entry = { photos: 0, json: 0, global: 0, reset: now + SCRAPE_WINDOW_MS };
+  }
+  entry[bucket] = (entry[bucket] || 0) + 1;
+  entry.global += 1;
+  scrapeHits.set(ip, entry);
+  return entry;
+}
+
+function scrapeLimited(ip, pathname) {
+  let bucket = 'global';
+  if (
+    pathname.startsWith('/contenu/photos/') ||
+    pathname.startsWith('/uploads/') ||
+    /\.(?:jpg|jpeg|png|webp|gif)$/i.test(pathname)
+  ) {
+    bucket = 'photos';
+  } else if (pathname.endsWith('.json') || pathname === '/api/content') {
+    bucket = 'json';
+  } else {
+    return false;
+  }
+  const entry = recordScrape(ip, bucket);
+  if (entry.photos > SCRAPE_MAX_PHOTOS || entry.json > SCRAPE_MAX_JSON || entry.global > SCRAPE_MAX_GLOBAL) {
+    banIp(ip);
+    return true;
+  }
+  return false;
+}
+
+function isBadUserAgent(ua) {
+  if (!ua || !String(ua).trim()) return true;
+  if (GOOD_BOT_RE.test(ua)) return false;
+  return BAD_UA_RE.test(ua);
+}
+
 function parseMultipart(buffer, boundary) {
   const parts = [];
   const boundaryBuffer = Buffer.from(`--${boundary}`);
@@ -356,10 +423,44 @@ const server = http.createServer(async (req, res) => {
 
   const url = new URL(req.url, `http://${req.headers.host}`);
   const pathname = url.pathname;
+  const ip = clientIp(req);
+  const ua = req.headers['user-agent'] || '';
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     res.end();
+    return;
+  }
+
+  // Honeypot — bait for scrapers
+  if (
+    pathname === '/admin-backup.zip' ||
+    pathname === '/contenu/.trap' ||
+    pathname === '/.env' ||
+    pathname === '/wp-login.php'
+  ) {
+    banIp(ip, BAN_MS * 4);
+    res.writeHead(404);
+    res.end('Not found');
+    return;
+  }
+
+  if (isBanned(ip)) {
+    res.writeHead(429, { 'Retry-After': '900' });
+    res.end('Too many requests');
+    return;
+  }
+
+  // Allow good bots; block obvious scrapers (except admin API auth flows still need browsers)
+  if (isBadUserAgent(ua) && !pathname.startsWith('/api/admin/')) {
+    res.writeHead(403);
+    res.end('Forbidden');
+    return;
+  }
+
+  if (scrapeLimited(ip, pathname)) {
+    res.writeHead(429, { 'Retry-After': '60' });
+    res.end('Too many requests');
     return;
   }
 

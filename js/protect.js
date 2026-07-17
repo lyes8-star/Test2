@@ -1,6 +1,6 @@
 /**
- * Dissuasion anti-copie / anti-vol de photos (pas une protection absolue).
- * N’altère pas la sélection de texte ni les raccourcis clavier (accessibilité).
+ * Dissuasion anti-copie / anti-vol (pas une protection absolue).
+ * Locks raccourcis + sélection : désactivés en mode accessibilité / formulaires / admin.
  */
 (function () {
   const MEDIA_SEL = [
@@ -18,7 +18,33 @@
     '.news-detail__image',
   ].join(',');
 
-  function isProtectedTarget(el) {
+  const EDITABLE_SEL = 'input, textarea, select, [contenteditable="true"], .a11y-panel, .chat-panel, .chat-widget, .search-modal, .fab-a11y';
+
+  function isAdminPage() {
+    return /\/admin(\/|$)/.test(window.location.pathname);
+  }
+
+  function hasA11yMode() {
+    const root = document.documentElement;
+    return Array.from(root.classList).some((c) => c.startsWith('a11y-'));
+  }
+
+  function isEditableTarget(el) {
+    if (!el || el.nodeType !== 1) return false;
+    return !!el.closest(EDITABLE_SEL);
+  }
+
+  function locksEnabled() {
+    if (isAdminPage()) return false;
+    if (hasA11yMode()) return false;
+    return true;
+  }
+
+  function syncLockClass() {
+    document.documentElement.classList.toggle('protect-lock', locksEnabled());
+  }
+
+  function isProtectedMedia(el) {
     if (!el || el.nodeType !== 1) return false;
     if (el.closest('.a11y-panel, .fab-a11y, #a11yPanel, [data-a11y]')) return false;
     return !!el.closest(MEDIA_SEL);
@@ -27,7 +53,8 @@
   document.addEventListener(
     'contextmenu',
     (e) => {
-      if (isProtectedTarget(e.target)) e.preventDefault();
+      if (isProtectedMedia(e.target)) e.preventDefault();
+      else if (locksEnabled() && !isEditableTarget(e.target)) e.preventDefault();
     },
     true
   );
@@ -35,7 +62,46 @@
   document.addEventListener(
     'dragstart',
     (e) => {
-      if (isProtectedTarget(e.target)) e.preventDefault();
+      if (isProtectedMedia(e.target) || (locksEnabled() && !isEditableTarget(e.target))) {
+        e.preventDefault();
+      }
+    },
+    true
+  );
+
+  document.addEventListener(
+    'selectstart',
+    (e) => {
+      if (!locksEnabled()) return;
+      if (isEditableTarget(e.target)) return;
+      e.preventDefault();
+    },
+    true
+  );
+
+  document.addEventListener(
+    'keydown',
+    (e) => {
+      if (!locksEnabled()) return;
+      if (isEditableTarget(e.target)) return;
+
+      const key = e.key || '';
+      const lower = key.toLowerCase();
+      const mod = e.ctrlKey || e.metaKey;
+
+      if (key === 'F12') {
+        e.preventDefault();
+        return;
+      }
+
+      if (mod && e.shiftKey && ['i', 'j', 'c', 'k'].includes(lower)) {
+        e.preventDefault();
+        return;
+      }
+
+      if (mod && ['s', 'u', 'a', 'p'].includes(lower)) {
+        e.preventDefault();
+      }
     },
     true
   );
@@ -50,9 +116,19 @@
     lb.appendChild(mark);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', ensureLightboxWatermark);
-  } else {
+  const mo = new MutationObserver(syncLockClass);
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+  function boot() {
+    syncLockClass();
     ensureLightboxWatermark();
   }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
+  window.addEventListener('procept:a11y-motion', syncLockClass);
 })();
