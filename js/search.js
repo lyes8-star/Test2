@@ -730,10 +730,6 @@ window.ProceptSearch = (function () {
       <span class="fab-search__icon" aria-hidden="true">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </span>
-      <span class="fab-search__label">
-        <span class="fab-search__label-full">Rechercher</span>
-        <span class="fab-search__label-short">Chercher</span>
-      </span>
     `;
     document.body.appendChild(fab);
     return fab;

@@ -140,7 +140,6 @@ window.ProceptA11y = (function () {
     fabEl.setAttribute('aria-controls', 'a11yPanel');
     fabEl.innerHTML = `
       <span class="fab-a11y__icon">${iconSvg()}</span>
-      <span class="fab-a11y__label">Accessibilité</span>
     `;
 
     panelEl = document.createElement('div');
