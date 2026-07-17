@@ -4151,10 +4151,8 @@ html.protect-lock select,
 html.protect-lock [contenteditable="true"],
 html.protect-lock .a11y-panel,
 html.protect-lock .a11y-panel *,
-html.protect-lock .chat-panel,
-html.protect-lock .chat-panel *,
-html.protect-lock .chat-widget,
-html.protect-lock .chat-widget *,
+html.protect-lock .chat__panel,
+html.protect-lock .chat__panel *,
 html.protect-lock .search-modal,
 html.protect-lock .search-modal * {
   -webkit-user-select: text;

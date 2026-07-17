@@ -18,7 +18,7 @@
     '.news-detail__image',
   ].join(',');
 
-  const EDITABLE_SEL = 'input, textarea, select, [contenteditable="true"], .a11y-panel, .chat-panel, .chat-widget, .search-modal, .fab-a11y';
+  const EDITABLE_SEL = 'input, textarea, select, [contenteditable="true"], .a11y-panel, .chat__panel, .chat-widget, .search-modal, .fab-a11y';
 
   function isAdminPage() {
     return /\/admin(\/|$)/.test(window.location.pathname);
