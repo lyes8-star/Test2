@@ -412,21 +412,38 @@ function escapeHtml(str) {
 function renderHero(slides) {
   const container = document.getElementById('heroSlides');
   const dots = document.getElementById('heroDots');
+  const frame = document.getElementById('heroFrame');
 
   container.innerHTML = slides.map((slide, i) =>
     `<div class="hero__slide${i === 0 ? ' active' : ''}" style="background-image:url('${slide.image}')" data-index="${i}" role="img" aria-label="${escapeHtml(slide.title)}"></div>`
   ).join('');
 
   dots.innerHTML = slides.map((_, i) =>
-    `<button class="hero__dot${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="Slide ${i + 1}"></button>`
+    `<button type="button" class="hero__dot${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="Slide ${i + 1}"></button>`
   ).join('');
 
   updateHeroText(slides[0]);
   startSlideshow(slides.length);
 
   dots.querySelectorAll('.hero__dot').forEach((dot) => {
-    dot.addEventListener('click', () => goToSlide(+dot.dataset.index, slides.length));
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      goToSlide(+dot.dataset.index, slides.length);
+    });
   });
+
+  if (frame && !frame.dataset.zoomBound) {
+    frame.dataset.zoomBound = '1';
+    frame.addEventListener('click', () => {
+      const slide = content?.hero?.slides?.[currentSlide];
+      if (!slide) return;
+      openLightbox({
+        image: slide.image,
+        imageFull: slide.image,
+        caption: slide.title || '',
+      });
+    });
+  }
 }
 
 function updateHeroText(slide) {
@@ -780,10 +797,12 @@ bindMobileDropdown(exploreToggle, exploreDropdown, null);
 
 /* —— Search : FAB page via ProceptSearch + Ctrl/Cmd+K —— */
 
-document.getElementById('heroPrev').addEventListener('click', () => {
+document.getElementById('heroPrev').addEventListener('click', (e) => {
+  e.stopPropagation();
   if (content) goToSlide(currentSlide - 1, content.hero.slides.length);
 });
-document.getElementById('heroNext').addEventListener('click', () => {
+document.getElementById('heroNext').addEventListener('click', (e) => {
+  e.stopPropagation();
   if (content) goToSlide(currentSlide + 1, content.hero.slides.length);
 });
 

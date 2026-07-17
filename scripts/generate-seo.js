@@ -363,8 +363,8 @@ function articlePageHtml(item) {
   <meta name="twitter:image" content="${esc(image)}">
   <script type="application/ld+json">${JSON.stringify(articleLd)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
-  <link rel="stylesheet" href="../../fonts/fonts.css?v=16">
-  <link rel="stylesheet" href="../../css/style.css?v=16">
+  <link rel="stylesheet" href="../../fonts/fonts.css?v=17">
+  <link rel="stylesheet" href="../../css/style.css?v=17">
 </head>
 <!--a11y-->
 <body class="page-service" data-news-slug="${esc(item.slug)}">
