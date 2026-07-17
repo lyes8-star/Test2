@@ -298,9 +298,24 @@ const server = http.createServer(async (req, res) => {
     res.end('Forbidden');
     return;
   }
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    const indexPath = path.join(filePath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      sendFile(res, indexPath);
+      return;
+    }
+  }
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     sendFile(res, filePath);
     return;
+  }
+  // Trailing-slash optional: /constructeur → constructeur/index.html
+  if (!pathname.endsWith('/')) {
+    const dirIndex = path.join(ROOT_DIR, pathname, 'index.html');
+    if (dirIndex.startsWith(ROOT_DIR) && fs.existsSync(dirIndex)) {
+      sendFile(res, dirIndex);
+      return;
+    }
   }
 
   // SPA fallback for admin

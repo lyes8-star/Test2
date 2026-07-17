@@ -6,7 +6,8 @@
 
 - `robots.txt` + `sitemap.xml`
 - Meta canonical, Open Graph, Twitter Card
-- JSON-LD `HomeAndConstructionBusiness` + `FAQPage`
+- JSON-LD `HomeAndConstructionBusiness` + `FAQPage` + `Service` / `BreadcrumbList` (pages métier)
+- Pages dédiées **`/constructeur/`** et **`/renovation/`**
 - Sections visibles **Zones** + **FAQ** (contenu indexable)
 - Lexique `data/seo-keywords.json` (~4500 termes) pour la **recherche interne** uniquement — **aucun stuffing caché**
 
@@ -20,7 +21,9 @@ node server.js
 
 | Page | URL |
 |------|-----|
-| Site | http://localhost:3000 |
+| Accueil | http://localhost:3000 |
+| Construction | http://localhost:3000/constructeur/ |
+| Rénovation | http://localhost:3000/renovation/ |
 | Admin | http://localhost:3000/admin |
 
 Identifiants : `admin` / `procept2026`
@@ -29,6 +32,8 @@ Identifiants : `admin` / `procept2026`
 
 ```
 ├── index.html
+├── constructeur/index.html
+├── renovation/index.html
 ├── robots.txt / sitemap.xml / favicon.svg
 ├── css/ js/ images/ admin/
 ├── data/content.json

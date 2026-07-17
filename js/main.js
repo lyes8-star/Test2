@@ -276,14 +276,20 @@ function resetSlideshow(total) {
 
 function renderServices(services) {
   const grid = document.getElementById('servicesGrid');
-  grid.innerHTML = services.map((s) => `
+  grid.innerHTML = services.map((s) => {
+    const href = s.link || `#${s.id}`;
+    const isPage = href && !href.startsWith('#');
+    return `
     <article class="service-card reveal" id="${s.id}" data-keywords="${(s.keywords || []).join(',')}">
-      <div class="service-card__image">
+      <a class="service-card__image" href="${escapeHtml(href)}" ${isPage ? '' : ''}>
         <img src="${s.image}" alt="${escapeHtml(s.title)} — Procept constructeur Mareil-Marly" width="800" height="600" loading="lazy" decoding="async">
-      </div>
+      </a>
       <div class="service-card__body">
-        <h3 class="service-card__title">${escapeHtml(s.title)}</h3>
+        <h3 class="service-card__title">
+          <a href="${escapeHtml(href)}">${escapeHtml(s.title)}</a>
+        </h3>
         <p class="service-card__desc">${escapeHtml(s.description)}</p>
+        ${isPage ? `<a class="service-card__more" href="${escapeHtml(href)}">En savoir plus →</a>` : ''}
         ${(s.related || []).length ? `
           <div class="service-card__thumbs">
             ${s.related.map((src, i) => `
@@ -294,8 +300,8 @@ function renderServices(services) {
           </div>
         ` : ''}
       </div>
-    </article>
-  `).join('');
+    </article>`;
+  }).join('');
 
   grid.querySelectorAll('.service-card__thumb').forEach((btn) => {
     btn.addEventListener('click', () => {
