@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#2c4a3e">
+  <title>Hors ligne — Procept</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #1a2822;
+      --accent: #c4a35a;
+      --text: #f5f2eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(196, 163, 90, 0.18), transparent 50%),
+        linear-gradient(165deg, #24362e 0%, var(--bg) 55%, #12201a 100%);
+      color: var(--text);
+      text-align: center;
+    }
+    .logo {
+      font-size: 1.75rem;
+      letter-spacing: 0.18em;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 400;
+      margin: 0 0 0.75rem;
+    }
+    p {
+      margin: 0 0 1.5rem;
+      opacity: 0.85;
+      line-height: 1.6;
+      max-width: 28rem;
+    }
+    a {
+      display: inline-block;
+      margin: 0.35rem;
+      padding: 0.7rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: system-ui, sans-serif;
+      font-size: 0.9rem;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #1a2822;
+      font-weight: 600;
+    }
+    .btn-outline {
+      border: 1px solid rgba(245, 242, 235, 0.35);
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <p class="logo">PROCEPT</p>
+    <h1>Vous êtes hors ligne</h1>
+    <p>La connexion réseau est indisponible. Réessayez plus tard, ou contactez-nous directement.</p>
+    <a class="btn-primary" href="./">Réessayer l’accueil</a>
+    <a class="btn-outline" href="tel:0139582823">Appeler 01 39 58 28 23</a>
+  </div>
+</body>
+</html>

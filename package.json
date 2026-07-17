@@ -5,11 +5,16 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "sync": "node scripts/sync-content.js",
+    "seo": "node scripts/sync-content.js && node scripts/generate-seo.js",
+    "optimize-images": "node scripts/optimize-images.js",
+    "build": "npm run sync && npm run optimize-images && npm run seo"
   },
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {
+  "devDependencies": {
+    "sharp": "^0.35.3"
   }
 }

@@ -30,7 +30,8 @@
 
   function setMeta(selector, attr, value) {
     const el = document.querySelector(selector);
-    if (el && value != null) el.setAttribute(attr, value);
+    if (!el || value == null) return;
+    if (el.getAttribute(attr) !== String(value)) el.setAttribute(attr, value);
   }
 
   async function loadContent() {
@@ -130,59 +131,18 @@
     const pageUrl = absoluteUrl(`${page.slug}/`);
     const image = absoluteUrl(page.hero?.image || site.ogImage || 'contenu/photos/hero/slide-1.jpg');
 
-    document.title = title;
+    if (document.title !== title) document.title = title;
     setMeta('meta[name="description"]', 'content', desc);
     setMeta('#canonicalLink', 'href', pageUrl);
     setMeta('#ogUrl', 'content', pageUrl);
     setMeta('#ogTitle', 'content', title);
     setMeta('#ogDescription', 'content', desc);
     setMeta('#ogImage', 'content', image);
+    setMeta('meta[property="og:image:alt"]', 'content', `${page.hero?.title || page.label} — Procept`);
     setMeta('#twTitle', 'content', title);
     setMeta('#twDescription', 'content', desc);
     setMeta('#twImage', 'content', image);
-
-    const phone = `+33${site.phone.replace(/\s/g, '').replace(/^0/, '')}`;
-    const serviceLd = {
-      '@context': 'https://schema.org',
-      '@type': 'Service',
-      name: page.label || page.hero?.title,
-      description: desc,
-      url: pageUrl,
-      image,
-      provider: {
-        '@type': 'HomeAndConstructionBusiness',
-        name: site.name,
-        telephone: phone,
-        email: site.email,
-        url: site.url,
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: site.address.split(',')[0]?.trim() || site.address,
-          addressLocality: site.city || 'Mareil-Marly',
-          postalCode: site.postalCode || '78750',
-          addressRegion: site.region || 'Île-de-France',
-          addressCountry: site.country || 'FR',
-        },
-      },
-      areaServed: (content.zones?.cities || []).slice(0, 20).map((city) => ({
-        '@type': 'City',
-        name: city,
-      })),
-    };
-
-    const breadcrumbLd = {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Accueil', item: absoluteUrl('') },
-        { '@type': 'ListItem', position: 2, name: page.label || 'Service', item: pageUrl },
-      ],
-    };
-
-    const elService = document.getElementById('jsonldService');
-    const elBreadcrumb = document.getElementById('jsonldBreadcrumb');
-    if (elService) elService.textContent = JSON.stringify(serviceLd);
-    if (elBreadcrumb) elBreadcrumb.textContent = JSON.stringify(breadcrumbLd);
+    // JSON-LD is injected statically by generate-seo.js.
   }
 
   function renderChrome() {
@@ -246,8 +206,15 @@
   function renderPage(page) {
     const heroImg = document.getElementById('pageHeroImage');
     if (heroImg && page.hero?.image) {
-      heroImg.src = asset(page.hero.image);
+      const src = asset(page.hero.image);
+      heroImg.src = src;
       heroImg.alt = `${page.hero.title || page.label} — Procept`;
+      const picture = heroImg.closest('picture');
+      const source = picture?.querySelector('source[type="image/webp"]');
+      if (source && window.ProceptContent?.webpSrcset) {
+        const set = window.ProceptContent.webpSrcset(src);
+        if (set) source.setAttribute('srcset', set);
+      }
     }
 
     const eyebrow = document.getElementById('pageEyebrow');
@@ -347,7 +314,9 @@
         const status = item.status || 'termine';
         return `
       <button type="button" class="gallery__item reveal" data-index="${i}" aria-label="${escapeHtml(item.caption)}">
-        <img src="${asset(item.image)}" alt="${escapeHtml(item.caption)} — Procept" width="640" height="480" loading="lazy" decoding="async">
+        ${window.ProceptContent?.pictureHtml
+          ? window.ProceptContent.pictureHtml(asset(item.image), `${escapeHtml(item.caption)} — Procept`, { width: 640, height: 480, sizes: '(max-width: 900px) 50vw, 320px' })
+          : `<img src="${asset(item.image)}" alt="${escapeHtml(item.caption)} — Procept" width="640" height="480" loading="lazy" decoding="async">`}
         <span class="gallery__caption">
           <span class="gallery__meta">
             <span class="gallery__cat">${escapeHtml(categoryLabels[category] || 'Réalisation')}</span>
