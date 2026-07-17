@@ -31,6 +31,24 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://www.procept.fr/mentions-legales/</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.procept.fr/confidentialite/</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.procept.fr/cookies/</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://www.procept.fr/actualites/chantier-en-cours-yvelines/</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>weekly</changefreq>

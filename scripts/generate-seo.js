@@ -172,6 +172,9 @@ function writeSitemap() {
     { loc: abs('renovation/'), lastmod: today, priority: '0.95' },
     { loc: abs('promotion-immobiliere/'), lastmod: today, priority: '0.95' },
     { loc: abs('actualites/'), lastmod: today, priority: '0.85' },
+    { loc: abs('mentions-legales/'), lastmod: today, priority: '0.4' },
+    { loc: abs('confidentialite/'), lastmod: today, priority: '0.4' },
+    { loc: abs('cookies/'), lastmod: today, priority: '0.4' },
   ];
   publishedNews().forEach((n) => {
     urls.push({
@@ -360,10 +363,8 @@ function articlePageHtml(item) {
   <meta name="twitter:image" content="${esc(image)}">
   <script type="application/ld+json">${JSON.stringify(articleLd)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Quattrocento:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../css/style.css?v=3">
+  <link rel="stylesheet" href="../../fonts/fonts.css?v=4">
+  <link rel="stylesheet" href="../../css/style.css?v=4">
 </head>
 <body class="page-service" data-news-slug="${esc(item.slug)}">
   <header class="header" id="header">
@@ -419,15 +420,20 @@ function articlePageHtml(item) {
         <a href="../../promotion-immobiliere/">Promotion</a>
         <a href="../">Actualités</a>
         <a href="../../#contact">Contact</a>
+        <a href="../../mentions-legales/">Mentions légales</a>
+        <a href="../../confidentialite/">Confidentialité</a>
+        <a href="../../cookies/">Cookies</a>
+        <a href="#" data-manage-cookies>Gérer les cookies</a>
       </div>
       <p class="footer__copy">&copy; 2026 Procept — Constructeur de maisons en Île-de-France</p>
     </div>
   </footer>
-  <script src="../../js/social.js?v=3" defer></script>
-  <script src="../../js/analytics.js?v=3" defer></script>
-  <script src="../../js/chat.js?v=3" defer></script>
-  <script src="../../js/search.js?v=3" defer></script>
-  <script src="../../js/pwa-install.js?v=3" defer></script>
+  <script src="../../js/consent.js?v=4" defer></script>
+  <script src="../../js/social.js?v=4" defer></script>
+  <script src="../../js/analytics.js?v=4" defer></script>
+  <script src="../../js/chat.js?v=4" defer></script>
+  <script src="../../js/search.js?v=4" defer></script>
+  <script src="../../js/pwa-install.js?v=4" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       if (window.ProceptAnalytics) {

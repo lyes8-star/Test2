@@ -27,11 +27,8 @@
   <meta name="twitter:title" id="twTitle" content="Procept — Constructeur de maisons à Saint-Germain-en-Laye">
   <meta name="twitter:description" id="twDescription" content="Procept est un promoteur immobilier, constructeur de maisons neuves à Saint-Germain-en-Laye. Rénovation et extension près de Versailles.">
   <meta name="twitter:image" id="twImage" content="https://www.procept.fr/images/hero/slide-1.jpg">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Quattrocento:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="fonts/fonts.css?v=4">
+<link rel="stylesheet" href="css/style.css?v=4">
   <link rel="preload" as="image" href="images/hero/slide-1.jpg" fetchpriority="high">
   <script type="application/ld+json" id="jsonldBusiness"></script>
   <script type="application/ld+json" id="jsonldFaq"></script>
@@ -327,6 +324,8 @@
             <label for="message">Votre projet</label>
             <textarea id="message" name="message" rows="5" required placeholder="Décrivez votre projet de construction, rénovation ou extension..."></textarea>
           </div>
+          <p class="form-legal-notice">En envoyant ce formulaire, vos coordonnées sont transmises à Procept via votre messagerie (mailto) pour répondre à votre demande.
+            <a href="confidentialite/">Politique de confidentialité</a> · <a href="cookies/">Cookies</a>.</p>
           <button type="submit" class="btn btn--primary btn--full">Envoyer ma demande</button>
           <p class="form-success" id="formSuccess" hidden>Merci ! Nous reviendrons vers vous dès que possible.</p>
         </form>
@@ -350,13 +349,17 @@
         <span class="logo__text">PROCEPT</span>
         <p id="footerAddress"></p>
       </div>
-      <div class="footer__links">
+            <div class="footer__links">
         <a href="constructeur/">Construction</a>
         <a href="renovation/">Rénovation</a>
         <a href="promotion-immobiliere/">Promotion</a>
         <a href="actualites/">Actualités</a>
         <a href="#realisations">Réalisations</a>
         <a href="#contact">Contact</a>
+        <a href="mentions-legales/">Mentions légales</a>
+        <a href="confidentialite/">Confidentialité</a>
+        <a href="cookies/">Cookies</a>
+        <a href="#" data-manage-cookies>Gérer les cookies</a>
       </div>
       <div class="social" data-social aria-label="Réseaux sociaux"></div>
       <p class="footer__copy">&copy; 2026 Procept — Constructeur de maisons en Île-de-France</p>
@@ -377,12 +380,13 @@
     <p class="lightbox__caption" id="lightboxCaption"></p>
   </div>
 
-  <script defer src="js/social.js?v=3"></script>
-  <script defer src="js/map-google.js?v=3"></script>
-  <script defer src="js/analytics.js?v=3"></script>
-  <script defer src="js/chat.js?v=3"></script>
-  <script defer src="js/search.js?v=3"></script>
-  <script defer src="js/pwa-install.js?v=3"></script>
-  <script defer src="js/main.js?v=3"></script>
+  <script defer src="js/consent.js?v=4"></script>
+  <script defer src="js/social.js?v=4"></script>
+  <script defer src="js/map-google.js?v=4"></script>
+  <script defer src="js/analytics.js?v=4"></script>
+  <script defer src="js/chat.js?v=4"></script>
+  <script defer src="js/search.js?v=4"></script>
+  <script defer src="js/pwa-install.js?v=4"></script>
+  <script defer src="js/main.js?v=4"></script>
 </body>
 </html>

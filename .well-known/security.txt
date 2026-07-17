@@ -1,0 +1,5 @@
+Contact: mailto:procept@procept.fr
+Expires: 2027-07-17T00:00:00.000Z
+Preferred-Languages: fr, en
+Canonical: https://www.procept.fr/.well-known/security.txt
+Policy: https://www.procept.fr/confidentialite/

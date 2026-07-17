@@ -84,6 +84,13 @@ function populateForms() {
   document.getElementById('siteKeywords').value = (site.keywords || []).join(', ');
   document.getElementById('siteAdsId').value = site.adsId || '';
   document.getElementById('siteGaId').value = site.gaId || '';
+  const legal = site.legal || {};
+  document.getElementById('legalRaison').value = legal.raisonSociale || '';
+  document.getElementById('legalForme').value = legal.forme || '';
+  document.getElementById('legalCapital').value = legal.capital || '';
+  document.getElementById('legalSiret').value = legal.siret || '';
+  document.getElementById('legalResp').value = legal.responsablePublication || '';
+  document.getElementById('legalHost').value = legal.hebergeur || '';
 
   const social = site.social || {};
   document.getElementById('socialFacebook').value = social.facebook || '';
@@ -125,6 +132,14 @@ function collectContent() {
       .filter(Boolean),
     adsId: document.getElementById('siteAdsId').value.trim(),
     gaId: document.getElementById('siteGaId').value.trim(),
+    legal: {
+      raisonSociale: document.getElementById('legalRaison').value.trim(),
+      forme: document.getElementById('legalForme').value.trim(),
+      capital: document.getElementById('legalCapital').value.trim(),
+      siret: document.getElementById('legalSiret').value.trim(),
+      responsablePublication: document.getElementById('legalResp').value.trim(),
+      hebergeur: document.getElementById('legalHost').value.trim(),
+    },
     social: {
       facebook: document.getElementById('socialFacebook').value.trim(),
       instagram: document.getElementById('socialInstagram').value.trim(),
