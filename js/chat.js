@@ -212,12 +212,8 @@ window.ProceptChat = (function () {
     wrap.id = 'proceptChat';
     wrap.className = 'chat';
     wrap.innerHTML = `
-      <button type="button" class="fab-contact fab-contact--pulse" id="chatFab" aria-label="Demander un devis avec l’assistant Procept" aria-expanded="false" aria-controls="chatPanel">
+      <button type="button" class="fab-contact fab-contact--pulse" id="chatFab" aria-label="Ouvrir l’assistant chantier" aria-expanded="false" aria-controls="chatPanel">
         <span class="fab-contact__icon" aria-hidden="true">${robotSvg()}</span>
-        <span class="fab-contact__label">
-          <span class="fab-contact__label-full">Demander un devis</span>
-          <span class="fab-contact__label-short">Devis</span>
-        </span>
       </button>
       <div class="chat__panel" id="chatPanel" role="dialog" aria-modal="true" aria-labelledby="chatTitle" hidden>
         <header class="chat__header">
