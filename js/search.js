@@ -582,6 +582,8 @@ window.ProceptSearch = (function () {
     modalEl.hidden = false;
     requestAnimationFrame(() => modalEl.classList.add('is-open'));
     document.body.classList.add('search-modal-open');
+    document.getElementById('searchFab')?.setAttribute('aria-expanded', 'true');
+    document.getElementById('searchFab')?.setAttribute('hidden', '');
     document.getElementById('searchToggle')?.setAttribute('aria-expanded', 'true');
     setTimeout(() => {
       inputEl?.focus();
@@ -595,6 +597,8 @@ window.ProceptSearch = (function () {
     isOpen = false;
     modalEl.classList.remove('is-open');
     document.body.classList.remove('search-modal-open');
+    document.getElementById('searchFab')?.setAttribute('aria-expanded', 'false');
+    document.getElementById('searchFab')?.removeAttribute('hidden');
     document.getElementById('searchToggle')?.setAttribute('aria-expanded', 'false');
 
     const finish = () => {
@@ -712,12 +716,43 @@ window.ProceptSearch = (function () {
 
   let triggersBound = false;
 
+  function ensureSearchFab() {
+    let fab = document.getElementById('searchFab');
+    if (fab) return fab;
+    fab = document.createElement('button');
+    fab.type = 'button';
+    fab.id = 'searchFab';
+    fab.className = 'fab-search';
+    fab.setAttribute('aria-label', 'Rechercher sur le site');
+    fab.setAttribute('aria-expanded', 'false');
+    fab.setAttribute('aria-controls', 'searchModal');
+    fab.innerHTML = `
+      <span class="fab-search__icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <span class="fab-search__label">
+        <span class="fab-search__label-full">Rechercher</span>
+        <span class="fab-search__label-short">Chercher</span>
+      </span>
+    `;
+    document.body.appendChild(fab);
+    return fab;
+  }
+
   function wireTriggers() {
     if (triggersBound) return;
     triggersBound = true;
 
-    const toggle = document.getElementById('searchToggle');
-    toggle?.addEventListener('click', (e) => {
+    const fab = ensureSearchFab();
+    fab.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (isOpen) closeSearch();
+      else openSearch();
+    });
+
+    // Legacy header loupe if still present
+    document.getElementById('searchToggle')?.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
       if (isOpen) closeSearch();
@@ -749,6 +784,7 @@ window.ProceptSearch = (function () {
     }
 
     document.getElementById('searchResultsMobile')?.remove();
+    document.getElementById('searchDesktop')?.remove();
   }
 
   function init(content, options = {}) {

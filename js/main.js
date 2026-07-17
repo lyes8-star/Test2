@@ -22,7 +22,7 @@ function siteBasePath() {
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
 
-  const RELOAD_KEY = 'procept-sw-reloaded-v7';
+  const RELOAD_KEY = 'procept-sw-reloaded-v8';
 
   const swUrl = new URL('sw.js', document.baseURI || window.location.href);
   navigator.serviceWorker
@@ -653,7 +653,7 @@ function initScrollSpy() {
     .map((id) => document.getElementById(id))
     .filter(Boolean);
 
-  const links = document.querySelectorAll('.nav__link[data-section]');
+  const links = document.querySelectorAll('.nav__link[data-section], .nav__mega-item[data-section]');
 
   const spy = new IntersectionObserver(
     (entries) => {
@@ -663,6 +663,9 @@ function initScrollSpy() {
         links.forEach((link) => {
           link.classList.toggle('active', link.dataset.section === id);
         });
+        const exploreOpen = ['realisations', 'actualites', 'apropos', 'zones', 'faq'].includes(id);
+        document.getElementById('exploreToggle')?.classList.toggle('active', exploreOpen);
+        document.getElementById('servicesToggle')?.classList.toggle('active', id === 'services');
       });
     },
     { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
@@ -676,6 +679,8 @@ const nav = document.getElementById('nav');
 const navToggle = document.getElementById('navToggle');
 const servicesToggle = document.getElementById('servicesToggle');
 const servicesDropdown = document.getElementById('servicesDropdown');
+const exploreToggle = document.getElementById('exploreToggle');
+const exploreDropdown = document.getElementById('exploreDropdown');
 
 navToggle.addEventListener('click', () => {
   const open = nav.classList.toggle('open');
@@ -689,23 +694,40 @@ function closeMobileNav() {
   document.body.classList.remove('nav-open');
   servicesDropdown?.classList.remove('open');
   servicesToggle?.setAttribute('aria-expanded', 'false');
+  exploreDropdown?.classList.remove('open');
+  exploreToggle?.setAttribute('aria-expanded', 'false');
 }
 
 document.querySelectorAll('.nav__link:not(.nav__link--parent), .nav__mega-item, .nav__mega-all').forEach((link) => {
   link.addEventListener('click', () => closeMobileNav());
 });
 
-servicesToggle.addEventListener('click', (e) => {
-  if (window.matchMedia('(max-width: 900px)').matches) {
-    e.preventDefault();
-    const open = servicesDropdown.classList.toggle('open');
-    servicesToggle.setAttribute('aria-expanded', open);
-  } else {
-    document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-  }
-});
+function bindMobileDropdown(toggle, dropdown, desktopScrollId) {
+  if (!toggle || !dropdown) return;
+  toggle.addEventListener('click', (e) => {
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      e.preventDefault();
+      const open = dropdown.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+      // close the other accordion
+      if (dropdown !== servicesDropdown) {
+        servicesDropdown?.classList.remove('open');
+        servicesToggle?.setAttribute('aria-expanded', 'false');
+      }
+      if (dropdown !== exploreDropdown) {
+        exploreDropdown?.classList.remove('open');
+        exploreToggle?.setAttribute('aria-expanded', 'false');
+      }
+    } else if (desktopScrollId) {
+      document.getElementById(desktopScrollId)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+}
 
-/* —— Search : ouvert via ProceptSearch (loupe + Ctrl/Cmd+K) —— */
+bindMobileDropdown(servicesToggle, servicesDropdown, 'services');
+bindMobileDropdown(exploreToggle, exploreDropdown, null);
+
+/* —— Search : FAB page via ProceptSearch + Ctrl/Cmd+K —— */
 
 document.getElementById('heroPrev').addEventListener('click', () => {
   if (content) goToSlide(currentSlide - 1, content.hero.slides.length);

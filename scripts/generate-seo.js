@@ -363,8 +363,8 @@ function articlePageHtml(item) {
   <meta name="twitter:image" content="${esc(image)}">
   <script type="application/ld+json">${JSON.stringify(articleLd)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
-  <link rel="stylesheet" href="../../fonts/fonts.css?v=8">
-  <link rel="stylesheet" href="../../css/style.css?v=8">
+  <link rel="stylesheet" href="../../fonts/fonts.css?v=9">
+  <link rel="stylesheet" href="../../css/style.css?v=9">
 </head>
 <body class="page-service" data-news-slug="${esc(item.slug)}">
   <header class="header" id="header">
@@ -375,7 +375,6 @@ function articlePageHtml(item) {
       </button>
       <nav class="nav" id="nav" aria-label="Navigation principale">
         <p class="nav__mobile-banner">Menu Procept</p>
-        <a href="../../" class="nav__link">Accueil</a>
         <a href="../" class="nav__link">Actualités</a>
         <a href="../../#contact" class="nav__link">Contact</a>
         <div class="nav__mobile-cta">
@@ -431,8 +430,8 @@ function articlePageHtml(item) {
   <script src="../../js/consent.js?v=4" defer></script>
   <script src="../../js/social.js?v=4" defer></script>
   <script src="../../js/analytics.js?v=4" defer></script>
-  <script src="../../js/chat.js?v=8" defer></script>
-  <script src="../../js/search.js?v=8" defer></script>
+  <script src="../../js/chat.js?v=9" defer></script>
+  <script src="../../js/search.js?v=9" defer></script>
   <script src="../../js/pwa-install.js?v=4" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
