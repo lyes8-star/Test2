@@ -16,7 +16,7 @@
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="../manifest.webmanifest">
   <link rel="stylesheet" href="../fonts/fonts.css?v=24">
-  <link rel="stylesheet" href="../css/style.css?v=28">
+  <link rel="stylesheet" href="../css/style.css?v=29">
   <script>
     (function () {
       try {
@@ -41,7 +41,6 @@
         <span></span><span></span><span></span>
       </button>
       <nav class="nav" id="nav" aria-label="Navigation principale">
-        <p class="nav__mobile-banner">Menu Procept</p>
         <a href="../mentions-legales/" class="nav__link">Mentions légales</a>
         <a href="../confidentialite/" class="nav__link">Confidentialité</a>
         <a href="../cookies/" class="nav__link">Cookies</a>
@@ -125,9 +124,12 @@
   <script>
     document.getElementById('navToggle')?.addEventListener('click', function () {
       var nav = document.getElementById('nav');
+      var header = document.getElementById('header');
       var open = nav.classList.toggle('open');
       this.setAttribute('aria-expanded', open);
       document.body.classList.toggle('nav-open', open);
+      if (open) header && header.classList.add('header--topbar-hidden');
+      else window.dispatchEvent(new Event('scroll'));
     });
     fetch('../data/content.json').then(function (r) { return r.json(); }).then(function (data) {
       var s = data.site || {};

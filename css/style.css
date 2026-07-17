@@ -738,10 +738,6 @@ a {
   display: none;
 }
 
-.nav__mobile-banner {
-  display: none;
-}
-
 .nav__link {
   font-size: 0.76rem;
   font-weight: 600;
@@ -3707,6 +3703,15 @@ body.chat-open {
     overflow: hidden;
   }
 
+  body.nav-open .topbar {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    overflow: hidden;
+    border: none;
+    pointer-events: none;
+  }
+
   body.nav-open .fab-search,
   body.nav-open .fab-phone,
   body.nav-open .fab-contact,
@@ -3720,21 +3725,6 @@ body.chat-open {
   .nav__mobile-search {
     display: block;
     margin-bottom: 1.15rem;
-  }
-
-  .nav__mobile-banner {
-    display: block;
-    margin: 0 0 1rem;
-    padding: 0.85rem 1rem;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    color: #fff;
-    border-radius: 12px;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    box-shadow: 0 8px 22px rgba(30, 51, 41, 0.28);
   }
 
   .nav__mobile-cta {

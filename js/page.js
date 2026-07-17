@@ -400,12 +400,16 @@
       servicesToggle?.setAttribute('aria-expanded', 'false');
       exploreDropdown?.classList.remove('open');
       exploreToggle?.setAttribute('aria-expanded', 'false');
+      // laisse updateScrollUI recalculer la topbar selon le scroll
+      window.dispatchEvent(new Event('scroll'));
     }
 
     toggle?.addEventListener('click', () => {
       const open = nav.classList.toggle('open');
       toggle.setAttribute('aria-expanded', open);
       document.body.classList.toggle('nav-open', open);
+      if (open) header?.classList.add('header--topbar-hidden');
+      else window.dispatchEvent(new Event('scroll'));
     });
 
     function bindAccordion(btn, dropdown, otherBtn, otherDropdown) {

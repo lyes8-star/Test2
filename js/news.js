@@ -361,6 +361,7 @@
   function initNav() {
     const toggle = document.getElementById('navToggle');
     const nav = document.getElementById('nav');
+    const header = document.getElementById('header');
     const servicesToggle = document.getElementById('servicesToggle');
     const servicesDropdown = document.getElementById('servicesDropdown');
     const exploreToggle = document.getElementById('exploreToggle');
@@ -374,6 +375,7 @@
       servicesToggle?.setAttribute('aria-expanded', 'false');
       exploreDropdown?.classList.remove('open');
       exploreToggle?.setAttribute('aria-expanded', 'false');
+      window.dispatchEvent(new Event('scroll'));
     }
 
     if (toggle && nav) {
@@ -381,6 +383,8 @@
         const open = nav.classList.toggle('open');
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         document.body.classList.toggle('nav-open', open);
+        if (open) header?.classList.add('header--topbar-hidden');
+        else window.dispatchEvent(new Event('scroll'));
       });
       nav.querySelectorAll('a').forEach((link) => {
         link.addEventListener('click', () => closeNav());
