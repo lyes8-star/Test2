@@ -5,12 +5,23 @@ let lastScrollY = 0;
 const GALLERY_VISIBLE = 6;
 
 async function loadContent() {
-  const res = await fetch('/api/content');
+  // API locale (node server.js) puis fallback GitHub Pages / fichier statique
+  try {
+    const res = await fetch('/api/content');
+    if (res.ok) {
+      content = await res.json();
+      renderSite();
+      if (window.ProceptSearch) window.ProceptSearch.init(content);
+      initReveal();
+      initScrollSpy();
+      return;
+    }
+  } catch (_) { /* pas de serveur API */ }
+
+  const res = await fetch('data/content.json');
   content = await res.json();
   renderSite();
-  if (window.ProceptSearch) {
-    window.ProceptSearch.init(content);
-  }
+  if (window.ProceptSearch) window.ProceptSearch.init(content);
   initReveal();
   initScrollSpy();
 }

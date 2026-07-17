@@ -51,7 +51,17 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 });
 
 async function loadContent() {
-  const res = await fetch('/api/content');
+  // API locale si serveur Node, sinon fichier statique (GitHub Pages)
+  try {
+    const apiRes = await fetch('/api/content');
+    if (apiRes.ok) {
+      content = await apiRes.json();
+      populateForms();
+      return;
+    }
+  } catch (_) { /* ignore */ }
+
+  const res = await fetch('../data/content.json');
   content = await res.json();
   populateForms();
 }
