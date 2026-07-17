@@ -108,7 +108,7 @@
       });
     }
     if ('serviceWorker' in navigator) {
-      const RELOAD_KEY = 'procept-sw-reloaded-v7';
+      const RELOAD_KEY = 'procept-sw-reloaded-v8';
       const swUrl = new URL('../sw.js', document.baseURI).href;
       navigator.serviceWorker
         .register(swUrl)
@@ -339,14 +339,18 @@
     const toggle = document.getElementById('navToggle');
     const nav = document.getElementById('nav');
     const servicesToggle = document.getElementById('servicesToggle');
-    const dropdown = document.getElementById('servicesDropdown');
+    const servicesDropdown = document.getElementById('servicesDropdown');
+    const exploreToggle = document.getElementById('exploreToggle');
+    const exploreDropdown = document.getElementById('exploreDropdown');
 
     function closeNav() {
       nav?.classList.remove('open');
       document.body.classList.remove('nav-open');
       toggle?.setAttribute('aria-expanded', 'false');
-      dropdown?.classList.remove('open');
+      servicesDropdown?.classList.remove('open');
       servicesToggle?.setAttribute('aria-expanded', 'false');
+      exploreDropdown?.classList.remove('open');
+      exploreToggle?.setAttribute('aria-expanded', 'false');
     }
 
     if (toggle && nav) {
@@ -359,12 +363,20 @@
         link.addEventListener('click', () => closeNav());
       });
     }
-    if (servicesToggle && dropdown) {
-      servicesToggle.addEventListener('click', () => {
+
+    function bindAccordion(btn, dropdown, otherBtn, otherDropdown) {
+      if (!btn || !dropdown) return;
+      btn.addEventListener('click', () => {
         const open = dropdown.classList.toggle('open');
-        servicesToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        otherDropdown?.classList.remove('open');
+        otherBtn?.setAttribute('aria-expanded', 'false');
       });
     }
+
+    bindAccordion(servicesToggle, servicesDropdown, exploreToggle, exploreDropdown);
+    bindAccordion(exploreToggle, exploreDropdown, servicesToggle, servicesDropdown);
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         if (window.ProceptSearch?.isOpen?.()) return;

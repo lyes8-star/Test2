@@ -82,7 +82,7 @@
       });
     }
     if ('serviceWorker' in navigator) {
-      const RELOAD_KEY = 'procept-sw-reloaded-v7';
+      const RELOAD_KEY = 'procept-sw-reloaded-v8';
       const swUrl = new URL('../sw.js', document.baseURI).href;
       navigator.serviceWorker
         .register(swUrl)
@@ -377,6 +377,8 @@
     const header = document.getElementById('header');
     const servicesToggle = document.getElementById('servicesToggle');
     const servicesDropdown = document.getElementById('servicesDropdown');
+    const exploreToggle = document.getElementById('exploreToggle');
+    const exploreDropdown = document.getElementById('exploreDropdown');
 
     function closeNav() {
       nav?.classList.remove('open');
@@ -384,6 +386,8 @@
       toggle?.setAttribute('aria-expanded', 'false');
       servicesDropdown?.classList.remove('open');
       servicesToggle?.setAttribute('aria-expanded', 'false');
+      exploreDropdown?.classList.remove('open');
+      exploreToggle?.setAttribute('aria-expanded', 'false');
     }
 
     toggle?.addEventListener('click', () => {
@@ -392,11 +396,18 @@
       document.body.classList.toggle('nav-open', open);
     });
 
-    servicesToggle?.addEventListener('click', (e) => {
-      e.preventDefault();
-      const open = servicesDropdown.classList.toggle('open');
-      servicesToggle.setAttribute('aria-expanded', open);
-    });
+    function bindAccordion(btn, dropdown, otherBtn, otherDropdown) {
+      btn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const open = dropdown.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open);
+        otherDropdown?.classList.remove('open');
+        otherBtn?.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    bindAccordion(servicesToggle, servicesDropdown, exploreToggle, exploreDropdown);
+    bindAccordion(exploreToggle, exploreDropdown, servicesToggle, servicesDropdown);
 
     nav?.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => closeNav());
@@ -413,6 +424,10 @@
       if (servicesDropdown && !servicesDropdown.contains(e.target)) {
         servicesDropdown.classList.remove('open');
         servicesToggle?.setAttribute('aria-expanded', 'false');
+      }
+      if (exploreDropdown && !exploreDropdown.contains(e.target)) {
+        exploreDropdown.classList.remove('open');
+        exploreToggle?.setAttribute('aria-expanded', 'false');
       }
     });
 
