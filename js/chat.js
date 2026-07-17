@@ -206,7 +206,21 @@ window.ProceptChat = (function () {
   }
 
   function ensureDom() {
-    if (document.getElementById('proceptChat')) return;
+    const existing = document.getElementById('proceptChat');
+    if (existing) {
+      if (!document.getElementById('chatBackdrop')) {
+        const panel = document.getElementById('chatPanel');
+        const backdrop = document.createElement('div');
+        backdrop.className = 'chat__backdrop';
+        backdrop.id = 'chatBackdrop';
+        backdrop.hidden = true;
+        backdrop.setAttribute('data-close-chat', '');
+        backdrop.tabIndex = -1;
+        if (panel) existing.insertBefore(backdrop, panel);
+        else existing.appendChild(backdrop);
+      }
+      return;
+    }
 
     const wrap = document.createElement('div');
     wrap.id = 'proceptChat';
@@ -215,6 +229,7 @@ window.ProceptChat = (function () {
       <button type="button" class="fab-contact fab-contact--pulse" id="chatFab" aria-label="Ouvrir l’assistant chantier" aria-expanded="false" aria-controls="chatPanel">
         <span class="fab-contact__icon" aria-hidden="true">${robotSvg()}</span>
       </button>
+      <div class="chat__backdrop" id="chatBackdrop" hidden data-close-chat tabindex="-1"></div>
       <div class="chat__panel" id="chatPanel" role="dialog" aria-modal="true" aria-labelledby="chatTitle" hidden>
         <header class="chat__header">
           <div class="chat__header-brand">
@@ -243,12 +258,17 @@ window.ProceptChat = (function () {
     open = !!value;
     const panel = document.getElementById('chatPanel');
     const fab = document.getElementById('chatFab');
+    const backdrop = document.getElementById('chatBackdrop');
     if (!panel || !fab) return;
 
     if (open) {
       stopFabPulse();
       if (!wasOpen) {
         track('generate_lead', { method: opts.source || 'chat_open' });
+      }
+      if (backdrop) {
+        backdrop.hidden = false;
+        requestAnimationFrame(() => backdrop.classList.add('is-open'));
       }
       panel.hidden = false;
       panel.classList.add('is-open');
@@ -266,6 +286,14 @@ window.ProceptChat = (function () {
       }
       document.getElementById('chatClose')?.focus({ preventScroll: true });
     } else {
+      if (backdrop) {
+        backdrop.classList.remove('is-open');
+        const hideBackdrop = () => {
+          if (!open) backdrop.hidden = true;
+        };
+        backdrop.addEventListener('transitionend', hideBackdrop, { once: true });
+        setTimeout(hideBackdrop, 280);
+      }
       panel.hidden = true;
       panel.classList.remove('is-open');
       fab.hidden = false;
@@ -560,6 +588,13 @@ window.ProceptChat = (function () {
       if (closeBtn) {
         e.preventDefault();
         e.stopPropagation();
+        setOpen(false);
+        return;
+      }
+
+      const backdrop = e.target.closest('#chatBackdrop, [data-close-chat]');
+      if (backdrop && open) {
+        e.preventDefault();
         setOpen(false);
         return;
       }
