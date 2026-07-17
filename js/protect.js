@@ -19,6 +19,7 @@
   ].join(',');
 
   const EDITABLE_SEL = 'input, textarea, select, [contenteditable="true"], .a11y-panel, .chat__panel, .chat-widget, .search-modal, .fab-a11y';
+  const SELECTABLE_SEL = '.topbar, .contact, .footer, a[href^="tel:"], a[href^="mailto:"], .page-cta, .cookie-banner';
 
   function isAdminPage() {
     return /\/admin(\/|$)/.test(window.location.pathname);
@@ -32,6 +33,11 @@
   function isEditableTarget(el) {
     if (!el || el.nodeType !== 1) return false;
     return !!el.closest(EDITABLE_SEL);
+  }
+
+  function isSelectableTarget(el) {
+    if (!el || el.nodeType !== 1) return false;
+    return !!el.closest(SELECTABLE_SEL);
   }
 
   function locksEnabled() {
@@ -73,7 +79,7 @@
     'selectstart',
     (e) => {
       if (!locksEnabled()) return;
-      if (isEditableTarget(e.target)) return;
+      if (isEditableTarget(e.target) || isSelectableTarget(e.target)) return;
       e.preventDefault();
     },
     true

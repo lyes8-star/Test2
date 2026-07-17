@@ -212,8 +212,31 @@ function renderSite() {
   document.getElementById('aboutZone').textContent = about.zone;
   if (about.image) {
     const aboutImg = document.getElementById('aboutImage');
-    aboutImg.src = about.image;
-    aboutImg.alt = `Siège social Procept — ${site.address}`;
+    const src = String(about.image).replace(/-full\.(jpe?g)$/i, '.$1');
+    const alt = `Siège social Procept — ${site.address}`;
+    if (window.ProceptContent?.pictureHtml && aboutImg?.parentElement) {
+      const wrap = aboutImg.closest('.about__visual') || aboutImg.parentElement;
+      const pic = window.ProceptContent.pictureHtml(src, alt, {
+        width: 800,
+        height: 600,
+        loading: 'lazy',
+        className: aboutImg.className || '',
+        sizes: '(max-width: 900px) 100vw, 480px',
+      });
+      const tmp = document.createElement('div');
+      tmp.innerHTML = pic;
+      const next = tmp.firstElementChild;
+      if (next) {
+        if (aboutImg.id) {
+          const img = next.tagName === 'PICTURE' ? next.querySelector('img') : next;
+          if (img) img.id = 'aboutImage';
+        }
+        aboutImg.replaceWith(next);
+      }
+    } else if (aboutImg) {
+      aboutImg.src = src;
+      aboutImg.alt = alt;
+    }
   }
 
   if (contactImage) {
@@ -279,7 +302,9 @@ function renderNewsHome(items) {
   grid.innerHTML = published.map((n) => `
     <article class="news-card reveal" data-id="${escapeHtml(n.id || n.slug || '')}">
       <a href="actualites/${encodeURIComponent(n.slug || n.id)}/" class="news-card__media">
-        <img src="${n.image}" alt="" width="640" height="400" loading="lazy" decoding="async">
+        ${window.ProceptContent?.pictureHtml
+          ? window.ProceptContent.pictureHtml(n.image, escapeHtml(n.title || ''), { width: 640, height: 400, sizes: '(max-width: 900px) 100vw, 360px' })
+          : `<img src="${n.image}" alt="${escapeHtml(n.title || '')}" width="640" height="400" loading="lazy" decoding="async">`}
       </a>
       <div class="news-card__body">
         <time class="news-card__date" datetime="${escapeHtml(n.date || '')}">${escapeHtml(formatNewsDate(n.date))}</time>
@@ -423,6 +448,33 @@ function renderHero(slides) {
       });
     });
   }
+
+  if (frame && !frame.dataset.swipeBound) {
+    frame.dataset.swipeBound = '1';
+    let touchX = 0;
+    let touchY = 0;
+    frame.addEventListener(
+      'touchstart',
+      (e) => {
+        const t = e.changedTouches[0];
+        touchX = t.clientX;
+        touchY = t.clientY;
+      },
+      { passive: true }
+    );
+    frame.addEventListener(
+      'touchend',
+      (e) => {
+        const t = e.changedTouches[0];
+        const dx = t.clientX - touchX;
+        const dy = t.clientY - touchY;
+        if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+        if (dx < 0) goToSlide(currentSlide + 1, slides.length);
+        else goToSlide(currentSlide - 1, slides.length);
+      },
+      { passive: true }
+    );
+  }
 }
 
 function updateHeroText(slide) {
@@ -473,10 +525,18 @@ function renderServices(services) {
   grid.innerHTML = services.map((s) => {
     const href = s.link || `#${s.id}`;
     const isPage = href && !href.startsWith('#');
+    const mainImg = window.ProceptContent?.pictureHtml
+      ? window.ProceptContent.pictureHtml(s.image, `${escapeHtml(s.title)} — Procept constructeur Mareil-Marly`, {
+          width: 800,
+          height: 600,
+          loading: 'lazy',
+          sizes: '(max-width: 900px) 100vw, 400px',
+        })
+      : `<img src="${s.image}" alt="${escapeHtml(s.title)} — Procept constructeur Mareil-Marly" width="800" height="600" loading="lazy" decoding="async">`;
     return `
     <article class="service-card reveal" id="${s.id}" data-keywords="${(s.keywords || []).join(',')}">
       <a class="service-card__image" href="${escapeHtml(href)}" ${isPage ? '' : ''}>
-        <img src="${s.image}" alt="${escapeHtml(s.title)} — Procept constructeur Mareil-Marly" width="800" height="600" loading="lazy" decoding="async">
+        ${mainImg}
         <span class="service-card__media-label">
           <span class="service-card__media-kicker">Métier</span>
           <span class="service-card__media-title">${escapeHtml(s.title)}</span>
@@ -492,7 +552,9 @@ function renderServices(services) {
           <div class="service-card__thumbs">
             ${s.related.map((src, i) => `
               <button type="button" class="service-card__thumb" data-service="${s.id}" data-img="${src}" aria-label="${escapeHtml(s.title)} photo ${i + 1}">
-                <img src="${src}" alt="${escapeHtml(s.title)} — réalisation Procept ${i + 1}" width="120" height="90" loading="lazy" decoding="async">
+                ${window.ProceptContent?.pictureHtml
+                  ? window.ProceptContent.pictureHtml(src, `${escapeHtml(s.title)} — réalisation Procept ${i + 1}`, { width: 120, height: 90, sizes: '120px' })
+                  : `<img src="${src}" alt="${escapeHtml(s.title)} — réalisation Procept ${i + 1}" width="120" height="90" loading="lazy" decoding="async">`}
               </button>
             `).join('')}
           </div>
@@ -515,7 +577,9 @@ function renderProcess(steps) {
   grid.innerHTML = steps.map((step, i) => `
     <article class="process__step reveal">
       <div class="process__image">
-        <img src="${step.image}" alt="${escapeHtml(step.title)}" width="640" height="480" loading="lazy" decoding="async">
+        ${window.ProceptContent?.pictureHtml
+          ? window.ProceptContent.pictureHtml(step.image, escapeHtml(step.title), { width: 640, height: 480, sizes: '(max-width: 900px) 100vw, 320px' })
+          : `<img src="${step.image}" alt="${escapeHtml(step.title)}" width="640" height="480" loading="lazy" decoding="async">`}
         <span class="process__num">${String(i + 1).padStart(2, '0')}</span>
       </div>
       <h3 class="process__title">${escapeHtml(step.title)}</h3>
@@ -678,6 +742,7 @@ backTop.addEventListener('click', () => {
 let revealObserver = null;
 
 function initReveal() {
+  document.documentElement.classList.add('reveals-on');
   if (!revealObserver) {
     revealObserver = new IntersectionObserver(
       (entries) => {
