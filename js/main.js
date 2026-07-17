@@ -22,7 +22,7 @@ function siteBasePath() {
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
 
-  const RELOAD_KEY = 'procept-sw-reloaded-v8';
+  const RELOAD_KEY = 'procept-sw-reloaded-v9';
 
   const swUrl = new URL('sw.js', document.baseURI || window.location.href);
   navigator.serviceWorker
@@ -435,8 +435,19 @@ function goToSlide(index, total) {
 
 function startSlideshow(total) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  slideInterval = setInterval(() => goToSlide(currentSlide + 1, total), 6000);
+  if (document.documentElement.classList.contains('a11y-motion')) return;
+  slideInterval = setInterval(() => {
+    if (document.documentElement.classList.contains('a11y-motion')) return;
+    goToSlide(currentSlide + 1, total);
+  }, 6000);
 }
+
+window.addEventListener('procept:a11y-motion', () => {
+  if (document.documentElement.classList.contains('a11y-motion') && slideInterval) {
+    clearInterval(slideInterval);
+    slideInterval = null;
+  }
+});
 
 function resetSlideshow(total) {
   clearInterval(slideInterval);

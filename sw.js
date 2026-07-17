@@ -1,5 +1,5 @@
 /* Service worker Procept — cache app shell (chemins relatifs pour GitHub Pages) */
-const CACHE = 'procept-shell-v8';
+const CACHE = 'procept-shell-v9';
 
 function shellUrls() {
   const base = self.registration.scope;
@@ -10,6 +10,7 @@ function shellUrls() {
     'js/page.js',
     'js/news.js',
     'js/search.js',
+    'js/a11y.js',
     'js/chat.js',
     'js/social.js',
     'js/analytics.js',

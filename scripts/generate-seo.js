@@ -363,10 +363,12 @@ function articlePageHtml(item) {
   <meta name="twitter:image" content="${esc(image)}">
   <script type="application/ld+json">${JSON.stringify(articleLd)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
-  <link rel="stylesheet" href="../../fonts/fonts.css?v=9">
-  <link rel="stylesheet" href="../../css/style.css?v=9">
+  <link rel="stylesheet" href="../../fonts/fonts.css?v=10">
+  <link rel="stylesheet" href="../../css/style.css?v=10">
 </head>
+<!--a11y-->
 <body class="page-service" data-news-slug="${esc(item.slug)}">
+  <a class="skip-link" href="#main">Aller au contenu</a>
   <header class="header" id="header">
     <div class="container header__inner">
       <a href="../../" class="logo"><span class="logo__mark">P</span><span class="logo__text">PROCEPT</span></a>
@@ -385,7 +387,7 @@ function articlePageHtml(item) {
       <a href="../../#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
     </div>
   </header>
-  <main>
+  <main id="main">
     <section class="section news-page">
       <div class="container">
         <nav class="breadcrumb" aria-label="Fil d'Ariane">
@@ -421,6 +423,7 @@ function articlePageHtml(item) {
         <a href="../../#contact">Contact</a>
         <a href="../../mentions-legales/">Mentions légales</a>
         <a href="../../confidentialite/">Confidentialité</a>
+        <a href="../../accessibilite/">Accessibilité</a>
         <a href="../../cookies/">Cookies</a>
         <a href="#" data-manage-cookies>Gérer les cookies</a>
       </div>
@@ -430,8 +433,9 @@ function articlePageHtml(item) {
   <script src="../../js/consent.js?v=4" defer></script>
   <script src="../../js/social.js?v=4" defer></script>
   <script src="../../js/analytics.js?v=4" defer></script>
-  <script src="../../js/chat.js?v=9" defer></script>
-  <script src="../../js/search.js?v=9" defer></script>
+  <script src="../../js/a11y.js?v=10" defer></script>
+  <script src="../../js/chat.js?v=10" defer></script>
+  <script src="../../js/search.js?v=10" defer></script>
   <script src="../../js/pwa-install.js?v=4" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {

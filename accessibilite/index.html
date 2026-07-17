@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Déclaration d’accessibilité Procept — conformité WCAG 2.1 AA, RGAA 4.1 et European Accessibility Act.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#2c4a3e">
+  <title>Déclaration d’accessibilité — Procept</title>
+  <link rel="canonical" href="https://www.procept.fr/accessibilite/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../fonts/fonts.css?v=10">
+  <link rel="stylesheet" href="../css/style.css?v=10">
+  <script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('procept-a11y-v1') || '{}');
+        var r = document.documentElement;
+        if (p.fontScale && p.fontScale !== 100) r.classList.add('a11y-font-' + p.fontScale);
+        if (p.contrast) r.classList.add('a11y-contrast');
+        if (p.links) r.classList.add('a11y-links');
+        if (p.spacing) r.classList.add('a11y-spacing');
+        if (p.readable) r.classList.add('a11y-readable');
+        if (p.motion || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) r.classList.add('a11y-motion');
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body class="page-legal">
+<a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="../" class="logo"><span class="logo__mark">P</span><span class="logo__text">PROCEPT</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav" aria-label="Navigation principale">
+        <p class="nav__mobile-banner">Menu Procept</p>
+        <a href="../mentions-legales/" class="nav__link">Mentions légales</a>
+        <a href="../confidentialite/" class="nav__link">Confidentialité</a>
+        <a href="../accessibilite/" class="nav__link nav__link--active">Accessibilité</a>
+        <a href="../cookies/" class="nav__link">Cookies</a>
+        <div class="nav__mobile-cta">
+          <a href="../#devis" class="btn btn--primary" data-open-chat>Demander un devis</a>
+        </div>
+      </nav>
+      <a href="../#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
+    </div>
+  </header>
+  <main id="main">
+    <section class="section legal-page">
+      <div class="container legal-page__inner">
+        <nav class="breadcrumb" aria-label="Fil d'Ariane">
+          <a href="../">Accueil</a> <span aria-hidden="true">/</span> <span>Accessibilité</span>
+        </nav>
+        <article class="legal">
+
+        <h1>Déclaration d’accessibilité</h1>
+        <p class="legal__updated">Engagement Procept envers l’accessibilité numérique (WCAG&nbsp;2.1 niveau AA, RGAA&nbsp;4.1, EN&nbsp;301&nbsp;549 / European Accessibility Act).</p>
+
+        <h2>État de conformité</h2>
+        <p>Le site <strong>procept.fr</strong> est <strong>partiellement conforme</strong> au RGAA 4.1 et aux critères WCAG 2.1 niveau AA. Un audit exhaustif n’a pas encore été réalisé ; des améliorations continues sont en cours.</p>
+
+        <h2>Résultats et moyens mis en œuvre</h2>
+        <ul>
+          <li>Langue de la page déclarée (<code>lang="fr"</code>)</li>
+          <li>Lien d’évitement « Aller au contenu »</li>
+          <li>Navigation au clavier, focus visible, libellés ARIA sur les contrôles principaux</li>
+          <li>Panneau <strong>Paramètres d’accessibilité</strong> (taille du texte, contraste, soulignement des liens, espacement, police lisible, réduction des animations) — préférences mémorisées localement</li>
+          <li>Respect de <code>prefers-reduced-motion</code> et possibilité de contraste renforcé</li>
+        </ul>
+        <p>Ouvrez le bouton « Accessibilité » (bas à gauche) pour ajuster l’affichage.</p>
+
+        <h2>Contenus non accessibles</h2>
+        <p>Peuvent encore présenter des écarts :</p>
+        <ul>
+          <li>Certaines images décoratives ou de galerie sans alternative textuelle détaillée</li>
+          <li>Carte Google Maps (contenu tiers, soumis au consentement cookies)</li>
+          <li>Documents ou médias externes éventuels non contrôlés</li>
+        </ul>
+
+        <h2>Établissement de cette déclaration</h2>
+        <p>Cette déclaration a été établie le <time datetime="2026-07-17">17 juillet 2026</time>.</p>
+        <p><strong>Technologies utilisées :</strong> HTML5, CSS3, JavaScript.</p>
+        <p><strong>Méthodes de test :</strong> vérification manuelle clavier / lecteurs d’écran de base, contrôles contrastes, Lighthouse Accessibility (Google), revue des critères RGAA prioritaires.</p>
+        <p><strong>Environnements de test :</strong> navigateurs récents (Chrome, Firefox, Safari, Edge) sur desktop et mobile.</p>
+
+        <h2>Retour d’information et contact</h2>
+        <p>Si vous rencontrez une difficulté d’accès à un contenu ou à un service, contactez-nous :</p>
+        <ul>
+          <li>Email : <a href="mailto:procept@procept.fr">procept@procept.fr</a></li>
+          <li>Téléphone : <a href="tel:+33139582823">01 39 58 28 23</a></li>
+          <li>Courrier : Procept — 29 Rue des Closeaux, 78750 Mareil-Marly</li>
+        </ul>
+        <p>Nous nous engageons à vous répondre et à proposer une alternative accessible dans un délai raisonnable.</p>
+
+        <h2>Voies de recours</h2>
+        <p>Si vous constatez un défaut d’accessibilité non corrigé, vous pouvez :</p>
+        <ul>
+          <li>Écrire au <a href="https://www.defenseurdesdroits.fr/" rel="noopener noreferrer" target="_blank">Défenseur des droits</a></li>
+          <li>Contacter le délégué du Défenseur des droits dans votre région</li>
+          <li>Envoyer un courrier (libre, sans affranchissement) au Défenseur des droits — Libre réponse 71120 — 75342 Paris CEDEX 07</li>
+        </ul>
+
+        <h2>Référentiels</h2>
+        <ul>
+          <li><a href="https://accessibilite.numerique.gouv.fr/" rel="noopener noreferrer" target="_blank">RGAA — accessibilité numérique (France)</a></li>
+          <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/" rel="noopener noreferrer" target="_blank">WCAG 2.1 (W3C)</a></li>
+          <li>EN 301 549 / European Accessibility Act</li>
+          <li>Bonnes pratiques Google Lighthouse Accessibility</li>
+        </ul>
+
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand"><span class="logo__text">PROCEPT</span><p>29 Rue des Closeaux, 78750 Mareil-Marly</p></div>
+      <div class="footer__links">
+        <a href="../constructeur/">Construction</a>
+        <a href="../renovation/">Rénovation</a>
+        <a href="../#contact">Contact</a>
+        <a href="../mentions-legales/">Mentions légales</a>
+        <a href="../confidentialite/">Confidentialité</a>
+        <a href="../accessibilite/">Accessibilité</a>
+        <a href="../cookies/">Cookies</a>
+        <a href="#" data-manage-cookies>Gérer les cookies</a>
+      </div>
+      <p class="footer__copy">&copy; 2026 Procept</p>
+    </div>
+  </footer>
+  <script defer src="../js/consent.js?v=4"></script>
+  <script defer src="../js/a11y.js?v=10"></script>
+  <script defer src="../js/analytics.js?v=4"></script>
+  <script defer src="../js/chat.js?v=10"></script>
+  <script>
+    document.getElementById('navToggle')?.addEventListener('click', function () {
+      var nav = document.getElementById('nav');
+      var open = nav.classList.toggle('open');
+      this.setAttribute('aria-expanded', open);
+      document.body.classList.toggle('nav-open', open);
+    });
+  </script>
+</body>
+</html>
