@@ -4138,3 +4138,23 @@ img,
     opacity: 0.7;
   }
 }
+
+/* Locks sélection (dissuasion) — exceptions formulaires / a11y / chat / recherche */
+html.protect-lock body {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html.protect-lock input,
+html.protect-lock textarea,
+html.protect-lock select,
+html.protect-lock [contenteditable="true"],
+html.protect-lock .a11y-panel,
+html.protect-lock .a11y-panel *,
+html.protect-lock .chat__panel,
+html.protect-lock .chat__panel *,
+html.protect-lock .search-modal,
+html.protect-lock .search-modal * {
+  -webkit-user-select: text;
+  user-select: text;
+}

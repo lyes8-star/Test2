@@ -33,6 +33,8 @@ Site compatible **GitHub Pages** (`index.html` à la racine).
 - Photos : `contenu/photos/` (hero, gallery, services)
 - Assemblage : `node scripts/sync-content.js` → `data/content.json`
 - Chargement navigateur : `js/content-loader.js` (repli sur `data/content.json`)
+- Dissuasion anti-copie : `js/protect.js` (raccourcis / sélection ; inactive en mode accessibilité et sur `/admin`)
+- Anti-bot **serveur** (rate-limit photos/JSON, filtre UA, honeypot) : uniquement avec `node server.js` — **pas actif sur GitHub Pages** (statique)
 
 ### Lancer en local
 
