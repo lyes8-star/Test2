@@ -1,14 +1,17 @@
 # Procept — Site web (compatible GitHub Pages)
 
-> **`index.html` est à la racine** — priorité GitHub Pages.
+> **`index.html` à la racine** — priorité GitHub Pages.
 
-## GitHub Pages
+## SEO Google (conforme)
 
-1. Settings → Pages → Source : **Deploy from a branch**
-2. Branch : `main` (ou cette branche) → dossier **`/` (root)**
+- `robots.txt` + `sitemap.xml`
+- Meta canonical, Open Graph, Twitter Card
+- JSON-LD `HomeAndConstructionBusiness` + `FAQPage` + `Service` / `BreadcrumbList` (pages métier)
+- Pages dédiées **`/constructeur/`** et **`/renovation/`**
+- Sections visibles **Zones** + **FAQ** (contenu indexable)
+- Lexique `data/seo-keywords.json` (~4500 termes) pour la **recherche interne** uniquement — **aucun stuffing caché**
 
-Le site lit `data/content.json` et les photos dans `images/`.  
-L’admin (upload / sauvegarde) nécessite `node server.js` en local.
+Soumettez le sitemap dans [Google Search Console](https://search.google.com/search-console) après déploiement.
 
 ## Lancer en local
 
@@ -18,7 +21,9 @@ node server.js
 
 | Page | URL |
 |------|-----|
-| Site | http://localhost:3000 |
+| Accueil | http://localhost:3000 |
+| Construction | http://localhost:3000/constructeur/ |
+| Rénovation | http://localhost:3000/renovation/ |
 | Admin | http://localhost:3000/admin |
 
 Identifiants : `admin` / `procept2026`
@@ -26,17 +31,12 @@ Identifiants : `admin` / `procept2026`
 ## Structure
 
 ```
-├── index.html          ← page d’accueil (racine)
-├── css/style.css
-├── js/main.js + search.js
-├── images/             ← toutes les photos Procept (hero, services, gallery)
-├── admin/
-├── data/content.json   ← textes + chemins images + catégories
-├── server.js
-└── test                ← export Duda d’origine (archive)
+├── index.html
+├── constructeur/index.html
+├── renovation/index.html
+├── robots.txt / sitemap.xml / favicon.svg
+├── css/ js/ images/ admin/
+├── data/content.json
+├── data/seo-keywords.json
+└── server.js
 ```
-
-## Contenu images
-
-- **45 réalisations** dans `images/gallery/` avec filtres (construction, rénovation, extension, chantier)
-- **4 slides** hero + **3** services + photos process / siège

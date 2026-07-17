@@ -22,18 +22,107 @@ async function loadContent() {
 }
 
 function afterLoad() {
+  applySeo(content);
   renderSite();
-  if (window.ProceptSearch) window.ProceptSearch.init(content);
+  if (window.ProceptSearch) {
+    window.ProceptSearch.init(content);
+    window.ProceptSearch.loadLexicon?.('data/seo-keywords.json');
+  }
   initReveal();
   initScrollSpy();
   initGalleryFilters();
+  initFaqAccordion();
+}
+
+function absoluteUrl(path) {
+  const base = (content.site.url || 'https://www.procept.fr/').replace(/\/?$/, '/');
+  if (!path) return base;
+  if (/^https?:\/\//i.test(path)) return path;
+  return base + path.replace(/^\//, '');
+}
+
+function setMeta(selector, attr, value) {
+  const el = document.querySelector(selector);
+  if (el && value != null) el.setAttribute(attr, value);
+}
+
+function applySeo(data) {
+  const { site, faq, zones } = data;
+  const title = `${site.name} — ${site.tagline}`;
+  const desc = site.description;
+  const url = site.url || 'https://www.procept.fr/';
+  const image = absoluteUrl(site.ogImage || 'images/hero/slide-1.jpg');
+
+  document.title = title;
+  setMeta('meta[name="description"]', 'content', desc);
+  setMeta('#canonicalLink', 'href', url);
+  setMeta('#ogUrl', 'content', url);
+  setMeta('#ogTitle', 'content', title);
+  setMeta('#ogDescription', 'content', desc);
+  setMeta('#ogImage', 'content', image);
+  setMeta('#twTitle', 'content', title);
+  setMeta('#twDescription', 'content', desc);
+  setMeta('#twImage', 'content', image);
+
+  const phone = `+33${site.phone.replace(/\s/g, '').replace(/^0/, '')}`;
+  const business = {
+    '@context': 'https://schema.org',
+    '@type': 'HomeAndConstructionBusiness',
+    '@id': `${url}#business`,
+    name: site.name,
+    description: desc,
+    url,
+    telephone: phone,
+    email: site.email,
+    image,
+    logo: absoluteUrl('favicon.svg'),
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.address.split(',')[0]?.trim() || site.address,
+      addressLocality: site.city || 'Mareil-Marly',
+      postalCode: site.postalCode || '78750',
+      addressRegion: site.region || 'Île-de-France',
+      addressCountry: site.country || 'FR',
+    },
+    geo: site.geo ? {
+      '@type': 'GeoCoordinates',
+      latitude: site.geo.lat,
+      longitude: site.geo.lng,
+    } : undefined,
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '18:00',
+    },
+    areaServed: (zones?.cities || site.keywords || []).map((city) => ({
+      '@type': 'City',
+      name: city,
+    })),
+    priceRange: '€€€',
+  };
+
+  document.getElementById('jsonldBusiness').textContent = JSON.stringify(business);
+
+  if (faq?.length) {
+    const faqLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    };
+    document.getElementById('jsonldFaq').textContent = JSON.stringify(faqLd);
+  }
 }
 
 function renderSite() {
-  const { site, hero, about, services, gallery, process, contactImage } = content;
-
-  document.title = `${site.name} — ${site.tagline}`;
-  document.querySelector('meta[name="description"]').content = site.description;
+  const { site, hero, about, services, process, contactImage, zones, faq } = content;
 
   const phoneHref = `tel:${site.phone.replace(/\s/g, '')}`;
 
@@ -54,12 +143,16 @@ function renderSite() {
 
   document.getElementById('heroEyebrow').textContent = site.tagline;
   document.getElementById('heroTitle').textContent = site.name;
+  const subtitle = document.getElementById('heroSubtitle');
+  if (subtitle) subtitle.textContent = site.tagline;
 
   renderHero(hero.slides);
   renderServices(services);
   renderProcess(process || []);
   renderGallery();
   renderMarquee(site.keywords || []);
+  renderZones(zones);
+  renderFaq(faq || []);
 
   document.getElementById('aboutTitle').textContent = about.title;
   document.getElementById('aboutText').textContent = about.text;
@@ -67,7 +160,7 @@ function renderSite() {
   if (about.image) {
     const aboutImg = document.getElementById('aboutImage');
     aboutImg.src = about.image;
-    aboutImg.alt = 'Notre siège social — Procept';
+    aboutImg.alt = `Siège social Procept — ${site.address}`;
   }
 
   if (contactImage) {
@@ -82,6 +175,43 @@ function renderSite() {
   document.getElementById('contactEmail').href = `mailto:${site.email}`;
   document.getElementById('contactHours').textContent = site.hours;
   document.getElementById('footerAddress').textContent = site.address;
+}
+
+function renderZones(zones) {
+  if (!zones) return;
+  const title = document.getElementById('zonesTitle');
+  const intro = document.getElementById('zonesIntro');
+  const list = document.getElementById('zonesList');
+  if (title) title.textContent = zones.title;
+  if (intro) intro.textContent = zones.intro;
+  if (list) {
+    list.innerHTML = (zones.cities || []).map((city) =>
+      `<li class="zones__item"><a href="#contact">${escapeHtml(city)}</a></li>`
+    ).join('');
+  }
+}
+
+function renderFaq(items) {
+  const list = document.getElementById('faqList');
+  if (!list) return;
+  list.innerHTML = items.map((item, i) => `
+    <details class="faq__item"${i === 0 ? ' open' : ''}>
+      <summary class="faq__question">${escapeHtml(item.question)}</summary>
+      <div class="faq__answer"><p>${escapeHtml(item.answer)}</p></div>
+    </details>
+  `).join('');
+}
+
+function initFaqAccordion() {
+  // Native <details> is enough; ensure only one open on click for cleaner UX
+  const list = document.getElementById('faqList');
+  if (!list) return;
+  list.addEventListener('toggle', (e) => {
+    if (!e.target.open) return;
+    list.querySelectorAll('details.faq__item').forEach((d) => {
+      if (d !== e.target) d.open = false;
+    });
+  }, true);
 }
 
 function renderMarquee(keywords) {
@@ -146,26 +276,32 @@ function resetSlideshow(total) {
 
 function renderServices(services) {
   const grid = document.getElementById('servicesGrid');
-  grid.innerHTML = services.map((s) => `
+  grid.innerHTML = services.map((s) => {
+    const href = s.link || `#${s.id}`;
+    const isPage = href && !href.startsWith('#');
+    return `
     <article class="service-card reveal" id="${s.id}" data-keywords="${(s.keywords || []).join(',')}">
-      <div class="service-card__image">
-        <img src="${s.image}" alt="${escapeHtml(s.title)}" width="800" height="600" loading="lazy" decoding="async">
-      </div>
+      <a class="service-card__image" href="${escapeHtml(href)}" ${isPage ? '' : ''}>
+        <img src="${s.image}" alt="${escapeHtml(s.title)} — Procept constructeur Mareil-Marly" width="800" height="600" loading="lazy" decoding="async">
+      </a>
       <div class="service-card__body">
-        <h3 class="service-card__title">${escapeHtml(s.title)}</h3>
+        <h3 class="service-card__title">
+          <a href="${escapeHtml(href)}">${escapeHtml(s.title)}</a>
+        </h3>
         <p class="service-card__desc">${escapeHtml(s.description)}</p>
+        ${isPage ? `<a class="service-card__more" href="${escapeHtml(href)}">En savoir plus →</a>` : ''}
         ${(s.related || []).length ? `
           <div class="service-card__thumbs">
             ${s.related.map((src, i) => `
-              <button type="button" class="service-card__thumb" data-service="${s.id}" data-img="${src}" aria-label="Voir photo ${i + 1}">
-                <img src="${src}" alt="" width="120" height="90" loading="lazy" decoding="async">
+              <button type="button" class="service-card__thumb" data-service="${s.id}" data-img="${src}" aria-label="${escapeHtml(s.title)} photo ${i + 1}">
+                <img src="${src}" alt="${escapeHtml(s.title)} — réalisation Procept ${i + 1}" width="120" height="90" loading="lazy" decoding="async">
               </button>
             `).join('')}
           </div>
         ` : ''}
       </div>
-    </article>
-  `).join('');
+    </article>`;
+  }).join('');
 
   grid.querySelectorAll('.service-card__thumb').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -211,7 +347,7 @@ function renderGallery() {
     const hide = !galleryExpanded && i >= GALLERY_VISIBLE;
     return `
     <div class="gallery__item reveal${hide ? ' hidden' : ''}" data-index="${i}" data-id="${item.id}" data-category="${item.category || 'autre'}">
-      <img src="${item.image}" alt="${escapeHtml(item.caption)}" width="640" height="480" loading="lazy" decoding="async">
+      <img src="${item.image}" alt="${escapeHtml(item.caption)} — ${escapeHtml(item.category || 'réalisation')} Procept" width="640" height="480" loading="lazy" decoding="async">
       <span class="gallery__caption">${escapeHtml(item.caption)}</span>
     </div>`;
   }).join('');
@@ -320,7 +456,7 @@ function initReveal() {
 
 /* —— Scroll spy —— */
 function initScrollSpy() {
-  const sections = ['accueil', 'services', 'apropos', 'realisations', 'contact']
+  const sections = ['accueil', 'services', 'apropos', 'realisations', 'zones', 'faq', 'contact']
     .map((id) => document.getElementById(id))
     .filter(Boolean);
 

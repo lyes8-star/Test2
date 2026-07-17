@@ -6,6 +6,7 @@ window.ProceptSearch = (function () {
   let index = [];
   let debounceTimer = null;
   let activeQuery = '';
+  let linkBase = '';
 
   function normalize(str) {
     return String(str || '')
@@ -34,6 +35,15 @@ window.ProceptSearch = (function () {
     return result;
   }
 
+  function resolveTarget(target) {
+    if (!target) return '#';
+    if (/^https?:\/\//i.test(target)) return target;
+    if (target.startsWith('#')) {
+      return linkBase ? `${linkBase}${target}` : target;
+    }
+    return linkBase ? `${linkBase}${target}` : target;
+  }
+
   function pushEntry(entry) {
     index.push({
       id: entry.id,
@@ -41,7 +51,7 @@ window.ProceptSearch = (function () {
       title: entry.title,
       excerpt: entry.excerpt,
       keywords: entry.keywords || [],
-      target: entry.target,
+      target: resolveTarget(entry.target),
       matchIds: entry.matchIds || [],
     });
   }
@@ -80,6 +90,9 @@ window.ProceptSearch = (function () {
     });
 
     (content.services || []).forEach((service) => {
+      const target = service.link && !service.link.startsWith('#')
+        ? service.link
+        : `#${service.id}`;
       pushEntry({
         id: service.id,
         type: 'Service',
@@ -92,8 +105,31 @@ window.ProceptSearch = (function () {
           ...(service.keywords || []),
           ...siteKeywords,
         ],
-        target: `#${service.id}`,
+        target,
         matchIds: [service.id],
+      });
+    });
+
+    Object.entries(content.pages || {}).forEach(([key, page]) => {
+      const slug = page.slug || key;
+      pushEntry({
+        id: `page-${key}`,
+        type: 'Page',
+        title: page.hero?.title || page.label || key,
+        excerpt: page.seo?.description || (page.intro || []).join(' ').slice(0, 160),
+        keywords: [
+          page.label,
+          page.hero?.title,
+          page.hero?.desc,
+          page.seo?.title,
+          page.seo?.description,
+          ...(page.intro || []),
+          ...(page.highlights || []).flatMap((h) => [h.title, h.text]),
+          page.secondary?.title,
+          page.secondary?.text,
+          ...siteKeywords,
+        ],
+        target: `${slug}/`,
       });
     });
 
@@ -112,6 +148,28 @@ window.ProceptSearch = (function () {
         target: '#apropos',
       });
     }
+
+    (content.faq || []).forEach((item, i) => {
+      pushEntry({
+        id: `faq-${i}`,
+        type: 'FAQ',
+        title: item.question,
+        excerpt: item.answer,
+        keywords: [item.question, item.answer, ...siteKeywords],
+        target: '#faq',
+      });
+    });
+
+    (content.zones?.cities || []).forEach((city) => {
+      pushEntry({
+        id: `zone-${normalize(city)}`,
+        type: 'Zone',
+        title: city,
+        excerpt: `Intervention Procept à ${city}`,
+        keywords: [city, `constructeur ${city}`, `rénovation ${city}`, ...siteKeywords],
+        target: '#zones',
+      });
+    });
 
     (content.gallery || []).forEach((item, i) => {
       pushEntry({
@@ -237,12 +295,38 @@ window.ProceptSearch = (function () {
   }
 
   function goToResult(target) {
-    const el = document.querySelector(target);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      el.classList.add('search-flash');
-      setTimeout(() => el.classList.remove('search-flash'), 1500);
+    if (!target) return;
+
+    const hashIdx = target.indexOf('#');
+    const pathPart = hashIdx === -1 ? target : target.slice(0, hashIdx);
+    const hashPart = hashIdx === -1 ? '' : target.slice(hashIdx);
+
+    // Cible purement locale (#section)
+    if (!pathPart && hashPart) {
+      const el = document.querySelector(hashPart);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('search-flash');
+        setTimeout(() => el.classList.remove('search-flash'), 1500);
+        return;
+      }
     }
+
+    // Autre page ou chemin relatif (constructeur/, ../#contact, etc.)
+    if (pathPart) {
+      // Hash sur la page courante si le path pointe ici
+      if (hashPart) {
+        const el = document.querySelector(hashPart);
+        if (el && (pathPart === './' || pathPart === '' || pathPart === window.location.pathname)) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+      }
+      window.location.href = target;
+      return;
+    }
+
+    window.location.href = target;
   }
 
   function bindInput(input, resultsEl, options = {}) {
@@ -302,7 +386,8 @@ window.ProceptSearch = (function () {
     }
   }
 
-  function init(content) {
+  function init(content, options = {}) {
+    linkBase = options.basePath || '';
     buildIndex(content);
 
     const desktopInput = document.getElementById('searchInput');
@@ -369,5 +454,32 @@ window.ProceptSearch = (function () {
     ];
   }
 
-  return { init, search, clearPageHighlight, goToResult };
+  async function loadLexicon(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return;
+      const data = await res.json();
+      const keywords = data.keywords || [];
+      // Index a sample of high-value keywords for live search (cap to keep UI snappy)
+      const sample = keywords.filter((k) => k.split(' ').length <= 5).slice(0, 800);
+      sample.forEach((kw) => {
+        pushEntry({
+          id: `seo-${normalize(kw)}`,
+          type: 'Mot-clé',
+          title: kw,
+          excerpt: `Recherche liée à ${kw}`,
+          keywords: [kw],
+          target: /rénov/i.test(kw)
+            ? 'renovation/'
+            : /extension|construct|maison|promo|permis|RE2020|bois|piscine|devis/i.test(kw)
+              ? 'constructeur/'
+              : '#zones',
+        });
+      });
+    } catch (_) {
+      /* lexique optionnel */
+    }
+  }
+
+  return { init, search, clearPageHighlight, goToResult, loadLexicon };
 })();

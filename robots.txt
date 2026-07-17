@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /server.js
+Disallow: /uploads/
+
+Sitemap: https://www.procept.fr/sitemap.xml
