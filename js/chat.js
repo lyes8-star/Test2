@@ -161,9 +161,12 @@ window.ProceptChat = (function () {
     wrap.id = 'proceptChat';
     wrap.className = 'chat';
     wrap.innerHTML = `
-      <button type="button" class="fab-contact" id="chatFab" aria-label="Demander un devis avec l’assistant Procept" aria-expanded="false" aria-controls="chatPanel">
+      <button type="button" class="fab-contact fab-contact--pulse" id="chatFab" aria-label="Demander un devis avec l’assistant Procept" aria-expanded="false" aria-controls="chatPanel">
         <span class="fab-contact__icon" aria-hidden="true">${robotSvg()}</span>
-        <span class="fab-contact__label">Devis</span>
+        <span class="fab-contact__label">
+          <span class="fab-contact__label-full">Demander un devis</span>
+          <span class="fab-contact__label-short">Devis</span>
+        </span>
       </button>
       <div class="chat__panel" id="chatPanel" role="dialog" aria-modal="true" aria-labelledby="chatTitle" hidden>
         <header class="chat__header">
@@ -183,6 +186,10 @@ window.ProceptChat = (function () {
     document.body.appendChild(wrap);
   }
 
+  function stopFabPulse() {
+    document.getElementById('chatFab')?.classList.remove('fab-contact--pulse');
+  }
+
   function setOpen(value, opts = {}) {
     ensureDom();
     const wasOpen = open;
@@ -192,6 +199,10 @@ window.ProceptChat = (function () {
     if (!panel || !fab) return;
 
     if (open) {
+      stopFabPulse();
+      if (!wasOpen) {
+        track('generate_lead', { method: opts.source || 'chat_open' });
+      }
       panel.hidden = false;
       panel.classList.add('is-open');
       fab.hidden = true;
@@ -499,14 +510,16 @@ window.ProceptChat = (function () {
       const fab = e.target.closest('#chatFab');
       if (fab) {
         e.preventDefault();
-        setOpen(!open);
+        stopFabPulse();
+        setOpen(!open, { source: 'fab' });
         return;
       }
 
       const openTrigger = e.target.closest('[data-open-chat], a[href="#devis"], a[href$="#devis"]');
       if (openTrigger) {
         e.preventDefault();
-        setOpen(true);
+        stopFabPulse();
+        setOpen(true, { source: 'cta' });
       }
     });
 
