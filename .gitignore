@@ -4,3 +4,13 @@ uploads/*
 data/.admin-hash
 .env
 *.log
+
+# Empêcher de reposer des images à la racine du dépôt
+/*.jpg
+/*.jpeg
+/*.png
+/*.webp
+/*.JPG
+/*.JPEG
+/*.PNG
+/*.WEBP
