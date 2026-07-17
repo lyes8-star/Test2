@@ -1,5 +1,5 @@
 /* Service worker Procept — cache app shell (chemins relatifs pour GitHub Pages) */
-const CACHE = 'procept-shell-v5';
+const CACHE = 'procept-shell-v6';
 
 function shellUrls() {
   const base = self.registration.scope;
@@ -62,16 +62,28 @@ self.addEventListener('fetch', (event) => {
     url.pathname.endsWith('.html') ||
     url.pathname.endsWith('/');
 
-  if (isHtml) {
+  // CSS/JS : network-first pour éviter les vieux assets après un déploiement
+  const isAsset =
+    /\.(?:css|js)$/i.test(url.pathname) ||
+    url.pathname.includes('/css/') ||
+    url.pathname.includes('/js/');
+
+  if (isHtml || isAsset) {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(req, copy));
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy));
+          }
           return res;
         })
         .catch(() =>
-          caches.match(req).then((r) => r || caches.match(new URL('./', self.registration.scope).href))
+          caches.match(req).then((r) => {
+            if (r) return r;
+            if (isHtml) return caches.match(new URL('./', self.registration.scope).href);
+            return undefined;
+          })
         )
     );
     return;
