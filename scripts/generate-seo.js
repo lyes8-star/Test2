@@ -70,7 +70,7 @@ function replaceBlock(html, name, inner) {
 
 function buildBusinessLd() {
   const phone = `+33${(site.phone || '').replace(/\s/g, '').replace(/^0/, '')}`;
-  const logoUrl = abs(site.ogImage || 'images/hero/slide-1.jpg');
+  const logoUrl = abs(site.ogImage || 'contenu/photos/hero/slide-1.jpg');
   return {
     '@context': 'https://schema.org',
     '@type': 'HomeAndConstructionBusiness',
@@ -304,7 +304,7 @@ function updateActualitesIndex() {
 
 function articlePageHtml(item) {
   const url = abs(`actualites/${item.slug}/`);
-  const image = abs(item.image || site.ogImage || 'images/hero/slide-1.jpg');
+  const image = abs(item.image || site.ogImage || 'contenu/photos/hero/slide-1.jpg');
   const title = `${item.title} — ${site.name || 'Procept'}`;
   const desc = item.excerpt || site.description || '';
   const bodyHtml = (item.body || []).map((p) => `<p>${esc(p)}</p>`).join('\n          ');
@@ -323,7 +323,7 @@ function articlePageHtml(item) {
       name: site.name || 'Procept',
       logo: {
         '@type': 'ImageObject',
-        url: abs(site.ogImage || 'images/hero/slide-1.jpg'),
+        url: abs(site.ogImage || 'contenu/photos/hero/slide-1.jpg'),
         width: 1200,
         height: 630,
       },
@@ -363,8 +363,8 @@ function articlePageHtml(item) {
   <meta name="twitter:image" content="${esc(image)}">
   <script type="application/ld+json">${JSON.stringify(articleLd)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
-  <link rel="stylesheet" href="../../fonts/fonts.css?v=15">
-  <link rel="stylesheet" href="../../css/style.css?v=15">
+  <link rel="stylesheet" href="../../fonts/fonts.css?v=16">
+  <link rel="stylesheet" href="../../css/style.css?v=16">
 </head>
 <!--a11y-->
 <body class="page-service" data-news-slug="${esc(item.slug)}">

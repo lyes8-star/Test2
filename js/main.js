@@ -143,7 +143,7 @@ function applySeo(data) {
   const title = `${site.name} — ${site.tagline}`;
   const desc = site.description;
   const url = site.url || 'https://www.procept.fr/';
-  const image = absoluteUrl(site.ogImage || 'images/hero/slide-1.jpg');
+  const image = absoluteUrl(site.ogImage || 'contenu/photos/hero/slide-1.jpg');
 
   document.title = title;
   setMeta('meta[name="description"]', 'content', desc);
@@ -196,7 +196,7 @@ function applySeo(data) {
     priceRange: '€€€',
     logo: {
       '@type': 'ImageObject',
-      url: absoluteUrl(site.ogImage || 'images/hero/slide-1.jpg'),
+      url: absoluteUrl(site.ogImage || 'contenu/photos/hero/slide-1.jpg'),
       width: 1200,
       height: 630,
     },

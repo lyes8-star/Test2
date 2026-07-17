@@ -4,17 +4,15 @@
 
 ➡️ **[Guide simple : dossier `contenu/`](contenu/LIRE-MOI.md)**
 
-Vous modifiez uniquement les fichiers dans **`contenu/`** (téléphone, textes, galerie, actualités…) directement sur GitHub.  
-Ne touchez pas à `js/`, `css/`, `server.js`, etc.
+Au quotidien : modifiez seulement les fichiers **texte** (`.json`) dans **`contenu/`** sur GitHub.  
+Ne touchez pas à `js/`, `css/`, `server.js`, ni à **`contenu/photos/`** (photos gérées à part).
 
 | Besoin | Fichier |
 |--------|---------|
 | Coordonnées | [`contenu/site.json`](contenu/site.json) |
-| Bandeau d’accueil | [`contenu/diaporama.json`](contenu/diaporama.json) |
-| Galerie | [`contenu/galerie.json`](contenu/galerie.json) |
+| Textes bandeau | [`contenu/diaporama.json`](contenu/diaporama.json) |
+| Légendes galerie | [`contenu/galerie.json`](contenu/galerie.json) |
 | Actualités | [`contenu/actualites.json`](contenu/actualites.json) |
-
-Images : dossiers `images/hero/`, `images/gallery/`, `images/services/` (ne pas renommer ces dossiers).
 
 ---
 
@@ -32,6 +30,7 @@ Site compatible **GitHub Pages** (`index.html` à la racine).
 ### Contenu technique
 
 - Source éditable : `contenu/*.json`
+- Photos : `contenu/photos/` (hero, gallery, services)
 - Assemblage : `node scripts/sync-content.js` → `data/content.json`
 - Chargement navigateur : `js/content-loader.js` (repli sur `data/content.json`)
 
@@ -52,13 +51,14 @@ L’admin enregistre à la fois `contenu/` et `data/content.json`.
 ### Structure
 
 ```
-├── contenu/          ← À MODIFIER (éditeurs)
-│   └── LIRE-MOI.md
-├── images/           ← photos (hero, gallery, services)
-├── index.html        ← pages publiques (ne pas déplacer)
+├── contenu/              ← zone éditeurs
+│   ├── LIRE-MOI.md
+│   ├── *.json            ← textes à modifier
+│   └── photos/           ← ne pas toucher (sauf tech)
+├── index.html
 ├── constructeur/ renovation/ …
-├── css/ js/          ← technique (ne pas toucher)
-├── data/content.json ← copie synchronisée
+├── css/ js/              ← technique
+├── data/content.json
 ├── admin/
 └── server.js
 ```

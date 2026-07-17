@@ -4,7 +4,7 @@
       "id": "construction",
       "title": "Construction",
       "description": "Maisons neuves clé en main pour particuliers et professionnels. Matériaux haut de gamme, certification RE2020. De l'avant-projet à la livraison, nous construisons la maison de vos rêves.",
-      "image": "images/services/construction.jpg",
+      "image": "contenu/photos/services/construction.jpg",
       "link": "constructeur/",
       "keywords": [
         "construction",
@@ -14,16 +14,16 @@
         "haut de gamme"
       ],
       "related": [
-        "images/gallery/gal-01.jpg",
-        "images/gallery/gal-02.jpg",
-        "images/gallery/gal-04.jpg"
+        "contenu/photos/gallery/gal-01.jpg",
+        "contenu/photos/gallery/gal-02.jpg",
+        "contenu/photos/gallery/gal-04.jpg"
       ]
     },
     {
       "id": "renovation",
       "title": "Rénovation",
       "description": "Rénovation, agrandissement de maisons, construction de piscines, toits-terrasses végétalisés, terrasses et vérandas. Nous concevons sur plans avec diagnostic au préalable.",
-      "image": "images/services/renovation.jpg",
+      "image": "contenu/photos/services/renovation.jpg",
       "link": "renovation/",
       "keywords": [
         "rénovation",
@@ -34,16 +34,16 @@
         "piscine"
       ],
       "related": [
-        "images/gallery/gal-03.jpg",
-        "images/gallery/gal-13.jpg",
-        "images/gallery/gal-16.jpg"
+        "contenu/photos/gallery/gal-03.jpg",
+        "contenu/photos/gallery/gal-13.jpg",
+        "contenu/photos/gallery/gal-16.jpg"
       ]
     },
     {
       "id": "promotion",
       "title": "Promotion immobilière",
       "description": "Acteur de la construction immobilière, Procept est également promoteur : achat de terrain, conception des plans, permis de construire. Création de maisons haut de gamme clé en main.",
-      "image": "images/services/promotion.jpg",
+      "image": "contenu/photos/services/promotion.jpg",
       "link": "promotion-immobiliere/",
       "keywords": [
         "promotion immobilière",
@@ -53,9 +53,9 @@
         "Versailles"
       ],
       "related": [
-        "images/gallery/gal-01.jpg",
-        "images/gallery/gal-07.jpg",
-        "images/gallery/gal-10.jpg"
+        "contenu/photos/gallery/gal-01.jpg",
+        "contenu/photos/gallery/gal-07.jpg",
+        "contenu/photos/gallery/gal-10.jpg"
       ]
     }
   ]

@@ -169,7 +169,7 @@
         const url = absoluteUrl(`actualites/${item.slug || item.id}/`);
       const title = `${item.title} — ${site.name || 'Procept'}`;
       const desc = item.excerpt || site.description || '';
-      const image = absoluteUrl(item.image || site.ogImage || 'images/hero/slide-1.jpg');
+      const image = absoluteUrl(item.image || site.ogImage || 'contenu/photos/hero/slide-1.jpg');
       document.title = title;
       setMeta('meta[name="description"]', 'content', desc);
       setMeta('#canonicalLink', 'href', url);
@@ -196,7 +196,7 @@
           name: site.name || 'Procept',
           logo: {
             '@type': 'ImageObject',
-            url: absoluteUrl(site.ogImage || 'images/hero/slide-1.jpg'),
+            url: absoluteUrl(site.ogImage || 'contenu/photos/hero/slide-1.jpg'),
             width: 1200,
             height: 630,
           },
