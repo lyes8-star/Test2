@@ -355,6 +355,14 @@
     const servicesToggle = document.getElementById('servicesToggle');
     const servicesDropdown = document.getElementById('servicesDropdown');
 
+    function closeNav() {
+      nav?.classList.remove('open');
+      document.body.classList.remove('nav-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+      servicesDropdown?.classList.remove('open');
+      servicesToggle?.setAttribute('aria-expanded', 'false');
+    }
+
     toggle?.addEventListener('click', () => {
       const open = nav.classList.toggle('open');
       toggle.setAttribute('aria-expanded', open);
@@ -368,13 +376,11 @@
     });
 
     nav?.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        nav.classList.remove('open');
-        document.body.classList.remove('nav-open');
-        toggle?.setAttribute('aria-expanded', 'false');
-        servicesDropdown?.classList.remove('open');
-        servicesToggle?.setAttribute('aria-expanded', 'false');
-      });
+      link.addEventListener('click', () => closeNav());
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeNav();
     });
 
     document.addEventListener('click', (e) => {
@@ -389,8 +395,13 @@
       'scroll',
       () => {
         const y = window.scrollY;
-        header?.classList.toggle('header--scrolled', y > 40);
-        header?.classList.toggle('header--hidden', y > lastY && y > 120);
+        header?.classList.toggle('header--scrolled', y > 24);
+        if (y > 40) {
+          if (y > lastY + 2) header?.classList.add('header--topbar-hidden');
+          else if (y < lastY - 2) header?.classList.remove('header--topbar-hidden');
+        } else {
+          header?.classList.remove('header--topbar-hidden');
+        }
         lastY = y;
       },
       { passive: true }
