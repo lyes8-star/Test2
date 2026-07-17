@@ -21,8 +21,42 @@ function siteBasePath() {
 
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
+
+  const RELOAD_KEY = 'procept-sw-reloaded-v7';
+
   const swUrl = new URL('sw.js', document.baseURI || window.location.href);
-  navigator.serviceWorker.register(swUrl.href).catch(() => {});
+  navigator.serviceWorker
+    .register(swUrl.href)
+    .then((registration) => {
+      registration.update().catch(() => {});
+
+      const askWaitingToActivate = () => {
+        if (!registration.waiting) return;
+        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      };
+
+      if (registration.waiting) askWaitingToActivate();
+
+      registration.addEventListener('updatefound', () => {
+        const worker = registration.installing;
+        if (!worker) return;
+        worker.addEventListener('statechange', () => {
+          if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+            askWaitingToActivate();
+          }
+        });
+      });
+    })
+    .catch(() => {});
+
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    if (sessionStorage.getItem(RELOAD_KEY)) return;
+    refreshing = true;
+    sessionStorage.setItem(RELOAD_KEY, '1');
+    window.location.reload();
+  });
 }
 
 async function loadContent() {

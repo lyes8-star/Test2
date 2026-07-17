@@ -1,5 +1,5 @@
 /* Service worker Procept — cache app shell (chemins relatifs pour GitHub Pages) */
-const CACHE = 'procept-shell-v6';
+const CACHE = 'procept-shell-v7';
 
 function shellUrls() {
   const base = self.registration.scope;
@@ -48,6 +48,12 @@ self.addEventListener('activate', (event) => {
       .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('fetch', (event) => {
