@@ -3,7 +3,7 @@ const TAB_TITLES = {
   site: 'Informations du site',
   hero: 'Diaporama d\'accueil',
   services: 'Services',
-  pages: 'Pages Construction & Rénovation',
+  pages: 'Pages Construction, Rénovation & Promotion',
   gallery: 'Galerie photos',
   about: 'À propos',
   faq: 'FAQ & SEO',
@@ -431,11 +431,16 @@ document.getElementById('addGallery').addEventListener('click', () => {
 
 function ensurePages() {
   if (!content.pages) content.pages = {};
-  ['construction', 'renovation'].forEach((key) => {
+  const defaults = {
+    construction: { slug: 'constructeur', label: 'Construction', galleryFilter: 'construction' },
+    renovation: { slug: 'renovation', label: 'Rénovation', galleryFilter: 'renovation' },
+    promotion: { slug: 'promotion-immobiliere', label: 'Promotion immobilière', galleryFilter: 'construction' },
+  };
+  Object.entries(defaults).forEach(([key, meta]) => {
     if (!content.pages[key]) {
       content.pages[key] = {
-        slug: key === 'construction' ? 'constructeur' : 'renovation',
-        label: key === 'construction' ? 'Construction' : 'Rénovation',
+        slug: meta.slug,
+        label: meta.label,
         seo: { title: '', description: '' },
         hero: { image: '', eyebrow: '', title: '', desc: '' },
         intro: [''],
@@ -443,7 +448,7 @@ function ensurePages() {
         secondary: { title: '', text: '' },
         steps: [],
         cta: { title: '', text: '' },
-        galleryFilter: key,
+        galleryFilter: meta.galleryFilter,
       };
     }
   });

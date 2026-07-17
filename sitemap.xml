@@ -16,6 +16,11 @@
     <priority>0.95</priority>
   </url>
   <url>
+    <loc>https://www.procept.fr/promotion-immobiliere/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://www.procept.fr/#services</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

@@ -1,6 +1,6 @@
 /**
- * Rendu partagé des pages service (Construction / Rénovation).
- * Attendu : <body data-page="construction|renovation">
+ * Rendu partagé des pages service (Construction / Rénovation / Promotion).
+ * Attendu : <body data-page="construction|renovation|promotion">
  */
 (function () {
   const PAGE_KEY = document.body.dataset.page;
