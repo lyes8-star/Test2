@@ -160,6 +160,8 @@
     const footerAddress = document.getElementById('footerAddress');
     if (footerAddress) footerAddress.textContent = site.address;
 
+    if (window.ProceptSocial) window.ProceptSocial.render(site.social || {}, '../');
+
     const contactAddress = document.getElementById('contactAddress');
     if (contactAddress) contactAddress.textContent = site.address;
     const contactPhone = document.getElementById('contactPhone');
