@@ -22,7 +22,7 @@ function siteBasePath() {
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
 
-  const RELOAD_KEY = 'procept-sw-reloaded-v9';
+  const RELOAD_KEY = 'procept-sw-reloaded-v10';
 
   const swUrl = new URL('sw.js', document.baseURI || window.location.href);
   navigator.serviceWorker
