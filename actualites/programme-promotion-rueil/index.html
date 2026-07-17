@@ -25,11 +25,26 @@
   <meta name="twitter:image" content="https://www.procept.fr/images/services/promotion.jpg">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","headline":"Nouveau programme de promotion près de Rueil-Malmaison","description":"Étude de faisabilité et montage d’un programme de maisons haut de gamme clé en main dans l’ouest parisien.","image":["https://www.procept.fr/images/services/promotion.jpg"],"datePublished":"2026-03-20","dateModified":"2026-03-20","author":{"@type":"Organization","name":"Procept"},"publisher":{"@type":"Organization","name":"Procept","logo":{"@type":"ImageObject","url":"https://www.procept.fr/images/hero/slide-1.jpg","width":1200,"height":630}},"mainEntityOfPage":"https://www.procept.fr/actualites/programme-promotion-rueil/"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://www.procept.fr/"},{"@type":"ListItem","position":2,"name":"Actualités","item":"https://www.procept.fr/actualites/"},{"@type":"ListItem","position":3,"name":"Nouveau programme de promotion près de Rueil-Malmaison","item":"https://www.procept.fr/actualites/programme-promotion-rueil/"}]}</script>
-  <link rel="stylesheet" href="../../fonts/fonts.css?v=9">
-  <link rel="stylesheet" href="../../css/style.css?v=9">
+  <link rel="stylesheet" href="../../fonts/fonts.css?v=10">
+  <link rel="stylesheet" href="../../css/style.css?v=10">
+  <script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('procept-a11y-v1') || '{}');
+        var r = document.documentElement;
+        if (p.fontScale && p.fontScale !== 100) r.classList.add('a11y-font-' + p.fontScale);
+        if (p.contrast) r.classList.add('a11y-contrast');
+        if (p.links) r.classList.add('a11y-links');
+        if (p.spacing) r.classList.add('a11y-spacing');
+        if (p.readable) r.classList.add('a11y-readable');
+        if (p.motion || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) r.classList.add('a11y-motion');
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="page-service" data-news-slug="programme-promotion-rueil">
-  <header class="header" id="header">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+<header class="header" id="header">
     <div class="container header__inner">
       <a href="../../" class="logo"><span class="logo__mark">P</span><span class="logo__text">PROCEPT</span></a>
       <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
@@ -47,7 +62,7 @@
       <a href="../../#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
     </div>
   </header>
-  <main>
+  <main id="main">
     <section class="section news-page">
       <div class="container">
         <nav class="breadcrumb" aria-label="Fil d'Ariane">
@@ -86,6 +101,7 @@
         <a href="../../#contact">Contact</a>
         <a href="../../mentions-legales/">Mentions légales</a>
         <a href="../../confidentialite/">Confidentialité</a>
+        <a href="../../accessibilite/">Accessibilité</a>
         <a href="../../cookies/">Cookies</a>
         <a href="#" data-manage-cookies>Gérer les cookies</a>
       </div>
@@ -95,8 +111,9 @@
   <script src="../../js/consent.js?v=4" defer></script>
   <script src="../../js/social.js?v=4" defer></script>
   <script src="../../js/analytics.js?v=4" defer></script>
-  <script src="../../js/chat.js?v=9" defer></script>
-  <script src="../../js/search.js?v=9" defer></script>
+    <script defer src="../../js/a11y.js?v=10"></script>
+<script src="../../js/chat.js?v=10" defer></script>
+  <script src="../../js/search.js?v=10" defer></script>
   <script src="../../js/pwa-install.js?v=4" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {

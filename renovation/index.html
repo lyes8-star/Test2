@@ -27,9 +27,23 @@
   <meta name="twitter:title" id="twTitle" content="Rénovation & agrandissement près de Saint-Germain-en-Laye — Procept">
   <meta name="twitter:description" id="twDescription" content="Rénovation, extension et agrandissement de maisons à Versailles et Saint-Germain-en-Laye. Maçonnerie, charpente, couverture, surélévation. Devis gratuit.">
   <meta name="twitter:image" id="twImage" content="https://www.procept.fr/images/hero/slide-2.jpg">
-  <link rel="stylesheet" href="../fonts/fonts.css?v=9">
-<link rel="stylesheet" href="../css/style.css?v=9">
-  <link rel="preload" as="image" href="../images/hero/slide-2.jpg" fetchpriority="high">
+  <link rel="stylesheet" href="../fonts/fonts.css?v=10">
+<link rel="stylesheet" href="../css/style.css?v=10">
+    <script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('procept-a11y-v1') || '{}');
+        var r = document.documentElement;
+        if (p.fontScale && p.fontScale !== 100) r.classList.add('a11y-font-' + p.fontScale);
+        if (p.contrast) r.classList.add('a11y-contrast');
+        if (p.links) r.classList.add('a11y-links');
+        if (p.spacing) r.classList.add('a11y-spacing');
+        if (p.readable) r.classList.add('a11y-readable');
+        if (p.motion || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) r.classList.add('a11y-motion');
+      } catch (e) {}
+    })();
+  </script>
+<link rel="preload" as="image" href="../images/hero/slide-2.jpg" fetchpriority="high">
   <script type="application/ld+json" id="jsonldService"></script>
   <script type="application/ld+json" id="jsonldBreadcrumb"></script>
   <!-- SEO:JSONLD:BEGIN -->
@@ -38,7 +52,8 @@
 <!-- SEO:JSONLD:END -->
 </head>
 <body data-page="renovation" class="page-service">
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
   <header class="header" id="header">
     <div class="topbar" id="topbar">
@@ -141,7 +156,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main">
     <section class="page-hero" id="top">
       <img class="page-hero__image" id="pageHeroImage" src="../images/hero/slide-2.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
       <div class="page-hero__overlay"></div>
@@ -251,6 +266,7 @@
         <a href="../#contact">Contact</a>
         <a href="../mentions-legales/">Mentions légales</a>
         <a href="../confidentialite/">Confidentialité</a>
+        <a href="../accessibilite/">Accessibilité</a>
         <a href="../cookies/">Cookies</a>
         <a href="#" data-manage-cookies>Gérer les cookies</a>
       </div>
@@ -276,9 +292,10 @@
   <script defer src="../js/social.js?v=4"></script>
   <script defer src="../js/consent.js?v=4"></script>
   <script defer src="../js/analytics.js?v=4"></script>
-  <script defer src="../js/chat.js?v=9"></script>
+    <script defer src="../js/a11y.js?v=10"></script>
+<script defer src="../js/chat.js?v=10"></script>
   <script defer src="../js/pwa-install.js?v=4"></script>
-  <script defer src="../js/search.js?v=9"></script>
-  <script defer src="../js/page.js?v=9"></script>
+  <script defer src="../js/search.js?v=10"></script>
+  <script defer src="../js/page.js?v=10"></script>
 </body>
 </html>

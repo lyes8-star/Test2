@@ -49,6 +49,12 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://www.procept.fr/accessibilite/</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://www.procept.fr/actualites/chantier-en-cours-yvelines/</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>weekly</changefreq>

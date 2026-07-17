@@ -10,11 +10,26 @@
   <link rel="canonical" href="https://www.procept.fr/cookies/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="../manifest.webmanifest">
-  <link rel="stylesheet" href="../fonts/fonts.css?v=9">
-  <link rel="stylesheet" href="../css/style.css?v=9">
+  <link rel="stylesheet" href="../fonts/fonts.css?v=10">
+  <link rel="stylesheet" href="../css/style.css?v=10">
+  <script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('procept-a11y-v1') || '{}');
+        var r = document.documentElement;
+        if (p.fontScale && p.fontScale !== 100) r.classList.add('a11y-font-' + p.fontScale);
+        if (p.contrast) r.classList.add('a11y-contrast');
+        if (p.links) r.classList.add('a11y-links');
+        if (p.spacing) r.classList.add('a11y-spacing');
+        if (p.readable) r.classList.add('a11y-readable');
+        if (p.motion || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) r.classList.add('a11y-motion');
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="page-legal">
-  <header class="header" id="header">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+<header class="header" id="header">
     <div class="container header__inner">
       <a href="../" class="logo"><span class="logo__mark">P</span><span class="logo__text">PROCEPT</span></a>
       <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
@@ -32,7 +47,7 @@
       <a href="../#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
     </div>
   </header>
-  <main>
+  <main id="main">
     <section class="section legal-page">
       <div class="container legal-page__inner">
         <nav class="breadcrumb" aria-label="Fil d'Ariane">
@@ -79,6 +94,7 @@
         <a href="../#contact">Contact</a>
         <a href="../mentions-legales/">Mentions légales</a>
         <a href="../confidentialite/">Confidentialité</a>
+        <a href="../accessibilite/">Accessibilité</a>
         <a href="../cookies/">Cookies</a>
         <a href="#" data-manage-cookies>Gérer les cookies</a>
       </div>
@@ -87,7 +103,8 @@
   </footer>
   <script defer src="../js/consent.js?v=4"></script>
   <script defer src="../js/analytics.js?v=4"></script>
-  <script defer src="../js/chat.js?v=9"></script>
+    <script defer src="../js/a11y.js?v=10"></script>
+<script defer src="../js/chat.js?v=10"></script>
   <script>
     document.getElementById('navToggle')?.addEventListener('click', function () {
       var nav = document.getElementById('nav');

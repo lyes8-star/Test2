@@ -82,7 +82,7 @@
       });
     }
     if ('serviceWorker' in navigator) {
-      const RELOAD_KEY = 'procept-sw-reloaded-v8';
+      const RELOAD_KEY = 'procept-sw-reloaded-v9';
       const swUrl = new URL('../sw.js', document.baseURI).href;
       navigator.serviceWorker
         .register(swUrl)

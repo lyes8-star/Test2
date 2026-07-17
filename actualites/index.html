@@ -28,14 +28,29 @@
 
   <script type="application/ld+json" id="jsonldArticle"></script>
   <script type="application/ld+json" id="jsonldBreadcrumb"></script>
-  <link rel="stylesheet" href="../fonts/fonts.css?v=9">
-<link rel="stylesheet" href="../css/style.css?v=9">
-  <!-- SEO:JSONLD:BEGIN -->
+  <link rel="stylesheet" href="../fonts/fonts.css?v=10">
+<link rel="stylesheet" href="../css/style.css?v=10">
+    <script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('procept-a11y-v1') || '{}');
+        var r = document.documentElement;
+        if (p.fontScale && p.fontScale !== 100) r.classList.add('a11y-font-' + p.fontScale);
+        if (p.contrast) r.classList.add('a11y-contrast');
+        if (p.links) r.classList.add('a11y-links');
+        if (p.spacing) r.classList.add('a11y-spacing');
+        if (p.readable) r.classList.add('a11y-readable');
+        if (p.motion || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) r.classList.add('a11y-motion');
+      } catch (e) {}
+    })();
+  </script>
+<!-- SEO:JSONLD:BEGIN -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://www.procept.fr/"},{"@type":"ListItem","position":2,"name":"Actualités","item":"https://www.procept.fr/actualites/"}]}</script>
 <!-- SEO:JSONLD:END -->
 </head>
 <body class="page-service">
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
   <header class="header" id="header">
     <div class="topbar" id="topbar">
@@ -138,7 +153,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main">
     <section class="section news-page">
       <div class="container">
         <div class="section__header news-page__header">
@@ -180,6 +195,7 @@
         <a href="../#contact">Contact</a>
         <a href="../mentions-legales/">Mentions légales</a>
         <a href="../confidentialite/">Confidentialité</a>
+        <a href="../accessibilite/">Accessibilité</a>
         <a href="../cookies/">Cookies</a>
         <a href="#" data-manage-cookies>Gérer les cookies</a>
       </div>
@@ -199,9 +215,10 @@
   <script defer src="../js/social.js?v=4"></script>
   <script defer src="../js/consent.js?v=4"></script>
   <script defer src="../js/analytics.js?v=4"></script>
-  <script defer src="../js/chat.js?v=9"></script>
+    <script defer src="../js/a11y.js?v=10"></script>
+<script defer src="../js/chat.js?v=10"></script>
   <script defer src="../js/pwa-install.js?v=4"></script>
-  <script defer src="../js/search.js?v=9"></script>
-  <script defer src="../js/news.js?v=9"></script>
+  <script defer src="../js/search.js?v=10"></script>
+  <script defer src="../js/news.js?v=10"></script>
 </body>
 </html>
