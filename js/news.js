@@ -39,11 +39,26 @@
   }
 
   function getSlug() {
+    // /actualites/<slug>/ (si on est sur une page générée, news.js n'est pas chargé)
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    const ai = parts.indexOf('actualites');
+    if (ai >= 0 && parts[ai + 1] && parts[ai + 1] !== 'index.html') {
+      return parts[ai + 1];
+    }
     const params = new URLSearchParams(window.location.search);
-    if (params.get('slug')) return params.get('slug');
-    if (params.get('id')) return params.get('id');
+    const q = params.get('slug') || params.get('id');
+    if (q) {
+      // Redirection vers URL propre
+      const target = `./${encodeURIComponent(q)}/`;
+      window.location.replace(target);
+      return q;
+    }
     const hash = window.location.hash.replace(/^#/, '');
-    return hash || null;
+    if (hash) {
+      window.location.replace(`./${encodeURIComponent(hash)}/`);
+      return hash;
+    }
+    return null;
   }
 
   async function loadContent() {
@@ -78,6 +93,9 @@
       });
     }
     if (window.ProceptSocial) window.ProceptSocial.render(content.site?.social || {}, '../');
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../sw.js').catch(() => {});
+    }
     initNav();
     initScrollUI();
   }
@@ -101,7 +119,7 @@
     const item = slug ? items.find((n) => n.slug === slug || n.id === slug) : null;
 
     if (item) {
-      const url = `${baseUrl}?slug=${encodeURIComponent(item.slug || item.id)}`;
+        const url = absoluteUrl(`actualites/${item.slug || item.id}/`);
       const title = `${item.title} — ${site.name || 'Procept'}`;
       const desc = item.excerpt || site.description || '';
       const image = absoluteUrl(item.image || site.ogImage || 'images/hero/slide-1.jpg');
@@ -129,7 +147,12 @@
         publisher: {
           '@type': 'Organization',
           name: site.name || 'Procept',
-          logo: { '@type': 'ImageObject', url: absoluteUrl('favicon.svg') },
+          logo: {
+            '@type': 'ImageObject',
+            url: absoluteUrl(site.ogImage || 'images/hero/slide-1.jpg'),
+            width: 1200,
+            height: 630,
+          },
         },
         mainEntityOfPage: url,
       };
@@ -225,16 +248,16 @@
       .map(
         (n) => `
       <article class="news-card reveal">
-        <a href="?slug=${encodeURIComponent(n.slug || n.id)}" class="news-card__media">
+        <a href="${encodeURIComponent(n.slug || n.id)}/" class="news-card__media">
           <img src="${asset(n.image)}" alt="" width="640" height="400" loading="lazy" decoding="async">
         </a>
         <div class="news-card__body">
           <time class="news-card__date" datetime="${escapeHtml(n.date || '')}">${escapeHtml(formatDate(n.date))}</time>
           <h2 class="news-card__title">
-            <a href="?slug=${encodeURIComponent(n.slug || n.id)}">${escapeHtml(n.title)}</a>
+            <a href="${encodeURIComponent(n.slug || n.id)}/">${escapeHtml(n.title)}</a>
           </h2>
           <p class="news-card__excerpt">${escapeHtml(n.excerpt || '')}</p>
-          <a class="news-card__more" href="?slug=${encodeURIComponent(n.slug || n.id)}">Lire la suite →</a>
+          <a class="news-card__more" href="${encodeURIComponent(n.slug || n.id)}/">Lire la suite →</a>
         </div>
       </article>`
       )
@@ -278,15 +301,24 @@
   function initNav() {
     const toggle = document.getElementById('navToggle');
     const nav = document.getElementById('nav');
+    const servicesToggle = document.getElementById('servicesToggle');
+    const dropdown = document.getElementById('servicesDropdown');
     if (toggle && nav) {
       toggle.addEventListener('click', () => {
         const open = nav.classList.toggle('open');
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         document.body.classList.toggle('nav-open', open);
       });
+      nav.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('open');
+          document.body.classList.remove('nav-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          dropdown?.classList.remove('open');
+          servicesToggle?.setAttribute('aria-expanded', 'false');
+        });
+      });
     }
-    const servicesToggle = document.getElementById('servicesToggle');
-    const dropdown = document.getElementById('servicesDropdown');
     if (servicesToggle && dropdown) {
       servicesToggle.addEventListener('click', () => {
         const open = dropdown.classList.toggle('open');

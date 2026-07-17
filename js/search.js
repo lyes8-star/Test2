@@ -243,7 +243,7 @@ window.ProceptSearch = (function () {
             'news',
             ...siteKeywords,
           ],
-          target: `actualites/?slug=${encodeURIComponent(item.slug || item.id)}`,
+          target: `actualites/${encodeURIComponent(item.slug || item.id)}/`,
         });
       });
 
