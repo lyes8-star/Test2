@@ -575,7 +575,7 @@ function articlePageHtml(item) {
   <link rel="preload" href="../../fonts/font-2.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../../fonts/font-5.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../../fonts/fonts.css?v=24">
-  <link rel="stylesheet" href="../../css/style.css?v=27">
+  <link rel="stylesheet" href="../../css/style.css?v=28">
 </head>
 <body class="page-service" data-news-slug="${esc(item.slug)}">
   <a class="skip-link" href="#main">Aller au contenu</a>
