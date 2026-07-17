@@ -353,6 +353,11 @@ function renderGalleryEditor() {
       </div>
       <div class="gallery-item__body">
         <input type="text" class="gallery-caption" value="${escapeHtml(item.caption)}" placeholder="Légende">
+        <select class="gallery-category" style="width:100%;padding:0.5rem;margin-bottom:0.5rem;border:1px solid var(--color-border);border-radius:4px;font-size:0.85rem">
+          ${['construction','renovation','extension','chantier','autre'].map(c =>
+            `<option value="${c}"${(item.category||'autre')===c?' selected':''}>${c}</option>`
+          ).join('')}
+        </select>
         <div class="gallery-item__actions">
           <button class="btn btn--danger btn--sm" data-action="delete">Supprimer</button>
         </div>
@@ -362,6 +367,14 @@ function renderGalleryEditor() {
     el.querySelector('.gallery-caption').addEventListener('input', (e) => {
       content.gallery[index].caption = e.target.value;
     });
+
+    // category select if present
+    const catSelect = el.querySelector('.gallery-category');
+    if (catSelect) {
+      catSelect.addEventListener('change', (e) => {
+        content.gallery[index].category = e.target.value;
+      });
+    }
 
     el.querySelector('.gallery-upload').addEventListener('change', async (e) => {
       const file = e.target.files[0];

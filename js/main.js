@@ -2,32 +2,35 @@ let content = null;
 let currentSlide = 0;
 let slideInterval = null;
 let lastScrollY = 0;
-const GALLERY_VISIBLE = 6;
+let galleryFilter = 'all';
+let galleryExpanded = false;
+const GALLERY_VISIBLE = 9;
 
 async function loadContent() {
-  // API locale (node server.js) puis fallback GitHub Pages / fichier statique
   try {
     const res = await fetch('/api/content');
     if (res.ok) {
       content = await res.json();
-      renderSite();
-      if (window.ProceptSearch) window.ProceptSearch.init(content);
-      initReveal();
-      initScrollSpy();
+      afterLoad();
       return;
     }
   } catch (_) { /* pas de serveur API */ }
 
   const res = await fetch('data/content.json');
   content = await res.json();
+  afterLoad();
+}
+
+function afterLoad() {
   renderSite();
   if (window.ProceptSearch) window.ProceptSearch.init(content);
   initReveal();
   initScrollSpy();
+  initGalleryFilters();
 }
 
 function renderSite() {
-  const { site, hero, about, services, gallery } = content;
+  const { site, hero, about, services, gallery, process, contactImage } = content;
 
   document.title = `${site.name} — ${site.tagline}`;
   document.querySelector('meta[name="description"]').content = site.description;
@@ -54,12 +57,22 @@ function renderSite() {
 
   renderHero(hero.slides);
   renderServices(services);
-  renderGallery(gallery);
+  renderProcess(process || []);
+  renderGallery();
   renderMarquee(site.keywords || []);
 
   document.getElementById('aboutTitle').textContent = about.title;
   document.getElementById('aboutText').textContent = about.text;
   document.getElementById('aboutZone').textContent = about.zone;
+  if (about.image) {
+    const aboutImg = document.getElementById('aboutImage');
+    aboutImg.src = about.image;
+    aboutImg.alt = 'Notre siège social — Procept';
+  }
+
+  if (contactImage) {
+    document.getElementById('contactAmbiance').style.backgroundImage = `url('${contactImage}')`;
+  }
 
   document.getElementById('contactAddress').textContent = site.address;
   document.getElementById('contactPhone').textContent = site.phone;
@@ -79,7 +92,6 @@ function renderMarquee(keywords) {
     : ['Construction', 'Rénovation', 'Extension', 'Promotion immobilière', 'Versailles', 'Saint-Germain-en-Laye', 'RE2020', 'Clé en main'];
 
   const items = words.map((w) => `<span class="marquee__item">${escapeHtml(w)}</span>`).join('<span class="marquee__sep">·</span>');
-  // Duplicate for seamless loop
   track.innerHTML = `${items}<span class="marquee__sep">·</span>${items}<span class="marquee__sep">·</span>${items}<span class="marquee__sep">·</span>${items}`;
 }
 
@@ -94,7 +106,7 @@ function renderHero(slides) {
   const dots = document.getElementById('heroDots');
 
   container.innerHTML = slides.map((slide, i) =>
-    `<div class="hero__slide${i === 0 ? ' active' : ''}" style="background-image:url('${slide.image}')" data-index="${i}"></div>`
+    `<div class="hero__slide${i === 0 ? ' active' : ''}" style="background-image:url('${slide.image}')" data-index="${i}" role="img" aria-label="${escapeHtml(slide.title)}"></div>`
   ).join('');
 
   dots.innerHTML = slides.map((_, i) =>
@@ -123,6 +135,7 @@ function goToSlide(index, total) {
 }
 
 function startSlideshow(total) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   slideInterval = setInterval(() => goToSlide(currentSlide + 1, total), 6000);
 }
 
@@ -136,25 +149,72 @@ function renderServices(services) {
   grid.innerHTML = services.map((s) => `
     <article class="service-card reveal" id="${s.id}" data-keywords="${(s.keywords || []).join(',')}">
       <div class="service-card__image">
-        <img src="${s.image}" alt="${s.title}" loading="lazy">
+        <img src="${s.image}" alt="${escapeHtml(s.title)}" width="800" height="600" loading="lazy" decoding="async">
       </div>
       <div class="service-card__body">
-        <h3 class="service-card__title">${s.title}</h3>
-        <p class="service-card__desc">${s.description}</p>
+        <h3 class="service-card__title">${escapeHtml(s.title)}</h3>
+        <p class="service-card__desc">${escapeHtml(s.description)}</p>
+        ${(s.related || []).length ? `
+          <div class="service-card__thumbs">
+            ${s.related.map((src, i) => `
+              <button type="button" class="service-card__thumb" data-service="${s.id}" data-img="${src}" aria-label="Voir photo ${i + 1}">
+                <img src="${src}" alt="" width="120" height="90" loading="lazy" decoding="async">
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
       </div>
+    </article>
+  `).join('');
+
+  grid.querySelectorAll('.service-card__thumb').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      openLightbox({ image: btn.dataset.img, imageFull: btn.dataset.img, caption: btn.closest('.service-card').querySelector('.service-card__title').textContent });
+    });
+  });
+  initReveal();
+}
+
+function renderProcess(steps) {
+  const grid = document.getElementById('processGrid');
+  if (!grid || !steps.length) return;
+  grid.innerHTML = steps.map((step, i) => `
+    <article class="process__step reveal">
+      <div class="process__image">
+        <img src="${step.image}" alt="${escapeHtml(step.title)}" width="640" height="480" loading="lazy" decoding="async">
+        <span class="process__num">${String(i + 1).padStart(2, '0')}</span>
+      </div>
+      <h3 class="process__title">${escapeHtml(step.title)}</h3>
+      <p class="process__desc">${escapeHtml(step.description)}</p>
     </article>
   `).join('');
   initReveal();
 }
 
-function renderGallery(items) {
+function filteredGallery() {
+  const items = content.gallery || [];
+  if (galleryFilter === 'all') return items;
+  return items.filter((item) => item.category === galleryFilter);
+}
+
+function renderGallery() {
+  const items = filteredGallery();
   const grid = document.getElementById('galleryGrid');
-  grid.innerHTML = items.map((item, i) => `
-    <div class="gallery__item reveal${i >= GALLERY_VISIBLE ? ' hidden' : ''}" data-index="${i}" data-id="${item.id}">
-      <img src="${item.image}" alt="${item.caption}" loading="lazy">
-      <span class="gallery__caption">${item.caption}</span>
-    </div>
-  `).join('');
+  const countEl = document.getElementById('galleryCount');
+  const moreBtn = document.getElementById('galleryMore');
+
+  if (countEl) {
+    countEl.textContent = `${items.length} photo${items.length > 1 ? 's' : ''}`;
+  }
+
+  grid.innerHTML = items.map((item, i) => {
+    const hide = !galleryExpanded && i >= GALLERY_VISIBLE;
+    return `
+    <div class="gallery__item reveal${hide ? ' hidden' : ''}" data-index="${i}" data-id="${item.id}" data-category="${item.category || 'autre'}">
+      <img src="${item.image}" alt="${escapeHtml(item.caption)}" width="640" height="480" loading="lazy" decoding="async">
+      <span class="gallery__caption">${escapeHtml(item.caption)}</span>
+    </div>`;
+  }).join('');
 
   grid.querySelectorAll('.gallery__item').forEach((el) => {
     el.addEventListener('click', () => {
@@ -163,24 +223,39 @@ function renderGallery(items) {
     });
   });
 
-  const moreBtn = document.getElementById('galleryMore');
   if (items.length <= GALLERY_VISIBLE) {
     moreBtn.style.display = 'none';
   } else {
-    moreBtn.style.display = '';
+    moreBtn.style.display = galleryExpanded ? 'none' : '';
     moreBtn.onclick = () => {
-      grid.querySelectorAll('.gallery__item.hidden').forEach((el) => el.classList.remove('hidden'));
-      moreBtn.style.display = 'none';
-      initReveal();
+      galleryExpanded = true;
+      renderGallery();
     };
   }
   initReveal();
 }
 
+function initGalleryFilters() {
+  document.querySelectorAll('.gallery__filter').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.gallery__filter').forEach((b) => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      galleryFilter = btn.dataset.filter;
+      galleryExpanded = false;
+      renderGallery();
+    });
+  });
+}
+
 function openLightbox(item) {
   const lb = document.getElementById('lightbox');
-  document.getElementById('lightboxImg').src = item.image;
-  document.getElementById('lightboxCaption').textContent = item.caption;
+  document.getElementById('lightboxImg').src = item.imageFull || item.image;
+  document.getElementById('lightboxImg').alt = item.caption || '';
+  document.getElementById('lightboxCaption').textContent = item.caption || '';
   lb.hidden = false;
   document.body.style.overflow = 'hidden';
 }
@@ -192,7 +267,6 @@ function closeLightbox() {
 
 /* —— Scroll UX —— */
 const header = document.getElementById('header');
-const topbar = document.getElementById('topbar');
 const progress = document.getElementById('scrollProgress');
 const backTop = document.getElementById('backTop');
 
@@ -205,13 +279,9 @@ function updateScrollUI() {
   header.classList.toggle('header--scrolled', y > 50);
   backTop.hidden = y < 400;
 
-  // Auto-hide topbar on scroll down, show on scroll up
   if (y > 80) {
-    if (y > lastScrollY + 4) {
-      header.classList.add('header--topbar-hidden');
-    } else if (y < lastScrollY - 4) {
-      header.classList.remove('header--topbar-hidden');
-    }
+    if (y > lastScrollY + 4) header.classList.add('header--topbar-hidden');
+    else if (y < lastScrollY - 4) header.classList.remove('header--topbar-hidden');
   } else {
     header.classList.remove('header--topbar-hidden');
   }
@@ -226,7 +296,7 @@ backTop.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-/* —— Reveal animations —— */
+/* —— Reveal —— */
 let revealObserver = null;
 
 function initReveal() {
@@ -272,7 +342,7 @@ function initScrollSpy() {
   sections.forEach((s) => spy.observe(s));
 }
 
-/* —— Mobile nav + mega menu —— */
+/* —— Mobile nav —— */
 const nav = document.getElementById('nav');
 const navToggle = document.getElementById('navToggle');
 const servicesToggle = document.getElementById('servicesToggle');
@@ -297,18 +367,16 @@ document.querySelectorAll('.nav__link:not(.nav__link--parent), .nav__mega-item, 
 });
 
 servicesToggle.addEventListener('click', (e) => {
-  // On desktop, hover handles it; on mobile/touch, toggle accordion
   if (window.matchMedia('(max-width: 900px)').matches) {
     e.preventDefault();
     const open = servicesDropdown.classList.toggle('open');
     servicesToggle.setAttribute('aria-expanded', open);
   } else {
-    // Desktop: navigate to services
     document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
   }
 });
 
-/* —— Desktop search toggle —— */
+/* —— Search toggle —— */
 const searchToggle = document.getElementById('searchToggle');
 const searchPanel = document.getElementById('searchPanel');
 const searchInput = document.getElementById('searchInput');
@@ -335,7 +403,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-/* —— Hero arrows —— */
 document.getElementById('heroPrev').addEventListener('click', () => {
   if (content) goToSlide(currentSlide - 1, content.hero.slides.length);
 });
@@ -343,7 +410,6 @@ document.getElementById('heroNext').addEventListener('click', () => {
   if (content) goToSlide(currentSlide + 1, content.hero.slides.length);
 });
 
-/* —— Lightbox —— */
 document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
 document.getElementById('lightbox').addEventListener('click', (e) => {
   if (e.target.id === 'lightbox') closeLightbox();
@@ -355,7 +421,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-/* —— Contact form —— */
 document.getElementById('contactForm').addEventListener('submit', (e) => {
   e.preventDefault();
   document.getElementById('formSuccess').hidden = false;

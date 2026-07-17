@@ -1,17 +1,16 @@
 # Procept — Site web (compatible GitHub Pages)
 
-> **`index.html` est à la racine** — priorité GitHub Pages / hébergement statique.
+> **`index.html` est à la racine** — priorité GitHub Pages.
 
 ## GitHub Pages
 
 1. Settings → Pages → Source : **Deploy from a branch**
 2. Branch : `main` (ou cette branche) → dossier **`/` (root)**
-3. Le site sera servi via `index.html` à la racine
 
-Sur GitHub Pages, le site public fonctionne en lecture seule (`data/content.json`).  
-L’admin (upload / sauvegarde) nécessite le serveur local ci-dessous.
+Le site lit `data/content.json` et les photos dans `images/`.  
+L’admin (upload / sauvegarde) nécessite `node server.js` en local.
 
-## Lancer en local (avec admin)
+## Lancer en local
 
 ```bash
 node server.js
@@ -27,13 +26,17 @@ Identifiants : `admin` / `procept2026`
 ## Structure
 
 ```
-├── index.html          ← ★ page d’accueil (racine = priorité GitHub Pages)
+├── index.html          ← page d’accueil (racine)
 ├── css/style.css
-├── js/main.js
-├── js/search.js
-├── admin/              ← interface admin
-├── data/content.json   ← contenu du site
-├── uploads/            ← images uploadées (serveur local)
-├── server.js           ← API + admin (local)
-└── README.md
+├── js/main.js + search.js
+├── images/             ← toutes les photos Procept (hero, services, gallery)
+├── admin/
+├── data/content.json   ← textes + chemins images + catégories
+├── server.js
+└── test                ← export Duda d’origine (archive)
 ```
+
+## Contenu images
+
+- **45 réalisations** dans `images/gallery/` avec filtres (construction, rénovation, extension, chantier)
+- **4 slides** hero + **3** services + photos process / siège
