@@ -67,15 +67,32 @@
     throw new Error('Impossible de charger le contenu du site');
   }
 
-  /** WebP srcset helpers for JPG assets */
+  /** Display JPG without -full suffix (thumbs have WebP derivatives). */
+  function displayImagePath(path) {
+    if (!path) return '';
+    return String(path).replace(/-full(?=\.jpe?g$)/i, '');
+  }
+
+  /** Full-size JPG for lightbox when a gallery -full variant exists. */
+  function fullImagePath(path) {
+    if (!path || !/\.jpe?g$/i.test(path)) return path || '';
+    if (/-full\.jpe?g$/i.test(path)) return path;
+    if (/\/gallery\//i.test(path)) {
+      return String(path).replace(/(\.jpe?g)$/i, '-full$1');
+    }
+    return path;
+  }
+
+  /** WebP srcset helpers for JPG assets (maps *-full.jpg → base-800w.webp). */
   function webpSrcset(path) {
     if (!path || !/\.jpe?g$/i.test(path)) return '';
-    const base = path.replace(/\.jpe?g$/i, '');
+    const base = displayImagePath(path).replace(/\.jpe?g$/i, '');
     return `${base}-800w.webp 800w, ${base}-1200w.webp 1200w`;
   }
 
   function pictureHtml(path, alt, opts) {
     const o = opts || {};
+    const display = displayImagePath(path);
     const width = o.width || 640;
     const height = o.height || 480;
     const loading = o.loading || 'lazy';
@@ -83,11 +100,11 @@
     const fetchpriority = o.fetchpriority ? ` fetchpriority="${o.fetchpriority}"` : '';
     const cls = o.className ? ` class="${o.className}"` : '';
     const sizes = o.sizes || '(max-width: 900px) 100vw, 640px';
-    const srcset = webpSrcset(path);
-    const img = `<img${cls} src="${path}" alt="${alt}" width="${width}" height="${height}" loading="${loading}" decoding="${decoding}"${fetchpriority}>`;
+    const srcset = webpSrcset(display);
+    const img = `<img${cls} src="${display}" alt="${alt}" width="${width}" height="${height}" loading="${loading}" decoding="${decoding}"${fetchpriority}>`;
     if (!srcset) return img;
     return `<picture><source type="image/webp" srcset="${srcset}" sizes="${sizes}">${img}</picture>`;
   }
 
-  global.ProceptContent = { load, PART_FILES, webpSrcset, pictureHtml };
+  global.ProceptContent = { load, PART_FILES, webpSrcset, pictureHtml, displayImagePath, fullImagePath };
 })(typeof window !== 'undefined' ? window : globalThis);

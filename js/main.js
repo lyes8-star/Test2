@@ -408,14 +408,15 @@ function renderHero(slides) {
   const dots = document.getElementById('heroDots');
   const frame = document.getElementById('heroFrame');
   const lcp = document.getElementById('heroLcp');
+  const displayPath = window.ProceptContent?.displayImagePath || ((p) => String(p || '').replace(/-full(?=\.jpe?g$)/i, ''));
+  const fullPath = window.ProceptContent?.fullImagePath || ((p) => p);
 
   container.innerHTML = slides.map((slide, i) => {
-    const webp = window.ProceptContent?.webpSrcset?.(slide.image) || '';
-    const bg = webp
-      ? ''
-      : `style="background-image:url('${slide.image}')"`;
+    const display = displayPath(slide.image);
+    const webp = window.ProceptContent?.webpSrcset?.(display) || '';
+    const bg = `style="background-image:url('${display}')"`;
     const picture = webp
-      ? `<picture><source type="image/webp" srcset="${webp}" sizes="(max-width: 900px) 100vw, 60vw"><img src="${slide.image}" alt="" width="1200" height="750" decoding="async"></picture>`
+      ? `<picture><source type="image/webp" srcset="${webp}" sizes="(max-width: 900px) 100vw, 60vw"><img src="${display}" alt="" width="1200" height="750" decoding="async"></picture>`
       : '';
     return `<div class="hero__slide${i === 0 ? ' active' : ''}" ${bg} data-index="${i}" role="img" aria-label="${escapeHtml(slide.title)}">${picture}</div>`;
   }).join('');
@@ -442,9 +443,11 @@ function renderHero(slides) {
     frame.addEventListener('click', () => {
       const slide = content?.hero?.slides?.[currentSlide];
       if (!slide) return;
+      const display = displayPath(slide.image);
+      const full = fullPath(slide.image);
       openLightbox({
-        image: slide.image,
-        imageFull: slide.image,
+        image: display,
+        imageFull: full,
         caption: slide.title || '',
       });
     });
