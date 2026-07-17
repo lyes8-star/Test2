@@ -861,6 +861,33 @@ a {
   flex-shrink: 0;
 }
 
+.social--header {
+  gap: 0.35rem;
+}
+
+.social--header[hidden] {
+  display: none;
+}
+
+.social--header .social__link {
+  width: 32px;
+  height: 32px;
+  border-color: rgba(26, 58, 82, 0.2);
+  color: var(--color-primary);
+  background: transparent;
+}
+
+.social--header .social__link:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-primary-dark);
+}
+
+.social--header .social__link svg {
+  width: 15px;
+  height: 15px;
+}
+
 .header__cta {
   white-space: nowrap;
   padding: 0.4rem 0.9rem;
