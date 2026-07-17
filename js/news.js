@@ -98,6 +98,7 @@
     const slug = getSlug();
     if (slug) renderDetail(slug);
     else renderList();
+    document.documentElement.classList.add('reveals-on');
     applyNewsSeo(slug);
     if (window.ProceptSearch) {
       window.ProceptSearch.init(content, { basePath: '../' });
@@ -304,7 +305,9 @@
         (n) => `
       <article class="news-card reveal" data-id="${escapeHtml(n.id || n.slug || '')}">
         <a href="${encodeURIComponent(n.slug || n.id)}/" class="news-card__media">
-          <img src="${asset(n.image)}" alt="" width="640" height="400" loading="lazy" decoding="async">
+          ${window.ProceptContent?.pictureHtml
+            ? window.ProceptContent.pictureHtml(asset(n.image), escapeHtml(n.title || ''), { width: 640, height: 400, sizes: '(max-width: 900px) 100vw, 360px' })
+            : `<img src="${asset(n.image)}" alt="${escapeHtml(n.title || '')}" width="640" height="400" loading="lazy" decoding="async">`}
         </a>
         <div class="news-card__body">
           <time class="news-card__date" datetime="${escapeHtml(n.date || '')}">${escapeHtml(formatDate(n.date))}</time>

@@ -544,7 +544,7 @@ function articlePageHtml(item) {
 <head>
   <meta charset="UTF-8">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="${esc(desc)}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#2c4a3e">
@@ -552,6 +552,8 @@ function articlePageHtml(item) {
   <link rel="canonical" href="${esc(url)}">
   <link rel="manifest" href="../../manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Procept">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../../icons/icon-192.png">
   <meta property="og:type" content="article">
@@ -572,8 +574,8 @@ function articlePageHtml(item) {
   <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>
   <link rel="preload" href="../../fonts/font-2.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../../fonts/font-5.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../../fonts/fonts.css?v=23">
-  <link rel="stylesheet" href="../../css/style.css?v=23">
+  <link rel="stylesheet" href="../../fonts/fonts.css?v=24">
+  <link rel="stylesheet" href="../../css/style.css?v=24">
 </head>
 <body class="page-service" data-news-slug="${esc(item.slug)}">
   <a class="skip-link" href="#main">Aller au contenu</a>

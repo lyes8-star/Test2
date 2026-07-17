@@ -360,6 +360,7 @@
   }
 
   function initReveal() {
+    document.documentElement.classList.add('reveals-on');
     const els = document.querySelectorAll('.reveal:not(.revealed)');
     if (!els.length) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

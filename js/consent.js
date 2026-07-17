@@ -92,6 +92,7 @@ window.ProceptConsent = (function () {
   function hideBanner() {
     document.getElementById('cookieBanner')?.remove();
     document.getElementById('cookieModal')?.remove();
+    document.body.classList.remove('cookie-banner-open');
   }
 
   function legalBase() {
@@ -165,6 +166,7 @@ window.ProceptConsent = (function () {
       </div>
     `;
     document.body.appendChild(el);
+    document.body.classList.add('cookie-banner-open');
     document.getElementById('cookieRefuse')?.addEventListener('click', () => {
       save({ analytics: false, ads: false, content: false });
     });

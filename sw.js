@@ -1,12 +1,11 @@
 /* Service worker Procept — cache app shell (chemins relatifs pour GitHub Pages) */
-const CACHE = 'procept-shell-v22';
+const CACHE = 'procept-shell-v23';
 
 function shellUrls() {
   const base = self.registration.scope;
   return [
     './',
     'offline.html',
-    'data/content.json',
     'css/style.css',
     'js/main.js',
     'js/page.js',
@@ -78,13 +77,17 @@ self.addEventListener('fetch', (event) => {
     url.pathname.endsWith('.html') ||
     url.pathname.endsWith('/');
 
-  // CSS/JS : network-first pour éviter les vieux assets après un déploiement
+  // CSS/JS + content JSON : network-first pour éviter contenu / assets périmés
   const isAsset =
     /\.(?:css|js)$/i.test(url.pathname) ||
     url.pathname.includes('/css/') ||
     url.pathname.includes('/js/');
+  const isContentJson =
+    url.pathname.endsWith('/data/content.json') ||
+    url.pathname.endsWith('data/content.json') ||
+    /\/contenu\/[^/]+\.json$/i.test(url.pathname);
 
-  if (isHtml || isAsset) {
+  if (isHtml || isAsset || isContentJson) {
     event.respondWith(
       fetch(req)
         .then((res) => {
