@@ -251,6 +251,7 @@ function renderSite() {
   document.getElementById('contactEmail').href = `mailto:${site.email}`;
   document.getElementById('contactHours').textContent = site.hours;
   document.getElementById('footerAddress').textContent = site.address;
+  if (window.ProceptCopy) window.ProceptCopy.bind();
 }
 
 function renderZones(zones) {

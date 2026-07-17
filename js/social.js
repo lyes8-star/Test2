@@ -1,5 +1,6 @@
 /**
- * Rendu des icônes réseaux sociaux (footer / topbar).
+ * Rendu des icônes réseaux sociaux (footer / toolbar).
+ * Affiche toujours les 4 réseaux ; sans URL → icône muted non cliquable.
  */
 window.ProceptSocial = (function () {
   const ICONS = {
@@ -16,21 +17,108 @@ window.ProceptSocial = (function () {
     youtube: 'YouTube',
   };
 
-  function render(social, basePath) {
+  function render(social) {
     const links = social || {};
     const html = Object.keys(ICONS)
-      .filter((key) => links[key] && String(links[key]).trim())
-      .map(
-        (key) =>
-          `<a class="social__link social__link--${key}" href="${links[key]}" target="_blank" rel="noopener noreferrer" aria-label="${LABELS[key]}">${ICONS[key]}</a>`
-      )
+      .map((key) => {
+        const url = links[key] && String(links[key]).trim();
+        if (url) {
+          return `<a class="social__link social__link--${key}" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="${LABELS[key]}">${ICONS[key]}</a>`;
+        }
+        return `<span class="social__link social__link--${key} social__link--muted" role="img" aria-label="${LABELS[key]} (bientôt)">${ICONS[key]}</span>`;
+      })
       .join('');
 
     document.querySelectorAll('[data-social]').forEach((el) => {
-      el.innerHTML = html || '';
-      el.hidden = !html;
+      el.innerHTML = html;
+      el.hidden = false;
+      el.removeAttribute('hidden');
     });
   }
 
   return { render };
+})();
+
+/**
+ * Copie email / téléphone au clic (topbar + bloc contact).
+ */
+window.ProceptCopy = (function () {
+  let toastTimer = null;
+
+  function toast(message) {
+    let el = document.getElementById('copyToast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'copyToast';
+      el.className = 'copy-toast';
+      el.setAttribute('role', 'status');
+      el.setAttribute('aria-live', 'polite');
+      document.body.appendChild(el);
+    }
+    el.textContent = message;
+    el.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2200);
+  }
+
+  async function writeClipboard(text) {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (_) { /* fallback */ }
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function valueFromLink(el, kind) {
+    if (kind === 'email') {
+      const href = el.getAttribute('href') || '';
+      const fromHref = href.replace(/^mailto:/i, '').split('?')[0].trim();
+      const text = (el.textContent || '').trim();
+      return fromHref || text;
+    }
+    const href = el.getAttribute('href') || '';
+    const fromHref = href.replace(/^tel:/i, '').trim();
+    const text = (el.textContent || '').replace(/\s/g, '');
+    return fromHref || text;
+  }
+
+  function bindOne(selector, kind) {
+    const el = document.querySelector(selector);
+    if (!el || el.dataset.copyBound === '1') return;
+    el.dataset.copyBound = '1';
+    el.classList.add('copy-contact');
+    el.setAttribute('title', kind === 'email' ? 'Cliquer pour copier l’email' : 'Cliquer pour copier le numéro');
+    el.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const value = valueFromLink(el, kind);
+      if (!value) return;
+      const ok = await writeClipboard(value);
+      toast(ok ? (kind === 'email' ? 'Email copié' : 'Numéro copié') : 'Impossible de copier');
+    });
+  }
+
+  function bind() {
+    bindOne('#topbarPhone', 'phone');
+    bindOne('#topbarEmail', 'email');
+    bindOne('#contactPhone', 'phone');
+    bindOne('#contactEmail', 'email');
+  }
+
+  return { bind, toast };
 })();

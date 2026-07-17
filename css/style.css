@@ -875,10 +875,6 @@ a {
   gap: 0.35rem;
 }
 
-.social--header[hidden] {
-  display: none;
-}
-
 .social--header .social__link {
   width: 32px;
   height: 32px;
@@ -893,9 +889,54 @@ a {
   color: var(--color-primary-dark);
 }
 
+.social--header .social__link--muted:hover {
+  background: transparent;
+  border-color: rgba(26, 58, 82, 0.2);
+  color: var(--color-primary);
+}
+
 .social--header .social__link svg {
   width: 15px;
   height: 15px;
+}
+
+.social__link--muted {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
+.footer .social__link--muted {
+  opacity: 0.4;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.copy-contact {
+  cursor: copy;
+}
+
+.copy-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%) translateY(120%);
+  z-index: 260;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  background: rgba(30, 51, 41, 0.96);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.copy-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .header__cta {

@@ -201,6 +201,8 @@
     }
     const contactHours = document.getElementById('contactHours');
     if (contactHours) contactHours.textContent = site.hours;
+
+    if (window.ProceptCopy) window.ProceptCopy.bind();
   }
 
   function renderPage(page) {
