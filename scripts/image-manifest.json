@@ -1,0 +1,456 @@
+{
+  "hero": [
+    {
+      "id": "slide-1",
+      "url": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/5ca7941c54234e65ae41dd620cd6b0f7-1920w.jpg",
+      "title": "Construction de maisons près de Saint-Germain-en-Laye",
+      "description": "La société Procept emploie les techniques les plus appropriées pour chaque domaine de compétences et met à votre service des professionnels avertis.",
+      "local": "images/hero/slide-1.jpg"
+    },
+    {
+      "id": "slide-2",
+      "url": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/b389dd517e0c46b497dd8721b695a663-1920w.jpg",
+      "title": "Rénovation de maisons à proximité de Saint-Germain-en-Laye",
+      "description": "Rénovation complète, agrandissement et modernisation de votre habitat avec des matériaux haut de gamme.",
+      "local": "images/hero/slide-2.jpg"
+    },
+    {
+      "id": "slide-3",
+      "url": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/4710d65295264608b7c358e609dfabcf-1920w.jpg",
+      "title": "Extension de maisons aux alentours de Rueil-Malmaison",
+      "description": "Extensions sur mesure, vérandas, terrasses et toits-terrasses végétalisés pour agrandir votre espace de vie.",
+      "local": "images/hero/slide-3.jpg"
+    },
+    {
+      "id": "slide-4",
+      "url": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/022c32a2ced24e7d8d6e8f91d4b4fb72-1920w.jpg",
+      "title": "Promotion immobilière près de Versailles",
+      "description": "Achat de terrain, conception des plans, permis de construire — nous vous accompagnons dans votre projet immobilier.",
+      "local": "images/hero/slide-4.jpg"
+    }
+  ],
+  "services": [
+    {
+      "id": "renovation",
+      "url": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/8d166e67a73c450dbdf3612d4bcbb75e-960w.jpg",
+      "local": "images/services/renovation.jpg"
+    },
+    {
+      "id": "promotion",
+      "url": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/71b1908f8e2547c1840f2df3fe31d69a-960w.jpg",
+      "local": "images/services/promotion.jpg"
+    },
+    {
+      "id": "construction",
+      "url": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/d087c20bb4ca4f8d9a3cb5c3fd8f2204-960w.jpg",
+      "local": "images/services/construction.jpg"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gal-01",
+      "caption": "Construction grande maison de luxe",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/d087c20bb4ca4f8d9a3cb5c3fd8f2204-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/d087c20bb4ca4f8d9a3cb5c3fd8f2204-1920w.jpg",
+      "local": "images/gallery/gal-01.jpg",
+      "localFull": "images/gallery/gal-01-full.jpg"
+    },
+    {
+      "id": "gal-02",
+      "caption": "Construction de maison neuve",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/b0344c01605a40899e9b31e56581f8d7-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/b0344c01605a40899e9b31e56581f8d7-1920w.jpg",
+      "local": "images/gallery/gal-02.jpg",
+      "localFull": "images/gallery/gal-02-full.jpg"
+    },
+    {
+      "id": "gal-03",
+      "caption": "Intérieur rénové",
+      "category": "renovation",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/765ebfc3faf249f3bbb7ca313d8e8f14-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/765ebfc3faf249f3bbb7ca313d8e8f14-1920w.jpg",
+      "local": "images/gallery/gal-03.jpg",
+      "localFull": "images/gallery/gal-03-full.jpg"
+    },
+    {
+      "id": "gal-04",
+      "caption": "Maison neuve haut de gamme",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/7f52b7da969b4475a0c468552ee06697-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/7f52b7da969b4475a0c468552ee06697-1920w.jpg",
+      "local": "images/gallery/gal-04.jpg",
+      "localFull": "images/gallery/gal-04-full.jpg"
+    },
+    {
+      "id": "gal-05",
+      "caption": "Projet de maison neuve",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/87d4d9cb18434173a7e591a214a6dee4-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/87d4d9cb18434173a7e591a214a6dee4-1920w.jpg",
+      "local": "images/gallery/gal-05.jpg",
+      "localFull": "images/gallery/gal-05-full.jpg"
+    },
+    {
+      "id": "gal-06",
+      "caption": "Projet maison neuve",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/f1f8fe5285bf42eb86da139a54c3c71d-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/f1f8fe5285bf42eb86da139a54c3c71d-1920w.jpg",
+      "local": "images/gallery/gal-06.jpg",
+      "localFull": "images/gallery/gal-06-full.jpg"
+    },
+    {
+      "id": "gal-07",
+      "caption": "Projet immobilier",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/06b3ac1c29d94c7d8fbec24542fbd161-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/06b3ac1c29d94c7d8fbec24542fbd161-1920w.jpg",
+      "local": "images/gallery/gal-07.jpg",
+      "localFull": "images/gallery/gal-07-full.jpg"
+    },
+    {
+      "id": "gal-08",
+      "caption": "Chantier construction",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/01839411c60f416d8cdf4757c0ce558a-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/01839411c60f416d8cdf4757c0ce558a-1920w.jpg",
+      "local": "images/gallery/gal-08.jpg",
+      "localFull": "images/gallery/gal-08-full.jpg"
+    },
+    {
+      "id": "gal-09",
+      "caption": "Chantier construction maison neuve",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/b78b3bdda0d44c51aa79c1349999b24f-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/b78b3bdda0d44c51aa79c1349999b24f-1920w.jpg",
+      "local": "images/gallery/gal-09.jpg",
+      "localFull": "images/gallery/gal-09-full.jpg"
+    },
+    {
+      "id": "gal-10",
+      "caption": "Projet immobilier grande maison",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/9cc08092485a4defbb91333b2c77eff4-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/9cc08092485a4defbb91333b2c77eff4-1920w.jpg",
+      "local": "images/gallery/gal-10.jpg",
+      "localFull": "images/gallery/gal-10-full.jpg"
+    },
+    {
+      "id": "gal-11",
+      "caption": "Construction neuve",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/bfd772f65c5943a386b1730ea641cbc5-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/bfd772f65c5943a386b1730ea641cbc5-1920w.jpg",
+      "local": "images/gallery/gal-11.jpg",
+      "localFull": "images/gallery/gal-11-full.jpg"
+    },
+    {
+      "id": "gal-12",
+      "caption": "Construction maison en bois",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/e782cd920e114b3a90851e09b97c1cc1-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/e782cd920e114b3a90851e09b97c1cc1-1920w.jpg",
+      "local": "images/gallery/gal-12.jpg",
+      "localFull": "images/gallery/gal-12-full.jpg"
+    },
+    {
+      "id": "gal-13",
+      "caption": "Extension de maison",
+      "category": "extension",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/eb70b85e09b04dc69f101cb980a579ca-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/eb70b85e09b04dc69f101cb980a579ca-1920w.jpg",
+      "local": "images/gallery/gal-13.jpg",
+      "localFull": "images/gallery/gal-13-full.jpg"
+    },
+    {
+      "id": "gal-14",
+      "caption": "Projet de maison moderne",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/4d07d60517744d6792264f327799a226-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/4d07d60517744d6792264f327799a226-1920w.jpg",
+      "local": "images/gallery/gal-14.jpg",
+      "localFull": "images/gallery/gal-14-full.jpg"
+    },
+    {
+      "id": "gal-15",
+      "caption": "Projet de maison",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/42876f78f978482fa393c6728e9cd938-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/42876f78f978482fa393c6728e9cd938-1920w.jpg",
+      "local": "images/gallery/gal-15.jpg",
+      "localFull": "images/gallery/gal-15-full.jpg"
+    },
+    {
+      "id": "gal-16",
+      "caption": "Rénovation maison haut de gamme",
+      "category": "renovation",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/5c1345f81e574c6a970c1e8900e08465-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/5c1345f81e574c6a970c1e8900e08465-1920w.jpg",
+      "local": "images/gallery/gal-16.jpg",
+      "localFull": "images/gallery/gal-16-full.jpg"
+    },
+    {
+      "id": "gal-17",
+      "caption": "Chantier construction maison haut de gamme",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/947e7a38e7484f708546eee3faa9e873-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/947e7a38e7484f708546eee3faa9e873-1920w.jpg",
+      "local": "images/gallery/gal-17.jpg",
+      "localFull": "images/gallery/gal-17-full.jpg"
+    },
+    {
+      "id": "gal-18",
+      "caption": "Début chantier construction",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/59cd871957b64e5a93a25dc2094fa34a-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/59cd871957b64e5a93a25dc2094fa34a-1920w.jpg",
+      "local": "images/gallery/gal-18.jpg",
+      "localFull": "images/gallery/gal-18-full.jpg"
+    },
+    {
+      "id": "gal-19",
+      "caption": "Extension en bois",
+      "category": "extension",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/48964b557fbf4988a1c9097d3d199f2a-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/48964b557fbf4988a1c9097d3d199f2a-1920w.jpg",
+      "local": "images/gallery/gal-19.jpg",
+      "localFull": "images/gallery/gal-19-full.jpg"
+    },
+    {
+      "id": "gal-20",
+      "caption": "Promotion immobilière",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/33d1e09fb2d142e8a63062c3b58067aa-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/33d1e09fb2d142e8a63062c3b58067aa-1920w.jpg",
+      "local": "images/gallery/gal-20.jpg",
+      "localFull": "images/gallery/gal-20-full.jpg"
+    },
+    {
+      "id": "gal-21",
+      "caption": "Ossature bois",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/1cfa08c0420549bb86b37b4fe334af8e-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/1cfa08c0420549bb86b37b4fe334af8e-1920w.jpg",
+      "local": "images/gallery/gal-21.jpg",
+      "localFull": "images/gallery/gal-21-full.jpg"
+    },
+    {
+      "id": "gal-22",
+      "caption": "Maison clé en main",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/af9c0057b2504eb99e3ab9be2ef70c94-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/af9c0057b2504eb99e3ab9be2ef70c94-1920w.jpg",
+      "local": "images/gallery/gal-22.jpg",
+      "localFull": "images/gallery/gal-22-full.jpg"
+    },
+    {
+      "id": "gal-23",
+      "caption": "Maison sur-mesure",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/6f3f72b3745f448f8b28223f37874e7e-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/6f3f72b3745f448f8b28223f37874e7e-1920w.jpg",
+      "local": "images/gallery/gal-23.jpg",
+      "localFull": "images/gallery/gal-23-full.jpg"
+    },
+    {
+      "id": "gal-24",
+      "caption": "Maison avec piscine",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/dd1e1903909244b0b418e74cbad649b2-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/dd1e1903909244b0b418e74cbad649b2-1920w.jpg",
+      "local": "images/gallery/gal-24.jpg",
+      "localFull": "images/gallery/gal-24-full.jpg"
+    },
+    {
+      "id": "gal-25",
+      "caption": "Grande maison neuve",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/a98f3ba91c2c4fcd94a80079c2d1e7ee-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/a98f3ba91c2c4fcd94a80079c2d1e7ee-1920w.jpg",
+      "local": "images/gallery/gal-25.jpg",
+      "localFull": "images/gallery/gal-25-full.jpg"
+    },
+    {
+      "id": "gal-26",
+      "caption": "Grande maison neuve et piscine",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/958ae3531a404cdebc905cf7db3a0981-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/958ae3531a404cdebc905cf7db3a0981-1920w.jpg",
+      "local": "images/gallery/gal-26.jpg",
+      "localFull": "images/gallery/gal-26-full.jpg"
+    },
+    {
+      "id": "gal-27",
+      "caption": "Travaux de couverture",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/d524c1c2296a4c65b46b670b1d02e172-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/d524c1c2296a4c65b46b670b1d02e172-1920w.jpg",
+      "local": "images/gallery/gal-27.jpg",
+      "localFull": "images/gallery/gal-27-full.jpg"
+    },
+    {
+      "id": "gal-28",
+      "caption": "Travaux de couverture sur toiture",
+      "category": "renovation",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/6fa054ae65954fa5a6ed1641f243e6d0-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/6fa054ae65954fa5a6ed1641f243e6d0-1920w.jpg",
+      "local": "images/gallery/gal-28.jpg",
+      "localFull": "images/gallery/gal-28-full.jpg"
+    },
+    {
+      "id": "gal-29",
+      "caption": "Chantier Cohen (55)",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/85d0d3c9a7af409ca4b9146355e37e6f-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/85d0d3c9a7af409ca4b9146355e37e6f-1920w.jpg",
+      "local": "images/gallery/gal-29.jpg",
+      "localFull": "images/gallery/gal-29-full.jpg"
+    },
+    {
+      "id": "gal-30",
+      "caption": "Dalles béton",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/f6bd3b5e5505471887d12d5b5d492f17-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/f6bd3b5e5505471887d12d5b5d492f17-1920w.jpg",
+      "local": "images/gallery/gal-30.jpg",
+      "localFull": "images/gallery/gal-30-full.jpg"
+    },
+    {
+      "id": "gal-31",
+      "caption": "Dalles en béton",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/0f6dc239c6654273a30d7ebe34eca11c-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/0f6dc239c6654273a30d7ebe34eca11c-1920w.jpg",
+      "local": "images/gallery/gal-31.jpg",
+      "localFull": "images/gallery/gal-31-full.jpg"
+    },
+    {
+      "id": "gal-32",
+      "caption": "Rénovation toit",
+      "category": "renovation",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/446aa8eaa1374579a19849169b446452-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/446aa8eaa1374579a19849169b446452-1920w.jpg",
+      "local": "images/gallery/gal-32.jpg",
+      "localFull": "images/gallery/gal-32-full.jpg"
+    },
+    {
+      "id": "gal-33",
+      "caption": "Materiel chantier",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/44b4751bf1084c03b9a36d7915442b8e-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/44b4751bf1084c03b9a36d7915442b8e-1920w.jpg",
+      "local": "images/gallery/gal-33.jpg",
+      "localFull": "images/gallery/gal-33-full.jpg"
+    },
+    {
+      "id": "gal-34",
+      "caption": "Matériel",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/57b39e5ac2ca496eb3710a193504a6b0-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/57b39e5ac2ca496eb3710a193504a6b0-1920w.jpg",
+      "local": "images/gallery/gal-34.jpg",
+      "localFull": "images/gallery/gal-34-full.jpg"
+    },
+    {
+      "id": "gal-35",
+      "caption": "Tiges chantier",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/5fbb374feede460c99a05668c40f3fa3-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/5fbb374feede460c99a05668c40f3fa3-1920w.jpg",
+      "local": "images/gallery/gal-35.jpg",
+      "localFull": "images/gallery/gal-35-full.jpg"
+    },
+    {
+      "id": "gal-36",
+      "caption": "Charpente bois",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/8b41cfa9810746368347e741e64ea360-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/8b41cfa9810746368347e741e64ea360-1920w.jpg",
+      "local": "images/gallery/gal-36.jpg",
+      "localFull": "images/gallery/gal-36-full.jpg"
+    },
+    {
+      "id": "gal-37",
+      "caption": "Plancher chauffant",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/edf9dfdea57c4b91a7ece33a5d9360a6-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/edf9dfdea57c4b91a7ece33a5d9360a6-1920w.jpg",
+      "local": "images/gallery/gal-37.jpg",
+      "localFull": "images/gallery/gal-37-full.jpg"
+    },
+    {
+      "id": "gal-38",
+      "caption": "Maquette construction",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/37b3750341744966b623a8ab4ea50692-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/37b3750341744966b623a8ab4ea50692-1920w.jpg",
+      "local": "images/gallery/gal-38.jpg",
+      "localFull": "images/gallery/gal-38-full.jpg"
+    },
+    {
+      "id": "gal-39",
+      "caption": "Maquette",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/4557590792d4448baec5827ed61acfd0-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/4557590792d4448baec5827ed61acfd0-1920w.jpg",
+      "local": "images/gallery/gal-39.jpg",
+      "localFull": "images/gallery/gal-39-full.jpg"
+    },
+    {
+      "id": "gal-40",
+      "caption": "Maison - Procept",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/400fd406afa4465981d5b8f04e3d5aa9-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/400fd406afa4465981d5b8f04e3d5aa9-1920w.jpg",
+      "local": "images/gallery/gal-40.jpg",
+      "localFull": "images/gallery/gal-40-full.jpg"
+    },
+    {
+      "id": "gal-41",
+      "caption": "Maison et dépendances",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/300d912fbca34b39845c77b87b3c655d-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/300d912fbca34b39845c77b87b3c655d-1920w.jpg",
+      "local": "images/gallery/gal-41.jpg",
+      "localFull": "images/gallery/gal-41-full.jpg"
+    },
+    {
+      "id": "gal-42",
+      "caption": "Chantier rénovation bâtiment public",
+      "category": "renovation",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/609b6ba528ee45a7b7f3be067f23bf10-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/609b6ba528ee45a7b7f3be067f23bf10-1920w.jpg",
+      "local": "images/gallery/gal-42.jpg",
+      "localFull": "images/gallery/gal-42-full.jpg"
+    },
+    {
+      "id": "gal-43",
+      "caption": "Notre siège social",
+      "category": "construction",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/99b11c078f3543ddbdaf3d3564dab5ed-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/99b11c078f3543ddbdaf3d3564dab5ed-1920w.jpg",
+      "local": "images/gallery/gal-43.jpg",
+      "localFull": "images/gallery/gal-43-full.jpg"
+    },
+    {
+      "id": "gal-44",
+      "caption": "Fondation maison",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/26066acdd1c4487e9c4d561f60c7fa0c-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/26066acdd1c4487e9c4d561f60c7fa0c-1920w.jpg",
+      "local": "images/gallery/gal-44.jpg",
+      "localFull": "images/gallery/gal-44-full.jpg"
+    },
+    {
+      "id": "gal-45",
+      "caption": "Panorama chantier construction",
+      "category": "chantier",
+      "thumbUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/e8b1457ba85c4d63bb5ee4c94775c762-640w.jpg",
+      "fullUrl": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/e8b1457ba85c4d63bb5ee4c94775c762-1920w.jpg",
+      "local": "images/gallery/gal-45.jpg",
+      "localFull": "images/gallery/gal-45-full.jpg"
+    }
+  ]
+}

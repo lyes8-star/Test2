@@ -118,8 +118,8 @@ window.ProceptSearch = (function () {
         id: item.id || `gal-${i}`,
         type: 'Réalisation',
         title: item.caption || 'Réalisation',
-        excerpt: item.caption || '',
-        keywords: [item.caption, ...siteKeywords],
+        excerpt: [item.caption, item.category].filter(Boolean).join(' — '),
+        keywords: [item.caption, item.category, ...siteKeywords],
         target: '#realisations',
         matchIds: [item.id || `gal-${i}`],
       });
