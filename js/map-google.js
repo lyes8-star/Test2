@@ -212,5 +212,130 @@ window.ProceptMapGoogle = (function () {
     });
   }
 
-  return { render, CITY_COORDS, embedUrl, mapsLink };
+  return {
+    render,
+    CITY_COORDS,
+    embedUrl,
+    mapsLink,
+    allowsMaps,
+    bindTopbarAddress,
+  };
+
+  function bindTopbarAddress(el, options = {}) {
+    if (!el) return;
+
+    const geo = options.geo || {};
+    const lat = typeof geo.lat === 'number' ? geo.lat : DEFAULT_CENTER[0];
+    const lng = typeof geo.lng === 'number' ? geo.lng : DEFAULT_CENTER[1];
+    const label = options.address || options.hqLabel || 'Procept Mareil-Marly';
+    const textEl = el.querySelector('.topbar__address-text') || el.querySelector('span');
+
+    if (textEl && options.address) textEl.textContent = options.address;
+    el.href = mapsLink(lat, lng, label);
+    el.setAttribute('aria-label', `Voir l’agence Procept sur Google Maps — ${label}`);
+
+    if (el.dataset.mapBound) return;
+    el.dataset.mapBound = '1';
+
+    let preview = null;
+    let hideTimer = null;
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    function ensurePreview() {
+      if (preview) return preview;
+      preview = document.createElement('div');
+      preview.className = 'topbar__map-preview';
+      preview.setAttribute('role', 'dialog');
+      preview.setAttribute('aria-label', 'Aperçu de la localisation Procept');
+      preview.hidden = true;
+      document.body.appendChild(preview);
+
+      preview.addEventListener('mouseenter', () => {
+        if (hideTimer) {
+          clearTimeout(hideTimer);
+          hideTimer = null;
+        }
+      });
+      preview.addEventListener('mouseleave', scheduleHide);
+      return preview;
+    }
+
+    function fillPreview() {
+      const box = ensurePreview();
+      if (allowsMaps()) {
+        box.innerHTML = `
+          <iframe
+            class="topbar__map-iframe"
+            title="Localisation Procept — Mareil-Marly"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="${embedUrl(lat, lng, 15)}"
+          ></iframe>
+          <p class="topbar__map-caption">${escapeHtml(label)}</p>
+        `;
+      } else {
+        box.innerHTML = `
+          <div class="topbar__map-consent">
+            <p>Acceptez les cookies « Contenus tiers » pour voir la carte, ou ouvrez Google Maps.</p>
+            <button type="button" class="btn btn--primary btn--sm" data-map-consent>Afficher la carte</button>
+          </div>
+        `;
+        box.querySelector('[data-map-consent]')?.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const cur = window.ProceptConsent?.get?.() || {};
+          window.ProceptConsent?.save?.({
+            analytics: !!cur.analytics,
+            ads: !!cur.ads,
+            content: true,
+          });
+          fillPreview();
+        });
+      }
+    }
+
+    function positionPreview() {
+      const box = ensurePreview();
+      const rect = el.getBoundingClientRect();
+      const width = 300;
+      let left = rect.left + rect.width / 2 - width / 2;
+      left = Math.max(12, Math.min(left, window.innerWidth - width - 12));
+      const top = rect.bottom + 8;
+      box.style.width = `${width}px`;
+      box.style.left = `${left}px`;
+      box.style.top = `${top}px`;
+    }
+
+    function show() {
+      if (!canHover) return;
+      if (hideTimer) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+      fillPreview();
+      positionPreview();
+      ensurePreview().hidden = false;
+    }
+
+    function scheduleHide() {
+      hideTimer = setTimeout(() => {
+        if (preview) preview.hidden = true;
+      }, 180);
+    }
+
+    el.addEventListener('mouseenter', show);
+    el.addEventListener('focus', show);
+    el.addEventListener('mouseleave', scheduleHide);
+    el.addEventListener('blur', scheduleHide);
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (preview && !preview.hidden) positionPreview();
+      },
+      { passive: true }
+    );
+    document.addEventListener('procept:consent', () => {
+      if (preview && !preview.hidden) fillPreview();
+    });
+  }
 })();

@@ -262,7 +262,19 @@ function renderSite() {
   topbarEmail.href = `mailto:${site.email}`;
 
   document.getElementById('topbarHours').querySelector('span').textContent = site.hours;
-  document.getElementById('topbarAddress').querySelector('span').textContent = site.address;
+  if (window.ProceptMapGoogle?.bindTopbarAddress) {
+    window.ProceptMapGoogle.bindTopbarAddress(document.getElementById('topbarAddress'), {
+      address: site.address,
+      geo: site.geo,
+      hqLabel: site.city || 'Mareil-Marly',
+    });
+  } else {
+    const topbarAddress = document.getElementById('topbarAddress');
+    if (topbarAddress) {
+      const span = topbarAddress.querySelector('.topbar__address-text') || topbarAddress.querySelector('span');
+      if (span) span.textContent = site.address;
+    }
+  }
 
   const fab = document.getElementById('fabPhone');
   fab.href = phoneHref;

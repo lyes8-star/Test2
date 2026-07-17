@@ -264,7 +264,15 @@
       if (span) span.textContent = site.hours || '';
     });
     set('topbarAddress', (el) => {
-      const span = el.querySelector('span');
+      if (window.ProceptMapGoogle?.bindTopbarAddress) {
+        window.ProceptMapGoogle.bindTopbarAddress(el, {
+          address: site.address,
+          geo: site.geo,
+          hqLabel: site.city || 'Mareil-Marly',
+        });
+        return;
+      }
+      const span = el.querySelector('.topbar__address-text') || el.querySelector('span');
       if (span) span.textContent = site.address || '';
     });
     set('footerAddress', (el) => {
