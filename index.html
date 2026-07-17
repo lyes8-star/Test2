@@ -101,6 +101,7 @@
 
         <a href="#realisations" class="nav__link" data-section="realisations">Réalisations</a>
         <a href="#apropos" class="nav__link" data-section="apropos">À propos</a>
+        <a href="#actualites" class="nav__link" data-section="actualites">Actualités</a>
         <a href="#zones" class="nav__link" data-section="zones">Zones</a>
         <a href="#faq" class="nav__link" data-section="faq">FAQ</a>
         <a href="#contact" class="nav__link" data-section="contact">Contact</a>
@@ -113,7 +114,7 @@
           </button>
           <div class="search__panel" id="searchPanel">
             <label class="sr-only" for="searchInput">Rechercher</label>
-            <input type="search" id="searchInput" class="search__input" placeholder="Ex. rénovation, Versailles…" autocomplete="off">
+            <input type="search" id="searchInput" class="search__input" placeholder="Ex. actualité, en cours, Versailles…" autocomplete="off">
             <button type="button" class="search__clear" id="searchClear" hidden aria-label="Effacer la recherche">×</button>
             <div class="search__results" id="searchResults" role="listbox" hidden></div>
           </div>
@@ -206,6 +207,11 @@
           <h2 class="section__title">Nos réalisations</h2>
           <p class="section__count" id="galleryCount"></p>
         </div>
+        <div class="gallery__filters gallery__filters--status" id="galleryStatusFilters" role="tablist" aria-label="Statut des projets">
+          <button type="button" class="gallery__filter active" data-status="all" role="tab" aria-selected="true">Tous</button>
+          <button type="button" class="gallery__filter" data-status="en-cours" role="tab" aria-selected="false">En cours</button>
+          <button type="button" class="gallery__filter" data-status="termine" role="tab" aria-selected="false">Terminés</button>
+        </div>
         <div class="gallery__filters" id="galleryFilters" role="tablist" aria-label="Filtrer les réalisations">
           <button type="button" class="gallery__filter active" data-filter="all" role="tab" aria-selected="true">Toutes</button>
           <button type="button" class="gallery__filter" data-filter="construction" role="tab">Construction</button>
@@ -220,6 +226,20 @@
       </div>
     </section>
 
+    <section class="section news reveal" id="actualites">
+      <div class="container">
+        <div class="section__header">
+          <span class="section__label">Vie du chantier</span>
+          <h2 class="section__title">Actualités Procept</h2>
+          <p class="section__intro">Livraisons, chantiers en cours et programmes dans l’ouest parisien.</p>
+        </div>
+        <div class="news__grid" id="newsHomeGrid"></div>
+        <div class="news__more">
+          <a href="actualites/" class="btn btn--outline">Toutes les actualités</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section zones reveal" id="zones">
       <div class="container">
         <div class="section__header">
@@ -227,7 +247,10 @@
           <h2 class="section__title" id="zonesTitle">Zones d'intervention</h2>
           <p class="section__intro" id="zonesIntro"></p>
         </div>
-        <ul class="zones__list" id="zonesList"></ul>
+        <div class="zones__layout">
+          <div class="zones__map" id="zonesMap"></div>
+          <ul class="zones__list" id="zonesList"></ul>
+        </div>
       </div>
     </section>
 
@@ -307,9 +330,11 @@
         <a href="constructeur/">Construction</a>
         <a href="renovation/">Rénovation</a>
         <a href="promotion-immobiliere/">Promotion</a>
+        <a href="actualites/">Actualités</a>
         <a href="#realisations">Réalisations</a>
         <a href="#contact">Contact</a>
       </div>
+      <div class="social" data-social aria-label="Réseaux sociaux"></div>
       <p class="footer__copy">&copy; 2026 Procept — Constructeur de maisons en Île-de-France</p>
     </div>
   </footer>
@@ -328,6 +353,8 @@
     <p class="lightbox__caption" id="lightboxCaption"></p>
   </div>
 
+  <script src="js/social.js"></script>
+  <script src="js/map-idf.js"></script>
   <script src="js/search.js"></script>
   <script src="js/main.js"></script>
 </body>

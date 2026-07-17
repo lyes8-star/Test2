@@ -31,7 +31,13 @@
     "city": "Mareil-Marly",
     "region": "Île-de-France",
     "country": "FR",
-    "ogImage": "images/hero/slide-1.jpg"
+    "ogImage": "images/hero/slide-1.jpg",
+    "social": {
+      "facebook": "https://www.facebook.com/",
+      "instagram": "https://www.instagram.com/",
+      "linkedin": "https://www.linkedin.com/",
+      "youtube": ""
+    }
   },
   "hero": {
     "slides": [
@@ -133,315 +139,360 @@
       "image": "images/gallery/gal-01.jpg",
       "imageFull": "images/gallery/gal-01-full.jpg",
       "caption": "Construction grande maison de luxe",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-02",
       "image": "images/gallery/gal-02.jpg",
       "imageFull": "images/gallery/gal-02-full.jpg",
       "caption": "Construction de maison neuve",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-03",
       "image": "images/gallery/gal-03.jpg",
       "imageFull": "images/gallery/gal-03-full.jpg",
       "caption": "Intérieur rénové",
-      "category": "renovation"
+      "category": "renovation",
+      "status": "termine"
     },
     {
       "id": "gal-04",
       "image": "images/gallery/gal-04.jpg",
       "imageFull": "images/gallery/gal-04-full.jpg",
       "caption": "Maison neuve haut de gamme",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-05",
       "image": "images/gallery/gal-05.jpg",
       "imageFull": "images/gallery/gal-05-full.jpg",
       "caption": "Projet de maison neuve",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-06",
       "image": "images/gallery/gal-06.jpg",
       "imageFull": "images/gallery/gal-06-full.jpg",
       "caption": "Projet maison neuve",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-07",
       "image": "images/gallery/gal-07.jpg",
       "imageFull": "images/gallery/gal-07-full.jpg",
       "caption": "Projet immobilier",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-08",
       "image": "images/gallery/gal-08.jpg",
       "imageFull": "images/gallery/gal-08-full.jpg",
       "caption": "Chantier construction",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "termine"
     },
     {
       "id": "gal-09",
       "image": "images/gallery/gal-09.jpg",
       "imageFull": "images/gallery/gal-09-full.jpg",
       "caption": "Chantier construction maison neuve",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "termine"
     },
     {
       "id": "gal-10",
       "image": "images/gallery/gal-10.jpg",
       "imageFull": "images/gallery/gal-10-full.jpg",
       "caption": "Projet immobilier grande maison",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-11",
       "image": "images/gallery/gal-11.jpg",
       "imageFull": "images/gallery/gal-11-full.jpg",
       "caption": "Construction neuve",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-12",
       "image": "images/gallery/gal-12.jpg",
       "imageFull": "images/gallery/gal-12-full.jpg",
       "caption": "Construction maison en bois",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-13",
       "image": "images/gallery/gal-13.jpg",
       "imageFull": "images/gallery/gal-13-full.jpg",
       "caption": "Extension de maison",
-      "category": "extension"
+      "category": "extension",
+      "status": "termine"
     },
     {
       "id": "gal-14",
       "image": "images/gallery/gal-14.jpg",
       "imageFull": "images/gallery/gal-14-full.jpg",
       "caption": "Projet de maison moderne",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-15",
       "image": "images/gallery/gal-15.jpg",
       "imageFull": "images/gallery/gal-15-full.jpg",
       "caption": "Projet de maison",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-16",
       "image": "images/gallery/gal-16.jpg",
       "imageFull": "images/gallery/gal-16-full.jpg",
       "caption": "Rénovation maison haut de gamme",
-      "category": "renovation"
+      "category": "renovation",
+      "status": "termine"
     },
     {
       "id": "gal-17",
       "image": "images/gallery/gal-17.jpg",
       "imageFull": "images/gallery/gal-17-full.jpg",
       "caption": "Chantier construction maison haut de gamme",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "termine"
     },
     {
       "id": "gal-18",
       "image": "images/gallery/gal-18.jpg",
       "imageFull": "images/gallery/gal-18-full.jpg",
       "caption": "Début chantier construction",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "termine"
     },
     {
       "id": "gal-19",
       "image": "images/gallery/gal-19.jpg",
       "imageFull": "images/gallery/gal-19-full.jpg",
       "caption": "Extension en bois",
-      "category": "extension"
+      "category": "extension",
+      "status": "termine"
     },
     {
       "id": "gal-20",
       "image": "images/gallery/gal-20.jpg",
       "imageFull": "images/gallery/gal-20-full.jpg",
       "caption": "Promotion immobilière",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-21",
       "image": "images/gallery/gal-21.jpg",
       "imageFull": "images/gallery/gal-21-full.jpg",
       "caption": "Ossature bois",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "termine"
     },
     {
       "id": "gal-22",
       "image": "images/gallery/gal-22.jpg",
       "imageFull": "images/gallery/gal-22-full.jpg",
       "caption": "Maison clé en main",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-23",
       "image": "images/gallery/gal-23.jpg",
       "imageFull": "images/gallery/gal-23-full.jpg",
       "caption": "Maison sur-mesure",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-24",
       "image": "images/gallery/gal-24.jpg",
       "imageFull": "images/gallery/gal-24-full.jpg",
       "caption": "Maison avec piscine",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-25",
       "image": "images/gallery/gal-25.jpg",
       "imageFull": "images/gallery/gal-25-full.jpg",
       "caption": "Grande maison neuve",
-      "category": "construction"
+      "category": "construction",
+      "status": "en-cours"
     },
     {
       "id": "gal-26",
       "image": "images/gallery/gal-26.jpg",
       "imageFull": "images/gallery/gal-26-full.jpg",
       "caption": "Grande maison neuve et piscine",
-      "category": "construction"
+      "category": "construction",
+      "status": "en-cours"
     },
     {
       "id": "gal-27",
       "image": "images/gallery/gal-27.jpg",
       "imageFull": "images/gallery/gal-27-full.jpg",
       "caption": "Travaux de couverture",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-28",
       "image": "images/gallery/gal-28.jpg",
       "imageFull": "images/gallery/gal-28-full.jpg",
       "caption": "Travaux de couverture sur toiture",
-      "category": "renovation"
+      "category": "renovation",
+      "status": "en-cours"
     },
     {
       "id": "gal-29",
       "image": "images/gallery/gal-29.jpg",
       "imageFull": "images/gallery/gal-29-full.jpg",
       "caption": "Chantier Cohen (55)",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-30",
       "image": "images/gallery/gal-30.jpg",
       "imageFull": "images/gallery/gal-30-full.jpg",
       "caption": "Dalles béton",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-31",
       "image": "images/gallery/gal-31.jpg",
       "imageFull": "images/gallery/gal-31-full.jpg",
       "caption": "Dalles en béton",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-32",
       "image": "images/gallery/gal-32.jpg",
       "imageFull": "images/gallery/gal-32-full.jpg",
       "caption": "Rénovation toit",
-      "category": "renovation"
+      "category": "renovation",
+      "status": "termine"
     },
     {
       "id": "gal-33",
       "image": "images/gallery/gal-33.jpg",
       "imageFull": "images/gallery/gal-33-full.jpg",
       "caption": "Materiel chantier",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-34",
       "image": "images/gallery/gal-34.jpg",
       "imageFull": "images/gallery/gal-34-full.jpg",
       "caption": "Matériel",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-35",
       "image": "images/gallery/gal-35.jpg",
       "imageFull": "images/gallery/gal-35-full.jpg",
       "caption": "Tiges chantier",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-36",
       "image": "images/gallery/gal-36.jpg",
       "imageFull": "images/gallery/gal-36-full.jpg",
       "caption": "Charpente bois",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-37",
       "image": "images/gallery/gal-37.jpg",
       "imageFull": "images/gallery/gal-37-full.jpg",
       "caption": "Plancher chauffant",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-38",
       "image": "images/gallery/gal-38.jpg",
       "imageFull": "images/gallery/gal-38-full.jpg",
       "caption": "Maquette construction",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-39",
       "image": "images/gallery/gal-39.jpg",
       "imageFull": "images/gallery/gal-39-full.jpg",
       "caption": "Maquette",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-40",
       "image": "images/gallery/gal-40.jpg",
       "imageFull": "images/gallery/gal-40-full.jpg",
       "caption": "Maison - Procept",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-41",
       "image": "images/gallery/gal-41.jpg",
       "imageFull": "images/gallery/gal-41-full.jpg",
       "caption": "Maison et dépendances",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-42",
       "image": "images/gallery/gal-42.jpg",
       "imageFull": "images/gallery/gal-42-full.jpg",
       "caption": "Chantier rénovation bâtiment public",
-      "category": "renovation"
+      "category": "renovation",
+      "status": "termine"
     },
     {
       "id": "gal-43",
       "image": "images/gallery/gal-43.jpg",
       "imageFull": "images/gallery/gal-43-full.jpg",
       "caption": "Notre siège social",
-      "category": "construction"
+      "category": "construction",
+      "status": "termine"
     },
     {
       "id": "gal-44",
       "image": "images/gallery/gal-44.jpg",
       "imageFull": "images/gallery/gal-44-full.jpg",
       "caption": "Fondation maison",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     },
     {
       "id": "gal-45",
       "image": "images/gallery/gal-45.jpg",
       "imageFull": "images/gallery/gal-45-full.jpg",
       "caption": "Panorama chantier construction",
-      "category": "chantier"
+      "category": "chantier",
+      "status": "en-cours"
     }
   ],
   "process": [
@@ -790,5 +841,62 @@
       },
       "galleryFilter": "construction"
     }
-  }
+  },
+  "news": [
+    {
+      "id": "news-1",
+      "slug": "maison-re2020-mareil-marly",
+      "title": "Livraison d’une maison RE2020 à Mareil-Marly",
+      "date": "2026-06-15",
+      "excerpt": "Procept vient de livrer une maison individuelle basse consommation, conçue sur-mesure près de Saint-Germain-en-Laye.",
+      "body": [
+        "Notre équipe vient d’achever la livraison clé en main d’une maison individuelle certifiée RE2020 à Mareil-Marly.",
+        "Le projet a mobilisé notre bureau d’études et nos partenaires architectes pour allier performances énergétiques, matériaux haut de gamme et grandes ouvertures lumineuses.",
+        "Vous avez un terrain dans l’ouest parisien ? Contactez Procept pour un devis gratuit."
+      ],
+      "image": "images/gallery/gal-01.jpg",
+      "published": true
+    },
+    {
+      "id": "news-2",
+      "slug": "extension-ossature-bois-versailles",
+      "title": "Extension ossature bois près de Versailles",
+      "date": "2026-05-02",
+      "excerpt": "Agrandissement d’une maison familiale avec extension bois et terrasse, dans le respect du bâti existant.",
+      "body": [
+        "Procept a réalisé une extension en ossature bois pour une famille proche de Versailles, avec vérification structurelle et diagnostic préalable.",
+        "Le chantier a intégré une terrasse et une continuité visuelle avec les espaces de vie existants.",
+        "Rénovation, agrandissement ou surélévation : nous intervenons dans tout l’ouest parisien."
+      ],
+      "image": "images/gallery/gal-19.jpg",
+      "published": true
+    },
+    {
+      "id": "news-3",
+      "slug": "programme-promotion-rueil",
+      "title": "Nouveau programme de promotion près de Rueil-Malmaison",
+      "date": "2026-03-20",
+      "excerpt": "Étude de faisabilité et montage d’un programme de maisons haut de gamme clé en main dans l’ouest parisien.",
+      "body": [
+        "En tant que promoteur, Procept accompagne le montage de programmes immobiliers : terrain, permis, coordination et commercialisation.",
+        "Un nouveau projet près de Rueil-Malmaison illustre notre approche en deux phases — montage puis réalisation.",
+        "Pour toute demande de promotion immobilière, notre équipe reste à votre écoute."
+      ],
+      "image": "images/services/promotion.jpg",
+      "published": true
+    },
+    {
+      "id": "news-4",
+      "slug": "chantier-en-cours-yvelines",
+      "title": "Chantier en cours dans les Yvelines",
+      "date": "2026-07-01",
+      "excerpt": "Suivi de gros œuvre et plancher chauffant sur un chantier de construction individuelle.",
+      "body": [
+        "Plusieurs chantiers sont actuellement en cours dans les Yvelines, avec un suivi quotidien par nos équipes.",
+        "Gros œuvre, charpente et finitions : chaque étape est contrôlée pour respecter délais et qualités attendues."
+      ],
+      "image": "images/gallery/gal-44.jpg",
+      "published": true
+    }
+  ]
 }

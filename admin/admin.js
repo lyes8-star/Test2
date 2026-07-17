@@ -5,6 +5,7 @@ const TAB_TITLES = {
   services: 'Services',
   pages: 'Pages Construction, Rénovation & Promotion',
   gallery: 'Galerie photos',
+  news: 'Actualités',
   about: 'À propos',
   faq: 'FAQ & SEO',
 };
@@ -82,6 +83,12 @@ function populateForms() {
   document.getElementById('siteUrl').value = site.url || 'https://www.procept.fr/';
   document.getElementById('siteKeywords').value = (site.keywords || []).join(', ');
 
+  const social = site.social || {};
+  document.getElementById('socialFacebook').value = social.facebook || '';
+  document.getElementById('socialInstagram').value = social.instagram || '';
+  document.getElementById('socialLinkedin').value = social.linkedin || '';
+  document.getElementById('socialYoutube').value = social.youtube || '';
+
   document.getElementById('aboutTitle').value = about.title;
   document.getElementById('aboutText').value = about.text;
   document.getElementById('aboutZone').value = about.zone;
@@ -94,6 +101,7 @@ function populateForms() {
   renderServicesEditor();
   renderPagesEditor();
   renderGalleryEditor();
+  renderNewsEditor();
   renderFaqEditor();
 }
 
@@ -113,6 +121,12 @@ function collectContent() {
       .split(',')
       .map((k) => k.trim())
       .filter(Boolean),
+    social: {
+      facebook: document.getElementById('socialFacebook').value.trim(),
+      instagram: document.getElementById('socialInstagram').value.trim(),
+      linkedin: document.getElementById('socialLinkedin').value.trim(),
+      youtube: document.getElementById('socialYoutube').value.trim(),
+    },
   };
 
   content.about = {
@@ -379,6 +393,10 @@ function renderGalleryEditor() {
             `<option value="${c}"${(item.category||'autre')===c?' selected':''}>${c}</option>`
           ).join('')}
         </select>
+        <select class="gallery-status" style="width:100%;padding:0.5rem;margin-bottom:0.5rem;border:1px solid var(--color-border);border-radius:4px;font-size:0.85rem">
+          <option value="termine"${(item.status||'termine')==='termine'?' selected':''}>Terminé / Livré</option>
+          <option value="en-cours"${item.status==='en-cours'?' selected':''}>En cours</option>
+        </select>
         <div class="gallery-item__actions">
           <button class="btn btn--danger btn--sm" data-action="delete">Supprimer</button>
         </div>
@@ -394,6 +412,13 @@ function renderGalleryEditor() {
     if (catSelect) {
       catSelect.addEventListener('change', (e) => {
         content.gallery[index].category = e.target.value;
+      });
+    }
+
+    const statusSelect = el.querySelector('.gallery-status');
+    if (statusSelect) {
+      statusSelect.addEventListener('change', (e) => {
+        content.gallery[index].status = e.target.value;
       });
     }
 
@@ -425,8 +450,116 @@ document.getElementById('addGallery').addEventListener('click', () => {
     image: 'https://via.placeholder.com/640x480?text=Nouvelle+photo',
     caption: 'Nouvelle réalisation',
     category: 'autre',
+    status: 'termine',
   });
   renderGalleryEditor();
+});
+
+function slugify(str) {
+  return String(str || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 60) || `article-${Date.now()}`;
+}
+
+function renderNewsEditor() {
+  const container = document.getElementById('newsEditor');
+  if (!container) return;
+  if (!content.news) content.news = [];
+  container.innerHTML = '';
+
+  content.news.forEach((item, index) => {
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.style.marginBottom = '1.25rem';
+    el.innerHTML = `
+      <div class="form-grid">
+        <div class="form-group form-group--full">
+          <label>Titre</label>
+          <input type="text" class="news-title" value="${escapeHtml(item.title || '')}">
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" class="news-date" value="${escapeHtml(item.date || '')}">
+        </div>
+        <div class="form-group">
+          <label>Slug URL</label>
+          <input type="text" class="news-slug" value="${escapeHtml(item.slug || '')}">
+        </div>
+        <div class="form-group form-group--full">
+          <label>Extrait</label>
+          <textarea class="news-excerpt" rows="2">${escapeHtml(item.excerpt || '')}</textarea>
+        </div>
+        <div class="form-group form-group--full">
+          <label>Corps (un paragraphe par ligne vide)</label>
+          <textarea class="news-body" rows="5">${escapeHtml((item.body || []).join('\n\n'))}</textarea>
+        </div>
+        <div class="form-group form-group--full">
+          <label>Image</label>
+          <div class="news-image"></div>
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" class="news-published"${item.published !== false ? ' checked' : ''}> Publié</label>
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn--danger btn--sm news-delete">Supprimer</button>
+        </div>
+      </div>
+    `;
+
+    const imgWrap = el.querySelector('.news-image');
+    imgWrap.appendChild(createImageUpload(item.image || '', (url) => {
+      content.news[index].image = url;
+    }));
+
+    el.querySelector('.news-title').addEventListener('input', (e) => {
+      content.news[index].title = e.target.value;
+      if (!content.news[index].slug) {
+        content.news[index].slug = slugify(e.target.value);
+        el.querySelector('.news-slug').value = content.news[index].slug;
+      }
+    });
+    el.querySelector('.news-date').addEventListener('input', (e) => {
+      content.news[index].date = e.target.value;
+    });
+    el.querySelector('.news-slug').addEventListener('input', (e) => {
+      content.news[index].slug = slugify(e.target.value);
+    });
+    el.querySelector('.news-excerpt').addEventListener('input', (e) => {
+      content.news[index].excerpt = e.target.value;
+    });
+    el.querySelector('.news-body').addEventListener('input', (e) => {
+      content.news[index].body = e.target.value.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+    });
+    el.querySelector('.news-published').addEventListener('change', (e) => {
+      content.news[index].published = e.target.checked;
+    });
+    el.querySelector('.news-delete').addEventListener('click', () => {
+      content.news.splice(index, 1);
+      renderNewsEditor();
+    });
+
+    container.appendChild(el);
+  });
+}
+
+document.getElementById('addNews').addEventListener('click', () => {
+  if (!content.news) content.news = [];
+  const today = new Date().toISOString().slice(0, 10);
+  content.news.unshift({
+    id: `news-${Date.now()}`,
+    slug: `article-${Date.now()}`,
+    title: 'Nouvel article',
+    date: today,
+    excerpt: '',
+    body: [''],
+    image: 'images/gallery/gal-01.jpg',
+    published: true,
+  });
+  renderNewsEditor();
 });
 
 function ensurePages() {

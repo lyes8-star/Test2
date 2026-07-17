@@ -3,6 +3,7 @@ let currentSlide = 0;
 let slideInterval = null;
 let lastScrollY = 0;
 let galleryFilter = 'all';
+let galleryStatus = 'all';
 let galleryExpanded = false;
 const GALLERY_VISIBLE = 9;
 
@@ -122,7 +123,7 @@ function applySeo(data) {
 }
 
 function renderSite() {
-  const { site, hero, about, services, process, contactImage, zones, faq } = content;
+  const { site, hero, about, services, process, contactImage, zones, faq, news } = content;
 
   const phoneHref = `tel:${site.phone.replace(/\s/g, '')}`;
 
@@ -151,8 +152,10 @@ function renderSite() {
   renderProcess(process || []);
   renderGallery();
   renderMarquee(site.keywords || []);
+  renderNewsHome(news || []);
   renderZones(zones);
   renderFaq(faq || []);
+  if (window.ProceptSocial) window.ProceptSocial.render(site.social || {});
 
   document.getElementById('aboutTitle').textContent = about.title;
   document.getElementById('aboutText').textContent = about.text;
@@ -189,6 +192,54 @@ function renderZones(zones) {
       `<li class="zones__item"><a href="#contact">${escapeHtml(city)}</a></li>`
     ).join('');
   }
+  if (window.ProceptMapIdf) {
+    window.ProceptMapIdf.render(document.getElementById('zonesMap'), zones.cities || [], {
+      contactHref: '#contact',
+    });
+  }
+}
+
+function formatNewsDate(iso) {
+  if (!iso) return '';
+  try {
+    return new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  } catch {
+    return iso;
+  }
+}
+
+function renderNewsHome(items) {
+  const grid = document.getElementById('newsHomeGrid');
+  if (!grid) return;
+  const published = (items || [])
+    .filter((n) => n.published !== false)
+    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+    .slice(0, 3);
+
+  if (!published.length) {
+    grid.innerHTML = '<p class="news-empty">Aucune actualité pour le moment.</p>';
+    return;
+  }
+
+  grid.innerHTML = published.map((n) => `
+    <article class="news-card reveal">
+      <a href="actualites/?slug=${encodeURIComponent(n.slug || n.id)}" class="news-card__media">
+        <img src="${n.image}" alt="" width="640" height="400" loading="lazy" decoding="async">
+      </a>
+      <div class="news-card__body">
+        <time class="news-card__date" datetime="${escapeHtml(n.date || '')}">${escapeHtml(formatNewsDate(n.date))}</time>
+        <h3 class="news-card__title">
+          <a href="actualites/?slug=${encodeURIComponent(n.slug || n.id)}">${escapeHtml(n.title)}</a>
+        </h3>
+        <p class="news-card__excerpt">${escapeHtml(n.excerpt || '')}</p>
+      </div>
+    </article>
+  `).join('');
+  initReveal();
 }
 
 function renderFaq(items) {
@@ -329,8 +380,16 @@ function renderProcess(steps) {
 
 function filteredGallery() {
   const items = content.gallery || [];
-  if (galleryFilter === 'all') return items;
-  return items.filter((item) => item.category === galleryFilter);
+  return items.filter((item) => {
+    const catOk = galleryFilter === 'all' || item.category === galleryFilter;
+    const status = item.status || 'termine';
+    const statusOk = galleryStatus === 'all' || status === galleryStatus;
+    return catOk && statusOk;
+  });
+}
+
+function statusLabel(status) {
+  return status === 'en-cours' ? 'En cours' : 'Livré';
 }
 
 function renderGallery() {
@@ -345,9 +404,11 @@ function renderGallery() {
 
   grid.innerHTML = items.map((item, i) => {
     const hide = !galleryExpanded && i >= GALLERY_VISIBLE;
+    const status = item.status || 'termine';
     return `
-    <div class="gallery__item reveal${hide ? ' hidden' : ''}" data-index="${i}" data-id="${item.id}" data-category="${item.category || 'autre'}">
+    <div class="gallery__item reveal${hide ? ' hidden' : ''}" data-index="${i}" data-id="${item.id}" data-category="${item.category || 'autre'}" data-status="${status}">
       <img src="${item.image}" alt="${escapeHtml(item.caption)} — ${escapeHtml(item.category || 'réalisation')} Procept" width="640" height="480" loading="lazy" decoding="async">
+      <span class="gallery__badge gallery__badge--${status}">${statusLabel(status)}</span>
       <span class="gallery__caption">${escapeHtml(item.caption)}</span>
     </div>`;
   }).join('');
@@ -372,15 +433,29 @@ function renderGallery() {
 }
 
 function initGalleryFilters() {
-  document.querySelectorAll('.gallery__filter').forEach((btn) => {
+  document.querySelectorAll('#galleryFilters .gallery__filter').forEach((btn) => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.gallery__filter').forEach((b) => {
+      document.querySelectorAll('#galleryFilters .gallery__filter').forEach((b) => {
         b.classList.remove('active');
         b.setAttribute('aria-selected', 'false');
       });
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
       galleryFilter = btn.dataset.filter;
+      galleryExpanded = false;
+      renderGallery();
+    });
+  });
+
+  document.querySelectorAll('#galleryStatusFilters .gallery__filter').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#galleryStatusFilters .gallery__filter').forEach((b) => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      galleryStatus = btn.dataset.status;
       galleryExpanded = false;
       renderGallery();
     });
@@ -456,7 +531,7 @@ function initReveal() {
 
 /* —— Scroll spy —— */
 function initScrollSpy() {
-  const sections = ['accueil', 'services', 'apropos', 'realisations', 'zones', 'faq', 'contact']
+  const sections = ['accueil', 'services', 'apropos', 'realisations', 'actualites', 'zones', 'faq', 'contact']
     .map((id) => document.getElementById(id))
     .filter(Boolean);
 

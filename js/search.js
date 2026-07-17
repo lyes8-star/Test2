@@ -74,8 +74,23 @@ window.ProceptSearch = (function () {
         site.address,
         site.phone,
         site.email,
+        'contact',
+        'devis',
       ],
       target: '#contact',
+    });
+
+    const social = site.social || {};
+    Object.entries(social).forEach(([network, url]) => {
+      if (!url) return;
+      pushEntry({
+        id: `social-${network}`,
+        type: 'Réseau',
+        title: network.charAt(0).toUpperCase() + network.slice(1),
+        excerpt: `Suivez Procept sur ${network}`,
+        keywords: [network, 'réseaux sociaux', 'social'],
+        target: url,
+      });
     });
 
     (content.hero?.slides || []).forEach((slide, i) => {
@@ -172,15 +187,73 @@ window.ProceptSearch = (function () {
     });
 
     (content.gallery || []).forEach((item, i) => {
+      const status = item.status || 'termine';
+      const statusLabel = status === 'en-cours' ? 'en cours' : 'terminé livré';
       pushEntry({
         id: item.id || `gal-${i}`,
-        type: 'Réalisation',
+        type: status === 'en-cours' ? 'Projet en cours' : 'Réalisation',
         title: item.caption || 'Réalisation',
-        excerpt: [item.caption, item.category].filter(Boolean).join(' — '),
-        keywords: [item.caption, item.category, ...siteKeywords],
+        excerpt: [item.caption, item.category, statusLabel].filter(Boolean).join(' — '),
+        keywords: [
+          item.caption,
+          item.category,
+          status,
+          statusLabel,
+          'projet',
+          'chantier',
+          ...siteKeywords,
+        ],
         target: '#realisations',
         matchIds: [item.id || `gal-${i}`],
       });
+    });
+
+    pushEntry({
+      id: 'projets-en-cours',
+      type: 'Projet',
+      title: 'Projets en cours',
+      excerpt: 'Voir les chantiers et projets Procept en cours',
+      keywords: ['en cours', 'chantier', 'projet en cours', 'travaux'],
+      target: '#realisations',
+    });
+
+    pushEntry({
+      id: 'projets-termines',
+      type: 'Projet',
+      title: 'Projets terminés',
+      excerpt: 'Voir les réalisations livrées Procept',
+      keywords: ['terminé', 'terminés', 'livré', 'livraison', 'réalisations'],
+      target: '#realisations',
+    });
+
+    (content.news || [])
+      .filter((n) => n.published !== false)
+      .forEach((item) => {
+        pushEntry({
+          id: item.id || `news-${item.slug}`,
+          type: 'Actualité',
+          title: item.title,
+          excerpt: item.excerpt || '',
+          keywords: [
+            item.title,
+            item.excerpt,
+            ...(item.body || []),
+            'actualité',
+            'actualités',
+            'news',
+            ...siteKeywords,
+          ],
+          target: `actualites/?slug=${encodeURIComponent(item.slug || item.id)}`,
+        });
+      });
+
+    pushEntry({
+      id: 'page-actualites',
+      type: 'Page',
+      title: 'Actualités Procept',
+      excerpt: 'Toutes les actualités du constructeur Procept',
+      keywords: ['actualité', 'actualités', 'news', 'blog'],
+      target: 'actualites/',
     });
 
     // Entrées dédiées aux mots-clés site (suggestions rapides)
@@ -230,17 +303,18 @@ window.ProceptSearch = (function () {
     container.hidden = false;
 
     if (!results.length) {
-      container.innerHTML = `<div class="search__empty">Aucun résultat pour « ${escapeHtml(query)} »</div>`;
+      container.innerHTML = `<div class="search__empty">Aucun résultat pour « ${escapeHtml(query)} ». Essayez « rénovation », « en cours », « Versailles » ou « actualité ».</div>`;
       return;
     }
 
+    // Grouper légèrement par type pour la lecture
     container.innerHTML = results
       .map(
         (r, i) => `
       <button type="button" class="search__result" role="option" data-target="${escapeHtml(r.target)}" data-index="${i}">
         <span class="search__result-type">${escapeHtml(r.type)}</span>
         <span class="search__result-title">${highlight(r.title, query)}</span>
-        <span class="search__result-excerpt">${highlight(r.excerpt.slice(0, 120), query)}</span>
+        <span class="search__result-excerpt">${highlight((r.excerpt || '').slice(0, 120), query)}</span>
       </button>`
       )
       .join('');
@@ -473,9 +547,11 @@ window.ProceptSearch = (function () {
             ? 'renovation/'
             : /promo|promoteur|permis|cl[eé]\s*en\s*main/i.test(kw)
               ? 'promotion-immobiliere/'
-              : /extension|construct|maison|RE2020|bois|piscine|devis/i.test(kw)
-                ? 'constructeur/'
-                : '#zones',
+              : /actualit|news|livraison/i.test(kw)
+                ? 'actualites/'
+                : /extension|construct|maison|RE2020|bois|piscine|devis/i.test(kw)
+                  ? 'constructeur/'
+                  : '#zones',
         });
       });
     } catch (_) {
