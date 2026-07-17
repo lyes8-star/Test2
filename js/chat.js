@@ -28,17 +28,68 @@ window.ProceptChat = (function () {
   let bound = false;
 
   const TYPE_LABELS = {
-    construction: 'Construction de maison',
+    construction: 'Maison neuve (construction)',
     renovation: 'Rénovation',
     extension: 'Extension / agrandissement',
-    promotion: 'Promotion immobilière',
+    promotion: 'Promotion / terrain',
+  };
+
+  const CONTEXT_BY_TYPE = {
+    construction: [
+      { value: 'terrain_ok', label: 'Terrain déjà acquis' },
+      { value: 'terrain_search', label: 'Je cherche un terrain' },
+      { value: 'etude', label: 'Étude / plans en cours' },
+    ],
+    renovation: [
+      { value: 'habite', label: 'Logement habité à moderniser' },
+      { value: 'entier', label: 'Rénovation complète' },
+      { value: 'urgent_reno', label: 'Besoin de devis rapide' },
+    ],
+    extension: [
+      { value: 'surface', label: 'Agrandir la surface habitable' },
+      { value: 'etage', label: 'Surélévation / étage' },
+      { value: 'annexe', label: 'Annexe, véranda ou garage' },
+    ],
+    promotion: [
+      { value: 'vendre', label: 'Valoriser / vendre un terrain' },
+      { value: 'permis', label: 'Projet avec permis à monter' },
+      { value: 'investisseur', label: 'Projet investisseur' },
+    ],
   };
 
   const CONTEXT_LABELS = {
-    terrain: 'J’ai un terrain',
+    terrain_ok: 'Terrain déjà acquis',
+    terrain_search: 'Recherche de terrain',
+    etude: 'Étude / plans en cours',
+    habite: 'Logement habité à moderniser',
+    entier: 'Rénovation complète',
+    urgent_reno: 'Devis rapide',
+    surface: 'Agrandissement surface',
+    etage: 'Surélévation / étage',
+    annexe: 'Annexe, véranda ou garage',
+    vendre: 'Valorisation / vente de terrain',
+    permis: 'Permis à monter',
+    investisseur: 'Projet investisseur',
+    // legacy
+    terrain: 'Terrain acquis',
     projet: 'Projet à définir',
     urgent: 'Devis urgent',
   };
+
+  function contextQuestion() {
+    switch (state.type) {
+      case 'construction':
+        return 'Où en est votre projet de maison neuve ?';
+      case 'renovation':
+        return 'Quel est l’état du bien à rénover ?';
+      case 'extension':
+        return 'Quel type d’agrandissement envisagez-vous ?';
+      case 'promotion':
+        return 'Quel est votre objectif promotion / terrain ?';
+      default:
+        return 'Précisez le contexte de votre projet :';
+    }
+  }
 
   function escapeHtml(str) {
     const div = document.createElement('div');
@@ -269,9 +320,9 @@ window.ProceptChat = (function () {
 
     if (step === STEPS.welcome) {
       setBody(
-        bubble('Bonjour ! Je suis l’assistant chantier Procept.', 'bot') +
-          bubble('En quelques questions, je prépare votre demande de devis.', 'bot') +
-          choices([{ value: 'start', label: 'Commencer →' }])
+        bubble('Bonjour, je suis l’assistant devis Procept.', 'bot') +
+          bubble('Je prépare votre devis en 4 questions (ouest parisien).', 'bot') +
+          choices([{ value: 'start', label: 'Commencer le devis →' }])
       );
       setFooter('');
       bindChoices(() => renderStep(STEPS.type));
@@ -280,17 +331,18 @@ window.ProceptChat = (function () {
 
     if (step === STEPS.type) {
       setBody(
-        bubble('Quel est votre projet ?', 'bot') +
+        bubble('Quel type de chantier souhaitez-vous chiffrer ?', 'bot') +
           choices([
-            { value: 'construction', label: 'Construction' },
+            { value: 'construction', label: 'Maison neuve (construction)' },
             { value: 'renovation', label: 'Rénovation' },
-            { value: 'extension', label: 'Extension' },
-            { value: 'promotion', label: 'Promotion immobilière' },
+            { value: 'extension', label: 'Extension / agrandissement' },
+            { value: 'promotion', label: 'Promotion / terrain' },
           ])
       );
       setFooter(`<button type="button" class="chat__link" data-back>← Retour</button>`);
       bindChoices((v) => {
         state.type = v;
+        state.context = '';
         renderStep(STEPS.context);
       });
       bindBack(STEPS.welcome);
@@ -298,13 +350,12 @@ window.ProceptChat = (function () {
     }
 
     if (step === STEPS.context) {
+      const opts = CONTEXT_BY_TYPE[state.type] || CONTEXT_BY_TYPE.construction;
       setBody(
-        bubble(`Parfait — ${escapeHtml(TYPE_LABELS[state.type] || '')}. Où en êtes-vous ?`, 'bot') +
-          choices([
-            { value: 'terrain', label: 'J’ai un terrain' },
-            { value: 'projet', label: 'Projet à définir' },
-            { value: 'urgent', label: 'Devis urgent' },
-          ])
+        bubble(
+          `${escapeHtml(TYPE_LABELS[state.type] || 'Votre projet')} — ${escapeHtml(contextQuestion())}`,
+          'bot'
+        ) + choices(opts)
       );
       setFooter(`<button type="button" class="chat__link" data-back>← Retour</button>`);
       bindChoices((v) => {
@@ -318,10 +369,10 @@ window.ProceptChat = (function () {
     if (step === STEPS.city) {
       const suggestions = (cities || []).slice(0, 8);
       setBody(
-        bubble('Dans quelle commune / secteur intervenons-nous pour vous ?', 'bot') +
+        bubble('Dans quelle commune se situe le projet ?', 'bot') +
           `<div class="chat__field">
-            <label class="sr-only" for="chatCity">Ville</label>
-            <input type="text" id="chatCity" class="chat__input" placeholder="Ex. Versailles, Rueil-Malmaison…" list="chatCityList" autocomplete="address-level2">
+            <label class="sr-only" for="chatCity">Commune</label>
+            <input type="text" id="chatCity" class="chat__input" placeholder="Ex. Versailles, Croissy-sur-Seine…" list="chatCityList" autocomplete="address-level2">
             <datalist id="chatCityList">${suggestions.map((c) => `<option value="${escapeHtml(c)}"></option>`).join('')}</datalist>
           </div>` +
           (suggestions.length
@@ -350,7 +401,7 @@ window.ProceptChat = (function () {
 
     if (step === STEPS.coords) {
       setBody(
-        bubble('Pour finaliser, laissez vos coordonnées (l’email facilite l’envoi du devis).', 'bot') +
+        bubble('Vos coordonnées pour recevoir le devis (téléphone ou email obligatoire).', 'bot') +
           `<div class="chat__fields">
             <label class="chat__label">Nom
               <input type="text" id="chatName" class="chat__input" autocomplete="name" placeholder="Votre nom" value="${escapeHtml(state.name)}">
@@ -362,6 +413,7 @@ window.ProceptChat = (function () {
               <input type="email" id="chatEmail" class="chat__input" autocomplete="email" placeholder="vous@email.fr" value="${escapeHtml(state.email)}">
             </label>
           </div>
+          <p class="chat__error" id="chatCoordsError" hidden></p>
           <button type="button" class="btn btn--primary btn--sm chat__next" id="chatCoordsNext">Voir mon devis →</button>`
       );
       setFooter(`<button type="button" class="chat__link" data-back>← Retour</button>`);
@@ -369,6 +421,15 @@ window.ProceptChat = (function () {
         state.name = (document.getElementById('chatName')?.value || '').trim();
         state.phone = (document.getElementById('chatPhone')?.value || '').trim();
         state.email = (document.getElementById('chatEmail')?.value || '').trim();
+        const err = document.getElementById('chatCoordsError');
+        if (!state.phone && !state.email) {
+          if (err) {
+            err.hidden = false;
+            err.textContent = 'Indiquez un téléphone ou un email pour être recontacté.';
+          }
+          return;
+        }
+        if (err) err.hidden = true;
         renderStep(STEPS.summary);
       });
       bindBack(STEPS.city);
@@ -380,7 +441,7 @@ window.ProceptChat = (function () {
       const typeLabel = TYPE_LABELS[state.type] || state.type;
       const ctxLabel = CONTEXT_LABELS[state.context] || state.context;
       setBody(
-        bubble('Votre demande de devis est prête.', 'bot') +
+        bubble('Votre demande de devis est prête. Choisissez comment l’envoyer :', 'bot') +
           `<div class="chat__recap" role="status">
             <p><strong>Projet</strong> ${escapeHtml(typeLabel)}</p>
             <p><strong>Contexte</strong> ${escapeHtml(ctxLabel || '—')}</p>
@@ -389,9 +450,9 @@ window.ProceptChat = (function () {
           </div>` +
           `<div class="chat__preview" id="chatPreview">${preview}</div>` +
           `<div class="chat__actions">
-            <a class="btn btn--primary chat__action-btn" id="chatMailto" href="${mailtoHref()}">Ouvrir l’email prérempli</a>
-            <button type="button" class="btn btn--outline chat__action-btn" id="chatCopy">Copier le message</button>
-            <button type="button" class="btn btn--outline chat__action-btn" id="chatToForm">Remplir le formulaire contact</button>
+            <a class="chat__action-btn chat__action-btn--primary" id="chatMailto" href="${mailtoHref()}">Envoyer par email</a>
+            <button type="button" class="chat__action-btn chat__action-btn--secondary" id="chatCopy">Copier le texte</button>
+            <button type="button" class="chat__action-btn chat__action-btn--secondary" id="chatToForm">Formulaire contact</button>
           </div>` +
           `<p class="chat__confirm" id="chatConfirm" hidden></p>` +
           bubble(`Ou appelez-nous au <a href="tel:${sitePhone.replace(/\s/g, '')}">${escapeHtml(sitePhone)}</a>.`, 'bot')
@@ -416,7 +477,7 @@ window.ProceptChat = (function () {
           await navigator.clipboard.writeText(buildMessage());
           if (confirm) {
             confirm.hidden = false;
-            confirm.textContent = 'Message copié. Collez-le dans un email à ' + siteEmail;
+            confirm.textContent = 'Texte copié. Collez-le dans un email à ' + siteEmail;
           }
           track('generate_lead', { method: 'copy', project_type: state.type });
         } catch {
