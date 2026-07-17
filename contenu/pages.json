@@ -8,7 +8,7 @@
         "description": "Constructeur de maisons individuelles à Saint-Germain-en-Laye et près de Versailles. Maisons sur-mesure, HQE, RE2020, ossature bois, clé en main. Devis gratuit."
       },
       "hero": {
-        "image": "images/hero/slide-1.jpg",
+        "image": "contenu/photos/hero/slide-1.jpg",
         "eyebrow": "Constructeur de maisons",
         "title": "Construction maisons norme RE2020 près de Versailles",
         "desc": "Vous avez un terrain ? Vous cherchez un constructeur ? Nous concevons sur plan la maison de vos rêves."
@@ -92,7 +92,7 @@
         "description": "Rénovation, extension et agrandissement de maisons à Versailles et Saint-Germain-en-Laye. Maçonnerie, charpente, couverture, surélévation. Devis gratuit."
       },
       "hero": {
-        "image": "images/hero/slide-2.jpg",
+        "image": "contenu/photos/hero/slide-2.jpg",
         "eyebrow": "Rénovation & extension",
         "title": "Rénovation de maisons près de Saint-Germain-en-Laye",
         "desc": "Architecture au service de votre projet de vie — envies, terrain et budget réunis."
@@ -168,7 +168,7 @@
         "description": "Promoteur immobilier Procept : maisons haut de gamme, bioclimatiques et intelligentes dans l'ouest parisien, près de Versailles et Rueil-Malmaison."
       },
       "hero": {
-        "image": "images/services/promotion.jpg",
+        "image": "contenu/photos/services/promotion.jpg",
         "eyebrow": "Promotion immobilière",
         "title": "Procept : Promotion immobilière autour de Versailles",
         "desc": "Maison sur-mesure, bioclimatique, intelligente et personnalisée — du terrain à la commercialisation."

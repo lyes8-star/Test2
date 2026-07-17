@@ -128,7 +128,7 @@
     const title = page.seo?.title || `${page.label} — ${site.name}`;
     const desc = page.seo?.description || site.description;
     const pageUrl = absoluteUrl(`${page.slug}/`);
-    const image = absoluteUrl(page.hero?.image || site.ogImage || 'images/hero/slide-1.jpg');
+    const image = absoluteUrl(page.hero?.image || site.ogImage || 'contenu/photos/hero/slide-1.jpg');
 
     document.title = title;
     setMeta('meta[name="description"]', 'content', desc);

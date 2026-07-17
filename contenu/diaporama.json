@@ -3,61 +3,61 @@
     "slides": [
       {
         "id": "slide-1",
-        "image": "images/hero/slide-1.jpg",
+        "image": "contenu/photos/hero/slide-1.jpg",
         "title": "Construction de maisons près de Saint-Germain-en-Laye",
         "description": "La société Procept emploie les techniques les plus appropriées pour chaque domaine de compétences et met à votre service des professionnels avertis."
       },
       {
         "id": "slide-2",
-        "image": "images/hero/slide-2.jpg",
+        "image": "contenu/photos/hero/slide-2.jpg",
         "title": "Rénovation de maisons à proximité de Saint-Germain-en-Laye",
         "description": "Rénovation complète, agrandissement et modernisation de votre habitat avec des matériaux haut de gamme."
       },
       {
         "id": "slide-3",
-        "image": "images/hero/slide-3.jpg",
+        "image": "contenu/photos/hero/slide-3.jpg",
         "title": "Extension de maisons aux alentours de Rueil-Malmaison",
         "description": "Extensions sur mesure, vérandas, terrasses et toits-terrasses végétalisés pour agrandir votre espace de vie."
       },
       {
         "id": "slide-4",
-        "image": "images/hero/slide-4.jpg",
+        "image": "contenu/photos/hero/slide-4.jpg",
         "title": "Promotion immobilière près de Versailles",
         "description": "Achat de terrain, conception des plans, permis de construire — nous vous accompagnons dans votre projet immobilier."
       },
       {
         "id": "slide-5",
-        "image": "images/gallery/gal-01-full.jpg",
+        "image": "contenu/photos/gallery/gal-01-full.jpg",
         "title": "Maisons de caractère dans les Yvelines",
         "description": "Des réalisations sur mesure, du premier croquis à la remise des clés, autour de Mareil-Marly et Saint-Germain-en-Laye."
       },
       {
         "id": "slide-6",
-        "image": "images/gallery/gal-04-full.jpg",
+        "image": "contenu/photos/gallery/gal-04-full.jpg",
         "title": "Habitat neuf haut de gamme",
         "description": "Matériaux nobles, finitions soignées et performance énergétique pour un confort durable."
       },
       {
         "id": "slide-7",
-        "image": "images/gallery/gal-13-full.jpg",
+        "image": "contenu/photos/gallery/gal-13-full.jpg",
         "title": "Agrandir sans quitter son quartier",
         "description": "Extensions et volumes ajoutés pour gagner de la surface tout en respectant le bâti existant."
       },
       {
         "id": "slide-8",
-        "image": "images/gallery/gal-03-full.jpg",
+        "image": "contenu/photos/gallery/gal-03-full.jpg",
         "title": "Rénovation intérieure d’exception",
         "description": "Repenser les espaces, la lumière et les circulations pour un intérieur contemporain."
       },
       {
         "id": "slide-9",
-        "image": "images/gallery/gal-08-full.jpg",
+        "image": "contenu/photos/gallery/gal-08-full.jpg",
         "title": "Chantiers menés avec exigence",
         "description": "Suivi de chantier, coordination des corps de métier et qualité d’exécution à chaque étape."
       },
       {
         "id": "slide-10",
-        "image": "images/gallery/gal-43-full.jpg",
+        "image": "contenu/photos/gallery/gal-43-full.jpg",
         "title": "Votre projet, notre expertise",
         "description": "Étude du terrain, du budget et de vos souhaits pour un avant-projet fidèle à vos attentes."
       }

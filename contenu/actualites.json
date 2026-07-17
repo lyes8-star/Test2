@@ -13,7 +13,7 @@
         "Ce type de construction illustre l’accompagnement Procept : étude du terrain, plans, permis, suivi de chantier et remise des clés.",
         "Vous avez un terrain dans l’ouest parisien ? Contactez Procept pour une étude et un devis gratuits."
       ],
-      "image": "images/gallery/gal-01.jpg",
+      "image": "contenu/photos/gallery/gal-01.jpg",
       "published": true
     },
     {
@@ -28,7 +28,7 @@
         "L’ossature bois permet un chantier plus rapide, une bonne performance thermique et une extension légère adaptée aux maisons de l’ouest parisien.",
         "Rénovation, agrandissement ou surélévation : nous intervenons à Versailles, Rueil-Malmaison, Marly-le-Roi et dans les Yvelines."
       ],
-      "image": "images/gallery/gal-19.jpg",
+      "image": "contenu/photos/gallery/gal-19.jpg",
       "published": true
     },
     {
@@ -43,7 +43,7 @@
         "Le contrat de promotion immobilière formalise les engagements : délais, qualité et accompagnement des acquéreurs jusqu’à la livraison.",
         "Pour toute demande de promotion immobilière dans l’ouest parisien, notre équipe reste à votre écoute à Mareil-Marly."
       ],
-      "image": "images/services/promotion.jpg",
+      "image": "contenu/photos/services/promotion.jpg",
       "published": true
     },
     {
@@ -58,7 +58,7 @@
         "Nos photos « En cours » sur le site montrent l’avancement réel des projets de construction et de rénovation autour de Saint-Germain-en-Laye.",
         "Vous souhaitez suivre un projet similaire ? Demandez un devis via l’assistant chantier ou le formulaire de contact Procept."
       ],
-      "image": "images/gallery/gal-44.jpg",
+      "image": "contenu/photos/gallery/gal-44.jpg",
       "published": true
     }
   ]
