@@ -375,7 +375,6 @@ function articlePageHtml(item) {
       </button>
       <nav class="nav" id="nav" aria-label="Navigation principale">
         <p class="nav__mobile-banner">Menu Procept</p>
-        <a href="../../" class="nav__link">Accueil</a>
         <a href="../" class="nav__link">Actualités</a>
         <a href="../../#contact" class="nav__link">Contact</a>
         <div class="nav__mobile-cta">
