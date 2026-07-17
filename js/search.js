@@ -1,12 +1,28 @@
 /**
- * Recherche live côté client — indexe le contenu et affiche des résultats en temps réel.
+ * Recherche live — popup type command-palette + filtrage du contenu de la page.
  */
 window.ProceptSearch = (function () {
-  const MAX_RESULTS = 8;
+  const MAX_RESULTS = 12;
+  const LIVE_SELECTORS = [
+    '.service-card',
+    '.gallery__item',
+    '.faq__item',
+    '.zones__item',
+    '.news-card',
+  ];
+
   let index = [];
   let debounceTimer = null;
   let activeQuery = '';
   let linkBase = '';
+  let modalEl = null;
+  let inputEl = null;
+  let resultsEl = null;
+  let clearBtn = null;
+  let activeIndex = -1;
+  let lastFocused = null;
+  let isOpen = false;
+  let scrollTimer = null;
 
   function normalize(str) {
     return String(str || '')
@@ -172,17 +188,20 @@ window.ProceptSearch = (function () {
         excerpt: item.answer,
         keywords: [item.question, item.answer, ...siteKeywords],
         target: '#faq',
+        matchIds: [`faq-${i}`],
       });
     });
 
     (content.zones?.cities || []).forEach((city) => {
+      const id = `zone-${normalize(city)}`;
       pushEntry({
-        id: `zone-${normalize(city)}`,
+        id,
         type: 'Zone',
         title: city,
         excerpt: `Intervention Procept à ${city}`,
         keywords: [city, `constructeur ${city}`, `rénovation ${city}`, ...siteKeywords],
         target: '#zones',
+        matchIds: [id, city],
       });
     });
 
@@ -244,6 +263,7 @@ window.ProceptSearch = (function () {
             ...siteKeywords,
           ],
           target: `actualites/${encodeURIComponent(item.slug || item.id)}/`,
+          matchIds: [item.id || item.slug],
         });
       });
 
@@ -265,7 +285,6 @@ window.ProceptSearch = (function () {
       target: '#devis',
     });
 
-    // Entrées dédiées aux mots-clés site (suggestions rapides)
     siteKeywords.forEach((kw) => {
       pushEntry({
         id: `kw-${normalize(kw)}`,
@@ -302,7 +321,40 @@ window.ProceptSearch = (function () {
       .map((r) => r.entry);
   }
 
+  function groupResults(results) {
+    const order = [
+      'Service',
+      'Zone',
+      'FAQ',
+      'Actualité',
+      'Réalisation',
+      'Projet en cours',
+      'Projet',
+      'Page',
+      'Devis',
+      'À propos',
+      'Contact',
+      'Diaporama',
+      'Réseau',
+      'Mot-clé',
+    ];
+    const groups = new Map();
+    results.forEach((r) => {
+      const key = r.type || 'Autre';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(r);
+    });
+    return [...groups.entries()].sort((a, b) => {
+      const ia = order.indexOf(a[0]);
+      const ib = order.indexOf(b[0]);
+      return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+    });
+  }
+
   function renderResults(container, results, query) {
+    activeIndex = -1;
+    if (!container) return;
+
     if (!query.trim()) {
       container.hidden = true;
       container.innerHTML = '';
@@ -316,62 +368,108 @@ window.ProceptSearch = (function () {
       return;
     }
 
-    // Grouper légèrement par type pour la lecture
-    container.innerHTML = results
-      .map(
-        (r, i) => `
-      <button type="button" class="search__result" role="option" data-target="${escapeHtml(r.target)}" data-index="${i}">
-        <span class="search__result-type">${escapeHtml(r.type)}</span>
+    let flatIndex = 0;
+    const groups = groupResults(results);
+    container.innerHTML = groups
+      .map(([type, items]) => {
+        const buttons = items
+          .map((r) => {
+            const i = flatIndex++;
+            return `
+      <button type="button" class="search__result" role="option" id="search-opt-${i}" data-target="${escapeHtml(r.target)}" data-index="${i}" aria-selected="false">
         <span class="search__result-title">${highlight(r.title, query)}</span>
         <span class="search__result-excerpt">${highlight((r.excerpt || '').slice(0, 120), query)}</span>
-      </button>`
-      )
+      </button>`;
+          })
+          .join('');
+        return `<div class="search__group" role="group" aria-label="${escapeHtml(type)}">
+          <span class="search__group-title">${escapeHtml(type)}</span>
+          ${buttons}
+        </div>`;
+      })
       .join('');
+  }
+
+  function getResultButtons() {
+    return resultsEl ? [...resultsEl.querySelectorAll('.search__result')] : [];
+  }
+
+  function setActiveResult(next) {
+    const buttons = getResultButtons();
+    if (!buttons.length) {
+      activeIndex = -1;
+      return;
+    }
+    activeIndex = ((next % buttons.length) + buttons.length) % buttons.length;
+    buttons.forEach((btn, i) => {
+      const on = i === activeIndex;
+      btn.classList.toggle('search__result--active', on);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    buttons[activeIndex].scrollIntoView({ block: 'nearest' });
+    if (inputEl) inputEl.setAttribute('aria-activedescendant', buttons[activeIndex].id);
+  }
+
+  function elementMatches(el, terms, matchedIds) {
+    if (matchedIds.size) {
+      const id = el.id || el.dataset.id || el.dataset.searchId || el.dataset.city || '';
+      if (id && matchedIds.has(id)) return true;
+      if (el.dataset.city && matchedIds.has(el.dataset.city)) return true;
+      if (matchedIds.has(`zone-${normalize(el.dataset.city || '')}`)) return true;
+    }
+    const text = normalize(el.textContent || '');
+    return terms.every((t) => text.includes(t));
   }
 
   function applyPageHighlight(results, query) {
     activeQuery = query;
-    const matchedServiceIds = new Set();
-    const matchedGalleryIds = new Set();
+    const terms = normalize(query).split(/\s+/).filter((t) => t.length >= 2);
+    const searching = terms.length > 0;
+    const main = document.querySelector('main');
+    main?.classList.toggle('search-active', searching);
 
+    const matchedIds = new Set();
     results.forEach((r) => {
-      (r.matchIds || []).forEach((id) => {
-        if (id.startsWith('gal-') || document.querySelector(`.gallery__item[data-id="${id}"]`)) {
-          matchedGalleryIds.add(id);
-        } else {
-          matchedServiceIds.add(id);
+      matchedIds.add(r.id);
+      (r.matchIds || []).forEach((id) => matchedIds.add(id));
+    });
+
+    let firstMatch = null;
+    LIVE_SELECTORS.forEach((sel) => {
+      document.querySelectorAll(sel).forEach((el) => {
+        if (!searching) {
+          el.classList.remove('search-dimmed', 'search-match');
+          return;
         }
+        const match = elementMatches(el, terms, matchedIds);
+        el.classList.toggle('search-match', match);
+        el.classList.toggle('search-dimmed', !match);
+        if (match && !firstMatch) firstMatch = el;
       });
-      if (r.type === 'Service') matchedServiceIds.add(r.id);
-      if (r.type === 'Réalisation') matchedGalleryIds.add(r.id);
     });
 
-    const searching = query.trim().length >= 2;
-
-    document.querySelectorAll('.service-card').forEach((card) => {
-      if (!searching) {
-        card.classList.remove('search-dimmed', 'search-match');
-        return;
+    // FAQ items: attach stable ids if missing
+    document.querySelectorAll('.faq__item').forEach((el, i) => {
+      if (!el.dataset.searchId) el.dataset.searchId = `faq-${i}`;
+      if (!searching) return;
+      if (matchedIds.has(`faq-${i}`) || matchedIds.has(el.dataset.searchId)) {
+        el.classList.add('search-match');
+        el.classList.remove('search-dimmed');
+        if (!firstMatch) firstMatch = el;
       }
-      const match = matchedServiceIds.has(card.id);
-      card.classList.toggle('search-match', match);
-      card.classList.toggle('search-dimmed', !match);
     });
 
-    document.querySelectorAll('.gallery__item').forEach((item) => {
-      if (!searching) {
-        item.classList.remove('search-dimmed', 'search-match');
-        return;
-      }
-      const id = item.dataset.id;
-      const match = matchedGalleryIds.has(id);
-      item.classList.toggle('search-match', match);
-      item.classList.toggle('search-dimmed', !match);
-    });
+    if (scrollTimer) clearTimeout(scrollTimer);
+    if (searching && firstMatch && isOpen) {
+      scrollTimer = setTimeout(() => {
+        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 280);
+    }
   }
 
   function clearPageHighlight() {
     activeQuery = '';
+    document.querySelector('main')?.classList.remove('search-active');
     document.querySelectorAll('.search-dimmed, .search-match').forEach((el) => {
       el.classList.remove('search-dimmed', 'search-match');
     });
@@ -384,17 +482,17 @@ window.ProceptSearch = (function () {
     const pathPart = hashIdx === -1 ? target : target.slice(0, hashIdx);
     const hashPart = hashIdx === -1 ? '' : target.slice(hashIdx);
 
-    // Assistant devis
     if (hashPart === '#devis' || target.endsWith('#devis')) {
+      closeSearch({ keepHighlight: false });
       if (window.ProceptChat) {
         window.ProceptChat.open();
         return;
       }
     }
 
-    // Cible purement locale (#section)
     if (!pathPart && hashPart) {
       const el = document.querySelector(hashPart);
+      closeSearch({ keepHighlight: true });
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         el.classList.add('search-flash');
@@ -403,12 +501,11 @@ window.ProceptSearch = (function () {
       }
     }
 
-    // Autre page ou chemin relatif (constructeur/, ../#contact, etc.)
     if (pathPart) {
-      // Hash sur la page courante si le path pointe ici
       if (hashPart) {
         const el = document.querySelector(hashPart);
         if (el && (pathPart === './' || pathPart === '' || pathPart === window.location.pathname)) {
+          closeSearch({ keepHighlight: true });
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
           return;
         }
@@ -420,42 +517,143 @@ window.ProceptSearch = (function () {
     window.location.href = target;
   }
 
-  function bindInput(input, resultsEl, options = {}) {
-    const { onOpen, onClose, clearBtn } = options;
-
-    function runSearch() {
-      const query = input.value;
-      const results = search(query);
-      renderResults(resultsEl, results, query);
-      applyPageHighlight(results, query);
-      if (clearBtn) clearBtn.hidden = !query;
-      if (query && onOpen) onOpen();
-      if (!query && onClose) onClose();
+  function ensureModal() {
+    modalEl = document.getElementById('searchModal');
+    if (modalEl) {
+      inputEl = modalEl.querySelector('#searchInput');
+      resultsEl = modalEl.querySelector('#searchResults');
+      clearBtn = modalEl.querySelector('#searchClear');
+      return;
     }
 
-    input.addEventListener('input', () => {
+    // Remove legacy header panel first to free IDs
+    document.getElementById('searchPanel')?.remove();
+    document.querySelector('#searchDesktop .search__panel')?.remove();
+
+    modalEl = document.createElement('div');
+    modalEl.id = 'searchModal';
+    modalEl.className = 'search-modal';
+    modalEl.setAttribute('hidden', '');
+    modalEl.innerHTML = `
+      <div class="search-modal__backdrop" data-close-search tabindex="-1"></div>
+      <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle">
+        <h2 id="searchModalTitle" class="sr-only">Rechercher sur le site</h2>
+        <div class="search-modal__field">
+          <svg class="search-modal__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <label class="sr-only" for="searchInput">Rechercher</label>
+          <input type="search" id="searchInput" class="search__input" placeholder="Rechercher un service, une ville, une actualité…" autocomplete="off" enterkeyhint="search" aria-autocomplete="list" aria-controls="searchResults" role="combobox" aria-expanded="false">
+          <button type="button" class="search__clear" id="searchClear" hidden aria-label="Effacer la recherche">×</button>
+          <kbd class="search-modal__kbd" aria-hidden="true">ESC</kbd>
+        </div>
+        <div class="search__results search-modal__results" id="searchResults" role="listbox" hidden></div>
+        <p class="search-modal__hint">↑↓ naviguer · Entrée ouvrir · Échap fermer · filtrage live sur la page</p>
+      </div>
+    `;
+    document.body.appendChild(modalEl);
+
+    inputEl = modalEl.querySelector('#searchInput');
+    resultsEl = modalEl.querySelector('#searchResults');
+    clearBtn = modalEl.querySelector('#searchClear');
+
+    modalEl.addEventListener('click', (e) => {
+      if (e.target.closest('[data-close-search]')) closeSearch();
+    });
+  }
+
+  function runSearch() {
+    if (!inputEl || !resultsEl) return;
+    const query = inputEl.value;
+    const results = search(query);
+    renderResults(resultsEl, results, query);
+    applyPageHighlight(results, query);
+    if (clearBtn) clearBtn.hidden = !query;
+    inputEl.setAttribute('aria-expanded', query.trim().length >= 2 ? 'true' : 'false');
+    if (results.length) setActiveResult(0);
+  }
+
+  function openSearch() {
+    ensureModal();
+    if (isOpen) {
+      inputEl?.focus();
+      return;
+    }
+    isOpen = true;
+    lastFocused = document.activeElement;
+    modalEl.hidden = false;
+    requestAnimationFrame(() => modalEl.classList.add('is-open'));
+    document.body.classList.add('search-modal-open');
+    document.getElementById('searchToggle')?.setAttribute('aria-expanded', 'true');
+    setTimeout(() => {
+      inputEl?.focus();
+      inputEl?.select?.();
+    }, 40);
+  }
+
+  function closeSearch(options = {}) {
+    const { keepHighlight = false, clearQuery = true } = options;
+    if (!modalEl) return;
+    isOpen = false;
+    modalEl.classList.remove('is-open');
+    document.body.classList.remove('search-modal-open');
+    document.getElementById('searchToggle')?.setAttribute('aria-expanded', 'false');
+
+    const finish = () => {
+      modalEl.hidden = true;
+      if (clearQuery && inputEl) {
+        inputEl.value = '';
+        if (resultsEl) {
+          resultsEl.hidden = true;
+          resultsEl.innerHTML = '';
+        }
+        if (clearBtn) clearBtn.hidden = true;
+      }
+      if (!keepHighlight) clearPageHighlight();
+      if (lastFocused && typeof lastFocused.focus === 'function') {
+        try {
+          lastFocused.focus();
+        } catch (_) {
+          /* ignore */
+        }
+      }
+    };
+
+    setTimeout(finish, 220);
+  }
+
+  let eventsBound = false;
+
+  function bindModalEvents() {
+    ensureModal();
+    if (eventsBound) return;
+    eventsBound = true;
+
+    inputEl.addEventListener('input', () => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(runSearch, 150);
+      debounceTimer = setTimeout(runSearch, 120);
     });
 
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        input.value = '';
-        runSearch();
-        clearPageHighlight();
-        resultsEl.hidden = true;
-        input.blur();
-        if (onClose) onClose();
+    inputEl.addEventListener('keydown', (e) => {
+      const buttons = getResultButtons();
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActiveResult(activeIndex < 0 ? 0 : activeIndex + 1);
+        return;
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActiveResult(activeIndex < 0 ? buttons.length - 1 : activeIndex - 1);
         return;
       }
       if (e.key === 'Enter') {
         e.preventDefault();
-        const first = resultsEl.querySelector('.search__result');
-        if (first) {
-          goToResult(first.dataset.target);
-          resultsEl.hidden = true;
-          if (onClose) onClose();
-        }
+        const btn = buttons[activeIndex] || buttons[0];
+        if (btn) goToResult(btn.dataset.target);
+        return;
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        closeSearch();
       }
     });
 
@@ -463,65 +661,103 @@ window.ProceptSearch = (function () {
       const btn = e.target.closest('.search__result');
       if (!btn) return;
       goToResult(btn.dataset.target);
-      resultsEl.hidden = true;
-      if (onClose) onClose();
     });
 
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        input.value = '';
-        runSearch();
-        clearPageHighlight();
-        input.focus();
+    resultsEl.addEventListener('mousemove', (e) => {
+      const btn = e.target.closest('.search__result');
+      if (!btn) return;
+      const idx = Number(btn.dataset.index);
+      if (!Number.isNaN(idx) && idx !== activeIndex) setActiveResult(idx);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      inputEl.value = '';
+      runSearch();
+      clearPageHighlight();
+      inputEl.focus();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const meta = e.metaKey || e.ctrlKey;
+      if (meta && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (isOpen) closeSearch();
+        else openSearch();
+        return;
+      }
+      if (e.key === 'Escape' && isOpen) {
+        e.preventDefault();
+        closeSearch();
+      }
+    });
+
+    modalEl.addEventListener('keydown', (e) => {
+      if (!isOpen || e.key !== 'Tab') return;
+      const focusables = modalEl.querySelectorAll(
+        'input, button:not([hidden]), [href], [tabindex]:not([tabindex="-1"])'
+      );
+      const list = [...focusables].filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
+      if (!list.length) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+  }
+
+  let triggersBound = false;
+
+  function wireTriggers() {
+    if (triggersBound) return;
+    triggersBound = true;
+
+    const toggle = document.getElementById('searchToggle');
+    toggle?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (isOpen) closeSearch();
+      else openSearch();
+    });
+
+    const mobileWrap = document.querySelector('.nav__mobile-search');
+    const mobileInput = document.getElementById('searchMobile');
+    if (mobileWrap) {
+      let trigger = document.getElementById('searchMobileTrigger');
+      if (!trigger) {
+        trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.id = 'searchMobileTrigger';
+        trigger.className = 'search-modal__trigger-mobile';
+        trigger.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Rechercher sur le site…</span>`;
+        if (mobileInput) {
+          mobileInput.replaceWith(trigger);
+        } else {
+          mobileWrap.appendChild(trigger);
+        }
+      }
+      trigger.addEventListener('click', () => {
+        document.getElementById('nav')?.classList.remove('open');
+        document.body.classList.remove('nav-open');
+        document.getElementById('navToggle')?.setAttribute('aria-expanded', 'false');
+        openSearch();
       });
     }
+
+    document.getElementById('searchResultsMobile')?.remove();
   }
 
   function init(content, options = {}) {
     linkBase = options.basePath || '';
     buildIndex(content);
+    ensureModal();
+    bindModalEvents();
+    wireTriggers();
 
-    const desktopInput = document.getElementById('searchInput');
-    const desktopResults = document.getElementById('searchResults');
-    const clearBtn = document.getElementById('searchClear');
-    const mobileInput = document.getElementById('searchMobile');
-
-    if (desktopInput && desktopResults) {
-      // Mirror mobile results into same dropdown when using desktop
-      bindInput(desktopInput, desktopResults, {
-        clearBtn,
-        onOpen: () => {
-          document.getElementById('searchPanel')?.classList.add('search__panel--open');
-          document.getElementById('searchToggle')?.setAttribute('aria-expanded', 'true');
-        },
-      });
-    }
-
-    if (mobileInput) {
-      // Mobile uses its own results container injected below input
-      let mobileResults = document.getElementById('searchResultsMobile');
-      if (!mobileResults) {
-        mobileResults = document.createElement('div');
-        mobileResults.id = 'searchResultsMobile';
-        mobileResults.className = 'search__results search__results--mobile';
-        mobileResults.hidden = true;
-        mobileResults.setAttribute('role', 'listbox');
-        mobileInput.parentElement.appendChild(mobileResults);
-      }
-
-      bindInput(mobileInput, mobileResults, {
-        onClose: () => {
-          mobileResults.hidden = true;
-        },
-      });
-
-      // Sync desktop ↔ mobile query lightly
-      mobileInput.addEventListener('input', () => {
-        if (desktopInput) desktopInput.value = mobileInput.value;
-      });
-    }
-
-    // Sync marquee keywords if present
     const track = document.getElementById('marqueeTrack');
     if (track && siteKeywords(content).length) {
       const words = siteKeywords(content);
@@ -551,7 +787,6 @@ window.ProceptSearch = (function () {
       if (!res.ok) return;
       const data = await res.json();
       const keywords = data.keywords || [];
-      // Index a sample of high-value keywords for live search (cap to keep UI snappy)
       const sample = keywords.filter((k) => k.split(' ').length <= 5).slice(0, 800);
       sample.forEach((kw) => {
         pushEntry({
@@ -576,5 +811,14 @@ window.ProceptSearch = (function () {
     }
   }
 
-  return { init, search, clearPageHighlight, goToResult, loadLexicon };
+  return {
+    init,
+    search,
+    clearPageHighlight,
+    goToResult,
+    loadLexicon,
+    open: openSearch,
+    close: closeSearch,
+    isOpen: () => isOpen,
+  };
 })();

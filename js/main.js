@@ -308,7 +308,7 @@ function renderNewsHome(items) {
   }
 
   grid.innerHTML = published.map((n) => `
-    <article class="news-card reveal">
+    <article class="news-card reveal" data-id="${escapeHtml(n.id || n.slug || '')}">
       <a href="actualites/${encodeURIComponent(n.slug || n.id)}/" class="news-card__media">
         <img src="${n.image}" alt="" width="640" height="400" loading="lazy" decoding="async">
       </a>
@@ -328,7 +328,7 @@ function renderFaq(items) {
   const list = document.getElementById('faqList');
   if (!list) return;
   list.innerHTML = items.map((item, i) => `
-    <details class="faq__item"${i === 0 ? ' open' : ''}>
+    <details class="faq__item" data-search-id="faq-${i}"${i === 0 ? ' open' : ''}>
       <summary class="faq__question">${escapeHtml(item.question)}</summary>
       <div class="faq__answer"><p>${escapeHtml(item.answer)}</p></div>
     </details>
@@ -671,32 +671,7 @@ servicesToggle.addEventListener('click', (e) => {
   }
 });
 
-/* —— Search toggle —— */
-const searchToggle = document.getElementById('searchToggle');
-const searchPanel = document.getElementById('searchPanel');
-const searchInput = document.getElementById('searchInput');
-
-searchToggle.addEventListener('click', () => {
-  const open = searchPanel.classList.toggle('search__panel--open');
-  searchToggle.setAttribute('aria-expanded', open);
-  if (open) {
-    searchInput.focus();
-  } else {
-    searchInput.value = '';
-    document.getElementById('searchResults').hidden = true;
-    document.getElementById('searchClear').hidden = true;
-    window.ProceptSearch?.clearPageHighlight();
-  }
-});
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.search') && !e.target.closest('.nav__mobile-search')) {
-    searchPanel.classList.remove('search__panel--open');
-    searchToggle.setAttribute('aria-expanded', 'false');
-    const results = document.getElementById('searchResults');
-    if (results) results.hidden = true;
-  }
-});
+/* —— Search : ouvert via ProceptSearch (loupe + Ctrl/Cmd+K) —— */
 
 document.getElementById('heroPrev').addEventListener('click', () => {
   if (content) goToSlide(currentSlide - 1, content.hero.slides.length);
@@ -711,6 +686,7 @@ document.getElementById('lightbox').addEventListener('click', (e) => {
 });
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
+    if (window.ProceptSearch?.isOpen?.()) return;
     closeLightbox();
     closeMobileNav();
   }
