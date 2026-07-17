@@ -113,6 +113,28 @@ window.ProceptSearch = (function () {
       });
     }
 
+    (content.faq || []).forEach((item, i) => {
+      pushEntry({
+        id: `faq-${i}`,
+        type: 'FAQ',
+        title: item.question,
+        excerpt: item.answer,
+        keywords: [item.question, item.answer, ...siteKeywords],
+        target: '#faq',
+      });
+    });
+
+    (content.zones?.cities || []).forEach((city) => {
+      pushEntry({
+        id: `zone-${normalize(city)}`,
+        type: 'Zone',
+        title: city,
+        excerpt: `Intervention Procept à ${city}`,
+        keywords: [city, `constructeur ${city}`, `rénovation ${city}`, ...siteKeywords],
+        target: '#zones',
+      });
+    });
+
     (content.gallery || []).forEach((item, i) => {
       pushEntry({
         id: item.id || `gal-${i}`,
@@ -369,5 +391,30 @@ window.ProceptSearch = (function () {
     ];
   }
 
-  return { init, search, clearPageHighlight, goToResult };
+  async function loadLexicon(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return;
+      const data = await res.json();
+      const keywords = data.keywords || [];
+      // Index a sample of high-value keywords for live search (cap to keep UI snappy)
+      const sample = keywords.filter((k) => k.split(' ').length <= 5).slice(0, 800);
+      sample.forEach((kw) => {
+        pushEntry({
+          id: `seo-${normalize(kw)}`,
+          type: 'Mot-clé',
+          title: kw,
+          excerpt: `Recherche liée à ${kw}`,
+          keywords: [kw],
+          target: /rénov|extension|construct|maison|promo|permis|RE2020|bois|piscine|devis/i.test(kw)
+            ? '#services'
+            : '#zones',
+        });
+      });
+    } catch (_) {
+      /* lexique optionnel */
+    }
+  }
+
+  return { init, search, clearPageHighlight, goToResult, loadLexicon };
 })();

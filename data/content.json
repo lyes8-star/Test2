@@ -21,7 +21,17 @@
       "RE2020",
       "clé en main",
       "Mareil-Marly"
-    ]
+    ],
+    "url": "https://www.procept.fr/",
+    "geo": {
+      "lat": 48.885845,
+      "lng": 2.0763435
+    },
+    "postalCode": "78750",
+    "city": "Mareil-Marly",
+    "region": "Île-de-France",
+    "country": "FR",
+    "ogImage": "images/hero/slide-1.jpg"
   },
   "hero": {
     "slides": [
@@ -460,5 +470,75 @@
       "image": "images/gallery/gal-01.jpg"
     }
   ],
-  "contactImage": "images/gallery/gal-43-full.jpg"
+  "contactImage": "images/gallery/gal-43-full.jpg",
+  "zones": {
+    "title": "Zones d'intervention",
+    "intro": "Basés à Mareil-Marly, nous intervenons dans l'ouest parisien : Yvelines, Hauts-de-Seine et communes limitrophes.",
+    "cities": [
+      "Mareil-Marly",
+      "Saint-Germain-en-Laye",
+      "Versailles",
+      "Rueil-Malmaison",
+      "Marly-le-Roi",
+      "Le Vésinet",
+      "Chatou",
+      "Croissy-sur-Seine",
+      "Le Pecq",
+      "Maisons-Laffitte",
+      "Poissy",
+      "La Celle-Saint-Cloud",
+      "Louveciennes",
+      "Bougival",
+      "Le Chesnay-Rocquencourt",
+      "Vélizy-Villacoublay",
+      "Saint-Cloud",
+      "Garches",
+      "Nanterre",
+      "Suresnes",
+      "Boulogne-Billancourt",
+      "Meudon",
+      "Sèvres",
+      "Chaville",
+      "Viroflay",
+      "Plaisir",
+      "Montigny-le-Bretonneux",
+      "Guyancourt",
+      "Orgeval",
+      "Chambourcy"
+    ]
+  },
+  "faq": [
+    {
+      "question": "Procept construit-il des maisons neuves à Saint-Germain-en-Laye ?",
+      "answer": "Oui. Procept est constructeur de maisons neuves clé en main autour de Saint-Germain-en-Laye, Mareil-Marly et dans tout l'ouest parisien, avec des matériaux haut de gamme et une certification RE2020."
+    },
+    {
+      "question": "Proposez-vous la rénovation et l'extension de maisons près de Versailles ?",
+      "answer": "Absolument. Nous réalisons rénovations complètes, agrandissements, extensions bois, vérandas, terrasses et toits-terrasses végétalisés à proximité de Versailles, Rueil-Malmaison et Marly-le-Roi."
+    },
+    {
+      "question": "Intervenez-vous aussi en promotion immobilière dans les Yvelines ?",
+      "answer": "Oui. En tant que promoteur immobilier, Procept accompagne l'achat de terrain, la conception des plans, le permis de construire et la livraison de maisons haut de gamme dans les Yvelines et les Hauts-de-Seine."
+    },
+    {
+      "question": "Quelles communes couvrez-vous depuis Mareil-Marly ?",
+      "answer": "Nous intervenons dans l'ouest parisien : Yvelines et Hauts-de-Seine, notamment Saint-Germain-en-Laye, Versailles, Rueil-Malmaison, Marly-le-Roi, Le Vésinet, Chatou, Poissy, et de nombreuses communes limitrophes."
+    },
+    {
+      "question": "Comment obtenir un devis pour un projet de construction ou rénovation ?",
+      "answer": "Contactez-nous au 01 39 58 28 23, par email à procept@procept.fr, ou via le formulaire de devis sur cette page. Nous étudions ensemble vos souhaits, le terrain et votre budget."
+    },
+    {
+      "question": "Vos constructions sont-elles conformes à la RE2020 ?",
+      "answer": "Oui. Nos maisons neuves et rénovations de bâtiments sont conçues pour répondre aux exigences RE2020, avec un suivi professionnel du gros œuvre aux finitions."
+    },
+    {
+      "question": "Réalisez-vous des maisons en ossature bois ?",
+      "answer": "Oui. Nous concevons et réalisons des extensions et constructions en ossature bois, ainsi que des projets sur mesure adaptés à votre terrain et à votre style de vie."
+    },
+    {
+      "question": "Quels sont vos horaires et l'adresse du siège ?",
+      "answer": "Le siège Procept se situe au 29 Rue des Closeaux, 78750 Mareil-Marly. Ouverture du lundi au vendredi, de 9h00 à 18h00. Tél. 01 39 58 28 23."
+    }
+  ]
 }

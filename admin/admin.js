@@ -5,6 +5,7 @@ const TAB_TITLES = {
   services: 'Services',
   gallery: 'Galerie photos',
   about: 'À propos',
+  faq: 'FAQ & SEO',
 };
 
 async function checkAuth() {
@@ -67,7 +68,7 @@ async function loadContent() {
 }
 
 function populateForms() {
-  const { site, about } = content;
+  const { site, about, zones, faq } = content;
 
   document.getElementById('siteName').value = site.name;
   document.getElementById('siteTagline').value = site.tagline;
@@ -77,19 +78,26 @@ function populateForms() {
   document.getElementById('siteEmail').value = site.email;
   document.getElementById('siteHours').value = site.hours;
   document.getElementById('siteAddress').value = site.address;
+  document.getElementById('siteUrl').value = site.url || 'https://www.procept.fr/';
   document.getElementById('siteKeywords').value = (site.keywords || []).join(', ');
 
   document.getElementById('aboutTitle').value = about.title;
   document.getElementById('aboutText').value = about.text;
   document.getElementById('aboutZone').value = about.zone;
 
+  document.getElementById('zonesTitle').value = zones?.title || '';
+  document.getElementById('zonesIntro').value = zones?.intro || '';
+  document.getElementById('zonesCities').value = (zones?.cities || []).join('\n');
+
   renderHeroEditor();
   renderServicesEditor();
   renderGalleryEditor();
+  renderFaqEditor();
 }
 
 function collectContent() {
   content.site = {
+    ...content.site,
     name: document.getElementById('siteName').value,
     tagline: document.getElementById('siteTagline').value,
     description: document.getElementById('siteDescription').value,
@@ -98,6 +106,7 @@ function collectContent() {
     email: document.getElementById('siteEmail').value,
     hours: document.getElementById('siteHours').value,
     address: document.getElementById('siteAddress').value,
+    url: document.getElementById('siteUrl').value || 'https://www.procept.fr/',
     keywords: document.getElementById('siteKeywords').value
       .split(',')
       .map((k) => k.trim())
@@ -105,9 +114,19 @@ function collectContent() {
   };
 
   content.about = {
+    ...content.about,
     title: document.getElementById('aboutTitle').value,
     text: document.getElementById('aboutText').value,
     zone: document.getElementById('aboutZone').value,
+  };
+
+  content.zones = {
+    title: document.getElementById('zonesTitle').value,
+    intro: document.getElementById('zonesIntro').value,
+    cities: document.getElementById('zonesCities').value
+      .split('\n')
+      .map((c) => c.trim())
+      .filter(Boolean),
   };
 
   return content;
@@ -403,8 +422,55 @@ document.getElementById('addGallery').addEventListener('click', () => {
     id: `gal-${Date.now()}`,
     image: 'https://via.placeholder.com/640x480?text=Nouvelle+photo',
     caption: 'Nouvelle réalisation',
+    category: 'autre',
   });
   renderGalleryEditor();
+});
+
+function renderFaqEditor() {
+  const container = document.getElementById('faqEditor');
+  if (!container) return;
+  if (!content.faq) content.faq = [];
+  container.innerHTML = '';
+
+  content.faq.forEach((item, index) => {
+    const el = document.createElement('div');
+    el.className = 'item-editor';
+    el.innerHTML = `
+      <div class="item-editor__header">
+        <h4>Question ${index + 1}</h4>
+        <button class="btn btn--danger btn--sm" data-action="delete">Supprimer</button>
+      </div>
+      <div class="form-group">
+        <label>Question</label>
+        <input type="text" class="faq-q" value="${escapeHtml(item.question)}">
+      </div>
+      <div class="form-group">
+        <label>Réponse</label>
+        <textarea class="faq-a" rows="3">${escapeHtml(item.answer)}</textarea>
+      </div>
+    `;
+    el.querySelector('.faq-q').addEventListener('input', (e) => {
+      content.faq[index].question = e.target.value;
+    });
+    el.querySelector('.faq-a').addEventListener('input', (e) => {
+      content.faq[index].answer = e.target.value;
+    });
+    el.querySelector('[data-action="delete"]').addEventListener('click', () => {
+      content.faq.splice(index, 1);
+      renderFaqEditor();
+    });
+    container.appendChild(el);
+  });
+}
+
+document.getElementById('addFaq').addEventListener('click', () => {
+  if (!content.faq) content.faq = [];
+  content.faq.push({
+    question: 'Nouvelle question ?',
+    answer: 'Réponse…',
+  });
+  renderFaqEditor();
 });
 
 function escapeHtml(str) {

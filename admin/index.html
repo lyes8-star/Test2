@@ -39,6 +39,7 @@
         <button class="admin__nav-btn" data-tab="services">Services</button>
         <button class="admin__nav-btn" data-tab="gallery">Galerie</button>
         <button class="admin__nav-btn" data-tab="about">À propos</button>
+        <button class="admin__nav-btn" data-tab="faq">FAQ / SEO</button>
       </nav>
       <div class="admin__sidebar-footer">
         <a href="../" target="_blank" class="btn btn--outline btn--sm">Voir le site</a>
@@ -92,6 +93,10 @@
                 <input type="text" id="siteAddress">
               </div>
               <div class="form-group form-group--full">
+                <label>URL canonique du site (SEO)</label>
+                <input type="url" id="siteUrl" placeholder="https://www.procept.fr/">
+              </div>
+              <div class="form-group form-group--full">
                 <label>Mots-clés recherche (séparés par des virgules)</label>
                 <input type="text" id="siteKeywords" placeholder="construction, rénovation, Versailles…">
               </div>
@@ -137,6 +142,35 @@
             <div class="form-group">
               <label>Zone d'intervention</label>
               <textarea id="aboutZone" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-faq">
+          <div class="card">
+            <div class="card__header">
+              <h3>FAQ (indexée Google)</h3>
+              <button class="btn btn--outline btn--sm" id="addFaq">+ Ajouter une question</button>
+            </div>
+            <p style="color:var(--color-text-light);font-size:0.9rem;margin-bottom:1.5rem">
+              Contenu visible sur le site + données structurées FAQPage. Ne pas cacher de mots-clés (pénalité Google).
+              Lexique SEO : <code>data/seo-keywords.json</code> (~4500 termes) pour la recherche interne.
+            </p>
+            <div id="faqEditor"></div>
+          </div>
+          <div class="card">
+            <h3>Zones d'intervention (communes visibles)</h3>
+            <div class="form-group">
+              <label>Titre</label>
+              <input type="text" id="zonesTitle">
+            </div>
+            <div class="form-group">
+              <label>Introduction</label>
+              <textarea id="zonesIntro" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Communes (une par ligne)</label>
+              <textarea id="zonesCities" rows="10"></textarea>
             </div>
           </div>
         </div>
