@@ -427,7 +427,14 @@ function updateHeroText(slide) {
 
 function goToSlide(index, total) {
   currentSlide = ((index % total) + total) % total;
-  document.querySelectorAll('.hero__slide').forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+  document.querySelectorAll('.hero__slide').forEach((s, i) => {
+    const on = i === currentSlide;
+    if (on) {
+      s.classList.remove('active');
+      void s.offsetWidth;
+    }
+    s.classList.toggle('active', on);
+  });
   document.querySelectorAll('.hero__dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
   updateHeroText(content.hero.slides[currentSlide]);
   resetSlideshow(total);
@@ -439,7 +446,7 @@ function startSlideshow(total) {
   slideInterval = setInterval(() => {
     if (document.documentElement.classList.contains('a11y-motion')) return;
     goToSlide(currentSlide + 1, total);
-  }, 6000);
+  }, 3500);
 }
 
 window.addEventListener('procept:a11y-motion', () => {
@@ -463,6 +470,10 @@ function renderServices(services) {
     <article class="service-card reveal" id="${s.id}" data-keywords="${(s.keywords || []).join(',')}">
       <a class="service-card__image" href="${escapeHtml(href)}" ${isPage ? '' : ''}>
         <img src="${s.image}" alt="${escapeHtml(s.title)} — Procept constructeur Mareil-Marly" width="800" height="600" loading="lazy" decoding="async">
+        <span class="service-card__media-label">
+          <span class="service-card__media-kicker">Métier</span>
+          <span class="service-card__media-title">${escapeHtml(s.title)}</span>
+        </span>
       </a>
       <div class="service-card__body">
         <h3 class="service-card__title">
@@ -521,6 +532,18 @@ function statusLabel(status) {
   return status === 'en-cours' ? 'En cours' : 'Livré';
 }
 
+function categoryLabel(category) {
+  const labels = {
+    construction: 'Construction',
+    renovation: 'Rénovation',
+    extension: 'Extension',
+    chantier: 'Chantier',
+    promotion: 'Promotion',
+    autre: 'Réalisation',
+  };
+  return labels[category] || 'Réalisation';
+}
+
 function renderGallery() {
   const items = filteredGallery();
   const grid = document.getElementById('galleryGrid');
@@ -534,12 +557,18 @@ function renderGallery() {
   grid.innerHTML = items.map((item, i) => {
     const hide = !galleryExpanded && i >= GALLERY_VISIBLE;
     const status = item.status || 'termine';
+    const category = item.category || 'autre';
     return `
-    <div class="gallery__item reveal${hide ? ' hidden' : ''}" data-index="${i}" data-id="${item.id}" data-category="${item.category || 'autre'}" data-status="${status}">
-      <img src="${item.image}" alt="${escapeHtml(item.caption)} — ${escapeHtml(item.category || 'réalisation')} Procept" width="640" height="480" loading="lazy" decoding="async">
-      <span class="gallery__badge gallery__badge--${status}">${statusLabel(status)}</span>
-      <span class="gallery__caption">${escapeHtml(item.caption)}</span>
-    </div>`;
+    <button type="button" class="gallery__item reveal${hide ? ' hidden' : ''}" data-index="${i}" data-id="${item.id}" data-category="${category}" data-status="${status}" aria-label="${escapeHtml(item.caption)}">
+      <img src="${item.image}" alt="${escapeHtml(item.caption)} — ${escapeHtml(categoryLabel(category))} Procept" width="640" height="480" loading="lazy" decoding="async">
+      <span class="gallery__caption">
+        <span class="gallery__meta">
+          <span class="gallery__cat">${escapeHtml(categoryLabel(category))}</span>
+          <span class="gallery__status">${statusLabel(status)}</span>
+        </span>
+        <span class="gallery__title">${escapeHtml(item.caption)}</span>
+      </span>
+    </button>`;
   }).join('');
 
   grid.querySelectorAll('.gallery__item').forEach((el) => {
