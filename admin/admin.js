@@ -82,6 +82,8 @@ function populateForms() {
   document.getElementById('siteAddress').value = site.address;
   document.getElementById('siteUrl').value = site.url || 'https://www.procept.fr/';
   document.getElementById('siteKeywords').value = (site.keywords || []).join(', ');
+  document.getElementById('siteAdsId').value = site.adsId || '';
+  document.getElementById('siteGaId').value = site.gaId || '';
 
   const social = site.social || {};
   document.getElementById('socialFacebook').value = social.facebook || '';
@@ -121,6 +123,8 @@ function collectContent() {
       .split(',')
       .map((k) => k.trim())
       .filter(Boolean),
+    adsId: document.getElementById('siteAdsId').value.trim(),
+    gaId: document.getElementById('siteGaId').value.trim(),
     social: {
       facebook: document.getElementById('socialFacebook').value.trim(),
       instagram: document.getElementById('socialInstagram').value.trim(),

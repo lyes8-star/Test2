@@ -2,8 +2,8 @@
   "name": "Procept — Constructeur de maisons",
   "short_name": "Procept",
   "description": "Constructeur et promoteur immobilier à Mareil-Marly, ouest parisien.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#2c4a3e",
@@ -11,13 +11,13 @@
   "lang": "fr",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/images/hero/slide-1.jpg",
+      "src": "images/hero/slide-1.jpg",
       "sizes": "1920x1080",
       "type": "image/jpeg",
       "purpose": "any"

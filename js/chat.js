@@ -24,7 +24,8 @@ window.ProceptChat = (function () {
   let siteEmail = 'procept@procept.fr';
   let sitePhone = '01 39 58 28 23';
   let open = false;
-  let root = null;
+  let currentStep = STEPS.welcome;
+  let bound = false;
 
   const TYPE_LABELS = {
     construction: 'Construction de maison',
@@ -46,12 +47,21 @@ window.ProceptChat = (function () {
   }
 
   function basePath() {
-    // Pages in subfolders need ../ for #contact on home
     const path = window.location.pathname || '';
-    if (/\/(constructeur|renovation|promotion-immobiliere|actualites)\/?/.test(path)) {
+    if (/\/(constructeur|renovation|promotion-immobiliere|actualites)(\/|$)/.test(path)) {
+      // Nested article: /actualites/slug/
+      if (/\/actualites\/[^/]+\/?$/.test(path) && !/\/actualites\/?$/.test(path)) {
+        return '../../';
+      }
       return '../';
     }
     return '';
+  }
+
+  function track(eventName, params) {
+    if (window.ProceptAnalytics?.track) {
+      window.ProceptAnalytics.track(eventName, params || {});
+    }
   }
 
   function buildMessage() {
@@ -121,14 +131,14 @@ window.ProceptChat = (function () {
   function goToContactForm() {
     saveDraft();
     applyDraftToForm();
-    const homeContact = `${basePath()}#contact`;
+    track('generate_lead', { method: 'form_redirect', project_type: state.type });
     const el = document.getElementById('contact') || document.getElementById('contactForm');
     if (el && document.getElementById('contactForm')) {
       setOpen(false);
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
-    window.location.href = homeContact;
+    window.location.href = `${basePath()}#contact`;
   }
 
   function robotSvg() {
@@ -164,41 +174,55 @@ window.ProceptChat = (function () {
               <p class="chat__subtitle">Procept — devis gratuit</p>
             </div>
           </div>
-          <button type="button" class="chat__close" id="chatClose" aria-label="Fermer">×</button>
+          <button type="button" class="chat__close" id="chatClose" aria-label="Fermer le chat">×</button>
         </header>
         <div class="chat__body" id="chatBody"></div>
         <div class="chat__footer" id="chatFooter"></div>
       </div>
     `;
     document.body.appendChild(wrap);
-    root = wrap;
-
-    document.getElementById('chatFab').addEventListener('click', () => setOpen(!open));
-    document.getElementById('chatClose').addEventListener('click', () => setOpen(false));
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && open) setOpen(false);
-    });
   }
 
-  function setOpen(value) {
-    open = value;
+  function setOpen(value, opts = {}) {
+    ensureDom();
+    const wasOpen = open;
+    open = !!value;
     const panel = document.getElementById('chatPanel');
     const fab = document.getElementById('chatFab');
     if (!panel || !fab) return;
-    panel.hidden = !open;
-    fab.setAttribute('aria-expanded', open ? 'true' : 'false');
-    fab.classList.toggle('is-open', open);
-    document.body.classList.toggle('chat-open', open);
+
     if (open) {
-      renderStep(STEPS.welcome);
-      const closeBtn = document.getElementById('chatClose');
-      closeBtn?.focus();
+      panel.hidden = false;
+      panel.classList.add('is-open');
+      fab.hidden = true;
+      fab.setAttribute('aria-expanded', 'true');
+      fab.classList.add('is-open');
+      document.body.classList.add('chat-open');
+      // Reset only on fresh open from closed, unless forceRestart
+      if (!wasOpen || opts.forceRestart || currentStep === STEPS.welcome) {
+        if (opts.forceRestart || !state.type) {
+          renderStep(STEPS.welcome);
+        } else {
+          renderStep(currentStep);
+        }
+      }
+      document.getElementById('chatClose')?.focus({ preventScroll: true });
+    } else {
+      panel.hidden = true;
+      panel.classList.remove('is-open');
+      fab.hidden = false;
+      fab.setAttribute('aria-expanded', 'false');
+      fab.classList.remove('is-open');
+      document.body.classList.remove('chat-open');
     }
   }
 
   function setBody(html) {
     const body = document.getElementById('chatBody');
-    if (body) body.innerHTML = html;
+    if (body) {
+      body.innerHTML = html;
+      body.scrollTop = 0;
+    }
   }
 
   function setFooter(html) {
@@ -220,12 +244,18 @@ window.ProceptChat = (function () {
   }
 
   function bindChoices(cb) {
-    document.querySelectorAll('.chat__choice').forEach((btn) => {
+    document.querySelectorAll('#chatBody .chat__choice').forEach((btn) => {
       btn.addEventListener('click', () => cb(btn.dataset.value));
     });
   }
 
+  function bindBack(step) {
+    document.querySelector('#chatFooter [data-back]')?.addEventListener('click', () => renderStep(step));
+  }
+
   function renderStep(step) {
+    currentStep = step;
+
     if (step === STEPS.welcome) {
       setBody(
         bubble('Bonjour ! Je suis l’assistant chantier Procept.', 'bot') +
@@ -247,12 +277,12 @@ window.ProceptChat = (function () {
             { value: 'promotion', label: 'Promotion immobilière' },
           ])
       );
-      setFooter(`<button type="button" class="chat__link" data-back="welcome">← Retour</button>`);
+      setFooter(`<button type="button" class="chat__link" data-back>← Retour</button>`);
       bindChoices((v) => {
         state.type = v;
         renderStep(STEPS.context);
       });
-      document.querySelector('[data-back]')?.addEventListener('click', () => renderStep(STEPS.welcome));
+      bindBack(STEPS.welcome);
       return;
     }
 
@@ -265,12 +295,12 @@ window.ProceptChat = (function () {
             { value: 'urgent', label: 'Devis urgent' },
           ])
       );
-      setFooter(`<button type="button" class="chat__link" data-back="type">← Retour</button>`);
+      setFooter(`<button type="button" class="chat__link" data-back>← Retour</button>`);
       bindChoices((v) => {
         state.context = v;
         renderStep(STEPS.city);
       });
-      document.querySelector('[data-back]')?.addEventListener('click', () => renderStep(STEPS.type));
+      bindBack(STEPS.type);
       return;
     }
 
@@ -291,7 +321,7 @@ window.ProceptChat = (function () {
             : '') +
           `<button type="button" class="btn btn--primary btn--sm chat__next" id="chatCityNext">Continuer</button>`
       );
-      setFooter(`<button type="button" class="chat__link" data-back="context">← Retour</button>`);
+      setFooter(`<button type="button" class="chat__link" data-back>← Retour</button>`);
       bindChoices((v) => {
         state.city = v;
         const input = document.getElementById('chatCity');
@@ -302,8 +332,8 @@ window.ProceptChat = (function () {
         state.city = (input?.value || '').trim() || 'Ouest parisien';
         renderStep(STEPS.coords);
       });
-      document.querySelector('[data-back]')?.addEventListener('click', () => renderStep(STEPS.context));
-      document.getElementById('chatCity')?.focus();
+      bindBack(STEPS.context);
+      document.getElementById('chatCity')?.focus({ preventScroll: true });
       return;
     }
 
@@ -312,47 +342,81 @@ window.ProceptChat = (function () {
         bubble('Pour finaliser, laissez vos coordonnées (l’email facilite l’envoi du devis).', 'bot') +
           `<div class="chat__fields">
             <label class="chat__label">Nom
-              <input type="text" id="chatName" class="chat__input" autocomplete="name" placeholder="Votre nom">
+              <input type="text" id="chatName" class="chat__input" autocomplete="name" placeholder="Votre nom" value="${escapeHtml(state.name)}">
             </label>
             <label class="chat__label">Téléphone
-              <input type="tel" id="chatPhone" class="chat__input" autocomplete="tel" placeholder="${escapeHtml(sitePhone)}">
+              <input type="tel" id="chatPhone" class="chat__input" autocomplete="tel" placeholder="${escapeHtml(sitePhone)}" value="${escapeHtml(state.phone)}">
             </label>
             <label class="chat__label">Email
-              <input type="email" id="chatEmail" class="chat__input" autocomplete="email" placeholder="vous@email.fr">
+              <input type="email" id="chatEmail" class="chat__input" autocomplete="email" placeholder="vous@email.fr" value="${escapeHtml(state.email)}">
             </label>
           </div>
           <button type="button" class="btn btn--primary btn--sm chat__next" id="chatCoordsNext">Voir mon devis →</button>`
       );
-      setFooter(`<button type="button" class="chat__link" data-back="city">← Retour</button>`);
+      setFooter(`<button type="button" class="chat__link" data-back>← Retour</button>`);
       document.getElementById('chatCoordsNext')?.addEventListener('click', () => {
         state.name = (document.getElementById('chatName')?.value || '').trim();
         state.phone = (document.getElementById('chatPhone')?.value || '').trim();
         state.email = (document.getElementById('chatEmail')?.value || '').trim();
         renderStep(STEPS.summary);
       });
-      document.querySelector('[data-back]')?.addEventListener('click', () => renderStep(STEPS.city));
+      bindBack(STEPS.city);
       return;
     }
 
     if (step === STEPS.summary) {
       const preview = escapeHtml(buildMessage()).replace(/\n/g, '<br>');
+      const typeLabel = TYPE_LABELS[state.type] || state.type;
+      const ctxLabel = CONTEXT_LABELS[state.context] || state.context;
       setBody(
-        bubble('Voici le message préparé pour Procept :', 'bot') +
-          `<div class="chat__preview">${preview}</div>` +
-          `<div class="chat__actions">
-            <a class="btn btn--primary" id="chatMailto" href="${mailtoHref()}">Envoyer par email</a>
-            <button type="button" class="btn btn--outline" id="chatToForm">Continuer sur le formulaire</button>
+        bubble('Votre demande de devis est prête.', 'bot') +
+          `<div class="chat__recap" role="status">
+            <p><strong>Projet</strong> ${escapeHtml(typeLabel)}</p>
+            <p><strong>Contexte</strong> ${escapeHtml(ctxLabel || '—')}</p>
+            <p><strong>Ville</strong> ${escapeHtml(state.city || '—')}</p>
+            <p><strong>Contact</strong> ${escapeHtml([state.name, state.phone, state.email].filter(Boolean).join(' · ') || 'Non renseigné')}</p>
           </div>` +
+          `<div class="chat__preview" id="chatPreview">${preview}</div>` +
+          `<div class="chat__actions">
+            <a class="btn btn--primary chat__action-btn" id="chatMailto" href="${mailtoHref()}">Ouvrir l’email prérempli</a>
+            <button type="button" class="btn btn--outline chat__action-btn" id="chatCopy">Copier le message</button>
+            <button type="button" class="btn btn--outline chat__action-btn" id="chatToForm">Remplir le formulaire contact</button>
+          </div>` +
+          `<p class="chat__confirm" id="chatConfirm" hidden></p>` +
           bubble(`Ou appelez-nous au <a href="tel:${sitePhone.replace(/\s/g, '')}">${escapeHtml(sitePhone)}</a>.`, 'bot')
       );
       setFooter(
-        `<button type="button" class="chat__link" data-back="coords">← Modifier</button>
+        `<button type="button" class="chat__link" data-back>← Modifier</button>
          <button type="button" class="chat__link" id="chatRestart">Recommencer</button>`
       );
       saveDraft();
       applyDraftToForm();
+
+      const confirm = document.getElementById('chatConfirm');
+      document.getElementById('chatMailto')?.addEventListener('click', () => {
+        track('generate_lead', { method: 'mailto', project_type: state.type });
+        if (confirm) {
+          confirm.hidden = false;
+          confirm.textContent = 'Messagerie ouverte — envoyez l’email pour finaliser votre demande.';
+        }
+      });
+      document.getElementById('chatCopy')?.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(buildMessage());
+          if (confirm) {
+            confirm.hidden = false;
+            confirm.textContent = 'Message copié. Collez-le dans un email à ' + siteEmail;
+          }
+          track('generate_lead', { method: 'copy', project_type: state.type });
+        } catch {
+          if (confirm) {
+            confirm.hidden = false;
+            confirm.textContent = 'Sélectionnez le texte ci-dessus et copiez-le (Ctrl+C).';
+          }
+        }
+      });
       document.getElementById('chatToForm')?.addEventListener('click', goToContactForm);
-      document.querySelector('[data-back]')?.addEventListener('click', () => renderStep(STEPS.coords));
+      bindBack(STEPS.coords);
       document.getElementById('chatRestart')?.addEventListener('click', () => {
         state = { type: '', context: '', city: '', name: '', phone: '', email: '' };
         renderStep(STEPS.welcome);
@@ -405,6 +469,7 @@ window.ProceptChat = (function () {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const href = buildMailtoFromForm(form);
+      track('generate_lead', { method: 'contact_form' });
       const success = document.getElementById('formSuccess');
       if (success) {
         success.hidden = false;
@@ -418,6 +483,42 @@ window.ProceptChat = (function () {
     });
   }
 
+  function wireGlobalEvents() {
+    if (bound) return;
+    bound = true;
+
+    document.addEventListener('click', (e) => {
+      const closeBtn = e.target.closest('#chatClose');
+      if (closeBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(false);
+        return;
+      }
+
+      const fab = e.target.closest('#chatFab');
+      if (fab) {
+        e.preventDefault();
+        setOpen(!open);
+        return;
+      }
+
+      const openTrigger = e.target.closest('[data-open-chat], a[href="#devis"], a[href$="#devis"]');
+      if (openTrigger) {
+        e.preventDefault();
+        setOpen(true);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) setOpen(false);
+    });
+
+    document.querySelectorAll('a[href^="tel:"]').forEach((a) => {
+      a.addEventListener('click', () => track('contact', { method: 'phone' }));
+    });
+  }
+
   function init(options = {}) {
     ensureDom();
     if (options.cities) cities = options.cities;
@@ -425,19 +526,16 @@ window.ProceptChat = (function () {
     if (options.phone) sitePhone = options.phone;
     hydrateFormFromStorage();
     wireContactForm();
+    wireGlobalEvents();
 
-    document.querySelectorAll('[data-open-chat], a[href="#devis"]').forEach((el) => {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        setOpen(true);
-      });
-    });
-
-    // Deep-link ?devis=1 or #devis opens chat
     if (window.location.hash === '#devis' || /[?&]devis=1/.test(window.location.search)) {
-      setTimeout(() => setOpen(true), 400);
+      setTimeout(() => setOpen(true), 300);
     }
   }
 
-  return { init, open: () => setOpen(true), close: () => setOpen(false) };
+  return {
+    init,
+    open: () => setOpen(true),
+    close: () => setOpen(false),
+  };
 })();

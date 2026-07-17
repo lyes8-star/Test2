@@ -63,6 +63,15 @@
 
   async function loadContent() {
     try {
+      const res = await fetch('../data/content.json');
+      if (res.ok) {
+        content = await res.json();
+        afterLoad();
+        return;
+      }
+    } catch (_) { /* try API */ }
+
+    try {
       const res = await fetch('/api/content');
       if (res.ok) {
         content = await res.json();
@@ -70,9 +79,8 @@
         return;
       }
     } catch (_) { /* static */ }
-    const res = await fetch('../data/content.json');
-    content = await res.json();
-    afterLoad();
+
+    console.error('Impossible de charger content.json');
   }
 
   function afterLoad() {
@@ -93,8 +101,14 @@
       });
     }
     if (window.ProceptSocial) window.ProceptSocial.render(content.site?.social || {}, '../');
+    if (window.ProceptAnalytics) {
+      window.ProceptAnalytics.init({
+        adsId: content.site?.adsId || '',
+        gaId: content.site?.gaId || '',
+      });
+    }
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../sw.js').catch(() => {});
+      navigator.serviceWorker.register(new URL('../sw.js', document.baseURI).href).catch(() => {});
     }
     initNav();
     initScrollUI();

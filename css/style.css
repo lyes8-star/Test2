@@ -491,9 +491,9 @@ a {
 .topbar {
   background: var(--color-primary-dark);
   color: rgba(255, 255, 255, 0.9);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   letter-spacing: 0.02em;
-  max-height: 40px;
+  max-height: 32px;
   overflow: hidden;
   transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -502,8 +502,8 @@ a {
 .topbar__inner {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  height: 36px;
+  gap: 1.15rem;
+  height: 30px;
   overflow-x: auto;
   white-space: nowrap;
 }
@@ -529,8 +529,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
-  gap: 1.25rem;
+  height: 60px;
+  gap: 1rem;
 }
 
 .logo {
@@ -1052,7 +1052,7 @@ section[id],
   bottom: 5.5rem;
   right: 1.25rem;
   width: min(380px, calc(100vw - 1.5rem));
-  max-height: min(560px, calc(100vh - 7rem));
+  max-height: min(640px, calc(100vh - 6rem));
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 16px 48px rgba(20, 40, 30, 0.28);
@@ -1063,6 +1063,15 @@ section[id],
   border: 1px solid rgba(44, 74, 62, 0.12);
 }
 
+/* display:flex above overrides UA [hidden] — force hide */
+.chat__panel[hidden] {
+  display: none !important;
+}
+
+.fab-contact[hidden] {
+  display: none !important;
+}
+
 .chat__header {
   display: flex;
   align-items: center;
@@ -1071,12 +1080,35 @@ section[id],
   padding: 0.9rem 1rem;
   background: var(--color-primary);
   color: #fff;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.chat__close {
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  z-index: 3;
+  position: relative;
+}
+
+.chat__close:hover {
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .chat__header-brand {
   display: flex;
   align-items: center;
   gap: 0.65rem;
+  min-width: 0;
 }
 
 .chat__title {
@@ -1089,17 +1121,6 @@ section[id],
   margin: 0;
   font-size: 0.75rem;
   opacity: 0.85;
-}
-
-.chat__close {
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
 }
 
 .chat__body {
@@ -1214,14 +1235,45 @@ section[id],
   font-size: 0.82rem;
   line-height: 1.5;
   color: var(--color-text);
-  max-height: 180px;
+  max-height: 140px;
   overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.chat__recap {
+  background: #fff;
+  border-left: 3px solid var(--color-accent, #c4a35a);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.chat__recap p {
+  margin: 0.2rem 0;
 }
 
 .chat__actions {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.chat__action-btn {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+}
+
+.chat__confirm {
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  background: #e8efe9;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: var(--color-primary-dark);
+  font-weight: 600;
 }
 
 .chat__link {
@@ -1263,12 +1315,12 @@ section[id],
 }
 .hero {
   position: relative;
-  height: 100vh;
-  min-height: 600px;
+  height: calc(100vh - 90px);
+  min-height: 520px;
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding-top: 100px;
+  padding-top: 72px;
 }
 
 .hero__slides {
@@ -1301,7 +1353,7 @@ section[id],
   z-index: 2;
   color: var(--color-white);
   max-width: 700px;
-  padding-top: 72px;
+  padding-top: 0;
 }
 
 .hero__eyebrow {
@@ -2207,6 +2259,12 @@ section[id],
     padding: 4rem 0;
   }
 
+  .hero {
+    height: auto;
+    min-height: calc(100svh - 72px);
+    padding-top: 64px;
+  }
+
   .hero__actions {
     flex-direction: column;
   }
@@ -2231,8 +2289,8 @@ section[id],
 /* ========== Pages service (Construction / Rénovation) ========== */
 .page-service .page-hero {
   position: relative;
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: calc(100vh - 90px);
+  min-height: calc(100dvh - 90px);
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -2549,7 +2607,7 @@ section[id],
 
 @media (max-width: 600px) {
   .page-hero__content {
-    padding: 7rem 0 3.5rem;
+    padding: 5.5rem 0 3rem;
   }
 
   .page-highlights__list {
@@ -2563,5 +2621,12 @@ section[id],
 
   .page-cta__actions .btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  /* topbar address hide early */
+  .topbar__address {
+    display: none;
   }
 }

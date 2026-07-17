@@ -35,17 +35,24 @@
 
   async function loadContent() {
     try {
-      const res = await fetch('/api/content');
+      const res = await fetch('../data/content.json');
       if (res.ok) {
         content = await res.json();
         afterLoad();
         return;
       }
+    } catch (_) { /* try API */ }
+
+    try {
+      const apiRes = await fetch('/api/content');
+      if (apiRes.ok) {
+        content = await apiRes.json();
+        afterLoad();
+        return;
+      }
     } catch (_) { /* static hosting */ }
 
-    const res = await fetch('../data/content.json');
-    content = await res.json();
-    afterLoad();
+    console.error('Impossible de charger content.json');
   }
 
   function afterLoad() {
@@ -57,6 +64,12 @@
     applySeo(page);
     renderChrome();
     renderPage(page);
+    if (window.ProceptAnalytics) {
+      window.ProceptAnalytics.init({
+        adsId: content.site?.adsId || '',
+        gaId: content.site?.gaId || '',
+      });
+    }
     if (window.ProceptSearch) {
       window.ProceptSearch.init(content, { basePath: '../' });
       window.ProceptSearch.loadLexicon?.('../data/seo-keywords.json');
@@ -69,7 +82,7 @@
       });
     }
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../sw.js').catch(() => {});
+      navigator.serviceWorker.register(new URL('../sw.js', document.baseURI).href).catch(() => {});
     }
     initReveal();
     initNav();
