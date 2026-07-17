@@ -380,7 +380,10 @@
     });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeNav();
+      if (e.key === 'Escape') {
+        if (window.ProceptSearch?.isOpen?.()) return;
+        closeNav();
+      }
     });
 
     document.addEventListener('click', (e) => {

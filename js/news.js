@@ -261,7 +261,7 @@
     list.innerHTML = items
       .map(
         (n) => `
-      <article class="news-card reveal">
+      <article class="news-card reveal" data-id="${escapeHtml(n.id || n.slug || '')}">
         <a href="${encodeURIComponent(n.slug || n.id)}/" class="news-card__media">
           <img src="${asset(n.image)}" alt="" width="640" height="400" loading="lazy" decoding="async">
         </a>
@@ -343,7 +343,10 @@
       });
     }
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeNav();
+      if (e.key === 'Escape') {
+        if (window.ProceptSearch?.isOpen?.()) return;
+        closeNav();
+      }
     });
   }
 
