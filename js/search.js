@@ -471,9 +471,11 @@ window.ProceptSearch = (function () {
           keywords: [kw],
           target: /rénov/i.test(kw)
             ? 'renovation/'
-            : /extension|construct|maison|promo|permis|RE2020|bois|piscine|devis/i.test(kw)
-              ? 'constructeur/'
-              : '#zones',
+            : /promo|promoteur|permis|cl[eé]\s*en\s*main/i.test(kw)
+              ? 'promotion-immobiliere/'
+              : /extension|construct|maison|RE2020|bois|piscine|devis/i.test(kw)
+                ? 'constructeur/'
+                : '#zones',
         });
       });
     } catch (_) {

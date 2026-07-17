@@ -112,7 +112,7 @@
       "title": "Promotion immobilière",
       "description": "Acteur de la construction immobilière, Procept est également promoteur : achat de terrain, conception des plans, permis de construire. Création de maisons haut de gamme clé en main.",
       "image": "images/services/promotion.jpg",
-      "link": "#promotion",
+      "link": "promotion-immobiliere/",
       "keywords": [
         "promotion immobilière",
         "terrain",
@@ -701,6 +701,94 @@
         "text": "Contactez Procept pour une rénovation, une extension ou un agrandissement près de Versailles et Saint-Germain-en-Laye."
       },
       "galleryFilter": "renovation"
+    },
+    "promotion": {
+      "slug": "promotion-immobiliere",
+      "label": "Promotion immobilière",
+      "seo": {
+        "title": "Votre Maison clé en main à Rueil-Malmaison : votre devis gratuit.",
+        "description": "Promoteur immobilier Procept : maisons haut de gamme, bioclimatiques et intelligentes dans l'ouest parisien, près de Versailles et Rueil-Malmaison. Devis gratuit."
+      },
+      "hero": {
+        "image": "images/services/promotion.jpg",
+        "eyebrow": "Promotion immobilière",
+        "title": "Procept : Promotion immobilière autour de Versailles",
+        "desc": "Maison sur-mesure, bioclimatique, intelligente et personnalisée — du terrain à la commercialisation."
+      },
+      "intro": [
+        "Procept conçoit des maisons sur-mesure, bioclimatiques, intelligentes et personnalisées. En tant que promoteur immobilier, nous accompagnons chaque programme de l'étude de marché à la commercialisation, dans un cadre contractuel clair.",
+        "Le contrat de promotion immobilière formalise notre engagement : étude de faisabilité, recherche et sécurisation du terrain, travail avec les architectes, obtention des permis de construire, puis réalisation et livraison.",
+        "Faire confiance à Procept, c'est s'appuyer sur une entreprise familiale de l'ouest parisien, proche de Versailles et de Rueil-Malmaison, pour un projet clé en main maîtrisé de bout en bout."
+      ],
+      "highlights": [
+        {
+          "title": "Maison sur-mesure",
+          "text": "Conception personnalisée adaptée à votre programme et à votre terrain."
+        },
+        {
+          "title": "Bioclimatique",
+          "text": "Maisons pensées pour le confort et la performance énergétique."
+        },
+        {
+          "title": "Maison intelligente",
+          "text": "Solutions contemporaines pour un habitat connecté et confortable."
+        },
+        {
+          "title": "Étude de faisabilité",
+          "text": "Analyse du marché, du terrain et des contraintes avant engagement."
+        },
+        {
+          "title": "Terrain & architectes",
+          "text": "Recherche foncière et conception avec des architectes partenaires."
+        },
+        {
+          "title": "Permis de construire",
+          "text": "Constitution et suivi des dossiers administratifs jusqu'à l'obtention."
+        },
+        {
+          "title": "Contrat de promotion",
+          "text": "Cadre juridique sécurisant pour le montage et la réalisation du programme."
+        },
+        {
+          "title": "Clé en main",
+          "text": "De l'initiation à l'achèvement, un interlocuteur unique Procept."
+        }
+      ],
+      "secondary": {
+        "title": "Votre maison clé en main près de Rueil-Malmaison",
+        "text": "La promotion immobilière chez Procept s'organise en deux phases : le montage du programme (terrain, faisabilité, financements, permis) puis sa réalisation (coordination de la construction, commercialisation et achèvement). Nous créons des maisons haut de gamme clé en main dans l'ouest parisien, autour de Versailles et de Rueil-Malmaison."
+      },
+      "steps": [
+        {
+          "title": "Initiation & terrain",
+          "description": "Identification du projet, recherche et sécurisation du terrain adapté."
+        },
+        {
+          "title": "Faisabilité",
+          "description": "Études techniques, urbanistiques et économiques pour valider le programme."
+        },
+        {
+          "title": "Financements",
+          "description": "Structuration du montage financier et accompagnement des partenaires."
+        },
+        {
+          "title": "Coordination construction",
+          "description": "Pilotage des travaux et des corps d'état jusqu'à la livraison."
+        },
+        {
+          "title": "Commercialisation",
+          "description": "Mise en marché du programme et relation avec les acquéreurs."
+        },
+        {
+          "title": "Achèvement",
+          "description": "Réception, livraisons et finalisation du programme immobilier."
+        }
+      ],
+      "cta": {
+        "title": "Votre projet de promotion immobilière",
+        "text": "Contactez Procept pour une étude de faisabilité, un terrain ou une maison clé en main près de Versailles et Rueil-Malmaison. Devis gratuit."
+      },
+      "galleryFilter": "construction"
     }
   }
 }
