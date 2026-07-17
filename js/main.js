@@ -7,24 +7,62 @@ let galleryStatus = 'all';
 let galleryExpanded = false;
 const GALLERY_VISIBLE = 9;
 
+function siteBasePath() {
+  // Support GitHub Pages project sites: /Test2/
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  if (parts[0] && !['constructeur', 'renovation', 'promotion-immobiliere', 'actualites', 'admin'].includes(parts[0]) && !parts[0].includes('.')) {
+    // Heuristic: first segment is repo name on github.io
+    if (location.hostname.endsWith('github.io')) {
+      return `/${parts[0]}/`;
+    }
+  }
+  return '/';
+}
+
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  const swUrl = new URL('sw.js', document.baseURI || window.location.href);
+  navigator.serviceWorker.register(swUrl.href).catch(() => {});
+}
+
 async function loadContent() {
+  // Prefer local JSON on static hosts (GitHub Pages); try API only as secondary
+  const candidates = ['data/content.json', './data/content.json'];
+  const base = siteBasePath();
+  if (base !== '/') candidates.push(`${base}data/content.json`.replace(/\/+/g, '/'));
+
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        content = await res.json();
+        afterLoad();
+        return;
+      }
+    } catch (_) { /* try next */ }
+  }
+
   try {
-    const res = await fetch('/api/content');
-    if (res.ok) {
-      content = await res.json();
+    const apiRes = await fetch('/api/content');
+    if (apiRes.ok) {
+      content = await apiRes.json();
       afterLoad();
       return;
     }
-  } catch (_) { /* pas de serveur API */ }
+  } catch (_) { /* no API */ }
 
-  const res = await fetch('data/content.json');
-  content = await res.json();
-  afterLoad();
+  console.error('Impossible de charger content.json');
 }
 
 function afterLoad() {
   applySeo(content);
   renderSite();
+  if (window.ProceptAnalytics) {
+    window.ProceptAnalytics.init({
+      adsId: content.site?.adsId || '',
+      gaId: content.site?.gaId || '',
+    });
+  }
   if (window.ProceptSearch) {
     window.ProceptSearch.init(content);
     window.ProceptSearch.loadLexicon?.('data/seo-keywords.json');
@@ -36,9 +74,7 @@ function afterLoad() {
       phone: content.site?.phone,
     });
   }
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  }
+  registerServiceWorker();
   initReveal();
   initScrollSpy();
   initGalleryFilters();
@@ -532,12 +568,12 @@ function updateScrollUI() {
   const pct = docHeight > 0 ? (y / docHeight) * 100 : 0;
 
   progress.style.width = `${pct}%`;
-  header.classList.toggle('header--scrolled', y > 50);
+  header.classList.toggle('header--scrolled', y > 24);
   backTop.hidden = y < 400;
 
-  if (y > 80) {
-    if (y > lastScrollY + 4) header.classList.add('header--topbar-hidden');
-    else if (y < lastScrollY - 4) header.classList.remove('header--topbar-hidden');
+  if (y > 40) {
+    if (y > lastScrollY + 2) header.classList.add('header--topbar-hidden');
+    else if (y < lastScrollY - 2) header.classList.remove('header--topbar-hidden');
   } else {
     header.classList.remove('header--topbar-hidden');
   }

@@ -415,15 +415,22 @@ function articlePageHtml(item) {
     </div>
   </footer>
   <script src="../../js/social.js" defer></script>
+  <script src="../../js/analytics.js" defer></script>
   <script src="../../js/chat.js" defer></script>
   <script src="../../js/search.js" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      if (window.ProceptAnalytics) {
+        window.ProceptAnalytics.init({
+          adsId: ${JSON.stringify(site.adsId || '')},
+          gaId: ${JSON.stringify(site.gaId || '')},
+        });
+      }
       if (window.ProceptChat) {
         window.ProceptChat.init({ email: ${JSON.stringify(site.email || '')}, phone: ${JSON.stringify(site.phone || '')} });
       }
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('../../sw.js').catch(function () {});
+        navigator.serviceWorker.register(new URL('../../sw.js', document.baseURI).href).catch(function () {});
       }
     });
   </script>
