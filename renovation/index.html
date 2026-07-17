@@ -114,12 +114,12 @@
           </button>
           <div class="search__panel" id="searchPanel">
             <label class="sr-only" for="searchInput">Rechercher</label>
-            <input type="search" id="searchInput" class="search__input" placeholder="Ex. rénovation, Versailles…" autocomplete="off">
+            <input type="search" id="searchInput" class="search__input" placeholder="Ex. actualité, en cours, Versailles…" autocomplete="off">
             <button type="button" class="search__clear" id="searchClear" hidden aria-label="Effacer la recherche">×</button>
             <div class="search__results" id="searchResults" role="listbox" hidden></div>
           </div>
         </div>
-        <a href="#contact" class="btn btn--primary btn--sm header__cta">Demander un devis</a>
+        <a href="#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
       </div>
     </div>
   </header>
@@ -246,6 +246,7 @@
   </div>
 
   <script src="../js/social.js"></script>
+  <script src="../js/chat.js"></script>
   <script src="../js/search.js"></script>
   <script src="../js/page.js"></script>
 </body>

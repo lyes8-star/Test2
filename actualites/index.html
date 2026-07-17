@@ -7,17 +7,25 @@
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#2c4a3e">
   <title>Actualités — Procept</title>
-  <link rel="canonical" href="https://www.procept.fr/actualites/">
+  <link rel="canonical" id="canonicalLink" href="https://www.procept.fr/actualites/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../favicon.svg">
 
-  <meta property="og:type" content="website">
+  <meta property="og:type" id="ogType" content="website">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Procept">
-  <meta property="og:url" content="https://www.procept.fr/actualites/">
-  <meta property="og:title" content="Actualités — Procept">
-  <meta property="og:description" content="Actualités Procept : livraisons, chantiers en cours et programmes immobiliers dans l'ouest parisien.">
-  <meta property="og:image" content="https://www.procept.fr/images/hero/slide-1.jpg">
+  <meta property="og:url" id="ogUrl" content="https://www.procept.fr/actualites/">
+  <meta property="og:title" id="ogTitle" content="Actualités — Procept">
+  <meta property="og:description" id="ogDescription" content="Actualités Procept : livraisons, chantiers en cours et programmes immobiliers dans l'ouest parisien.">
+  <meta property="og:image" id="ogImage" content="https://www.procept.fr/images/hero/slide-1.jpg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" id="twTitle" content="Actualités — Procept">
+  <meta name="twitter:description" id="twDescription" content="Actualités Procept : livraisons, chantiers en cours et programmes immobiliers dans l'ouest parisien.">
+  <meta name="twitter:image" id="twImage" content="https://www.procept.fr/images/hero/slide-1.jpg">
+
+  <script type="application/ld+json" id="jsonldArticle"></script>
+  <script type="application/ld+json" id="jsonldBreadcrumb"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,7 +117,7 @@
             <div class="search__results" id="searchResults" role="listbox" hidden></div>
           </div>
         </div>
-        <a href="../#contact" class="btn btn--primary btn--sm header__cta">Demander un devis</a>
+        <a href="#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
       </div>
     </div>
   </header>
@@ -162,6 +170,7 @@
   </button>
 
   <script src="../js/social.js"></script>
+  <script src="../js/chat.js"></script>
   <script src="../js/search.js"></script>
   <script src="../js/news.js"></script>
 </body>

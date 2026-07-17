@@ -65,12 +65,111 @@
     const slug = getSlug();
     if (slug) renderDetail(slug);
     else renderList();
+    applyNewsSeo(slug);
     if (window.ProceptSearch) {
       window.ProceptSearch.init(content, { basePath: '../' });
       window.ProceptSearch.loadLexicon?.('../data/seo-keywords.json');
     }
+    if (window.ProceptChat) {
+      window.ProceptChat.init({
+        cities: content.zones?.cities || [],
+        email: content.site?.email,
+        phone: content.site?.phone,
+      });
+    }
+    if (window.ProceptSocial) window.ProceptSocial.render(content.site?.social || {}, '../');
     initNav();
     initScrollUI();
+  }
+
+  function setMeta(selector, attr, value) {
+    const el = document.querySelector(selector);
+    if (el && value != null) el.setAttribute(attr, value);
+  }
+
+  function absoluteUrl(path) {
+    const base = (content.site?.url || 'https://www.procept.fr/').replace(/\/?$/, '/');
+    if (!path) return base;
+    if (/^https?:\/\//i.test(path)) return path;
+    return base + path.replace(/^\//, '');
+  }
+
+  function applyNewsSeo(slug) {
+    const site = content.site || {};
+    const baseUrl = absoluteUrl('actualites/');
+    const items = publishedNews();
+    const item = slug ? items.find((n) => n.slug === slug || n.id === slug) : null;
+
+    if (item) {
+      const url = `${baseUrl}?slug=${encodeURIComponent(item.slug || item.id)}`;
+      const title = `${item.title} — ${site.name || 'Procept'}`;
+      const desc = item.excerpt || site.description || '';
+      const image = absoluteUrl(item.image || site.ogImage || 'images/hero/slide-1.jpg');
+      document.title = title;
+      setMeta('meta[name="description"]', 'content', desc);
+      setMeta('#canonicalLink', 'href', url);
+      setMeta('#ogUrl', 'content', url);
+      setMeta('#ogTitle', 'content', title);
+      setMeta('#ogDescription', 'content', desc);
+      setMeta('#ogImage', 'content', image);
+      setMeta('#ogType', 'content', 'article');
+      setMeta('#twTitle', 'content', title);
+      setMeta('#twDescription', 'content', desc);
+      setMeta('#twImage', 'content', image);
+
+      const articleLd = {
+        '@context': 'https://schema.org',
+        '@type': 'NewsArticle',
+        headline: item.title,
+        description: desc,
+        image: [image],
+        datePublished: item.date,
+        dateModified: item.date,
+        author: { '@type': 'Organization', name: site.name || 'Procept' },
+        publisher: {
+          '@type': 'Organization',
+          name: site.name || 'Procept',
+          logo: { '@type': 'ImageObject', url: absoluteUrl('favicon.svg') },
+        },
+        mainEntityOfPage: url,
+      };
+      const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: absoluteUrl('') },
+          { '@type': 'ListItem', position: 2, name: 'Actualités', item: baseUrl },
+          { '@type': 'ListItem', position: 3, name: item.title, item: url },
+        ],
+      };
+      const elA = document.getElementById('jsonldArticle');
+      const elB = document.getElementById('jsonldBreadcrumb');
+      if (elA) elA.textContent = JSON.stringify(articleLd);
+      if (elB) elB.textContent = JSON.stringify(breadcrumbLd);
+    } else {
+      const title = `Actualités — ${site.name || 'Procept'}`;
+      const desc =
+        'Actualités Procept : livraisons, chantiers en cours et programmes immobiliers dans l\'ouest parisien.';
+      document.title = title;
+      setMeta('meta[name="description"]', 'content', desc);
+      setMeta('#canonicalLink', 'href', baseUrl);
+      setMeta('#ogUrl', 'content', baseUrl);
+      setMeta('#ogTitle', 'content', title);
+      setMeta('#ogDescription', 'content', desc);
+      setMeta('#ogType', 'content', 'website');
+      const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: absoluteUrl('') },
+          { '@type': 'ListItem', position: 2, name: 'Actualités', item: baseUrl },
+        ],
+      };
+      const elB = document.getElementById('jsonldBreadcrumb');
+      if (elB) elB.textContent = JSON.stringify(breadcrumbLd);
+      const elA = document.getElementById('jsonldArticle');
+      if (elA) elA.textContent = '';
+    }
   }
 
   function renderChrome() {
@@ -181,15 +280,16 @@
     const nav = document.getElementById('nav');
     if (toggle && nav) {
       toggle.addEventListener('click', () => {
-        const open = nav.classList.toggle('nav--open');
+        const open = nav.classList.toggle('open');
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        document.body.classList.toggle('nav-open', open);
       });
     }
     const servicesToggle = document.getElementById('servicesToggle');
     const dropdown = document.getElementById('servicesDropdown');
     if (servicesToggle && dropdown) {
       servicesToggle.addEventListener('click', () => {
-        const open = dropdown.classList.toggle('nav__dropdown--open');
+        const open = dropdown.classList.toggle('open');
         servicesToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
     }
