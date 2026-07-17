@@ -205,7 +205,16 @@
     if (hours) hours.querySelector('span').textContent = site.hours;
 
     const address = document.getElementById('topbarAddress');
-    if (address) address.querySelector('span').textContent = site.address;
+    if (window.ProceptMapGoogle?.bindTopbarAddress) {
+      window.ProceptMapGoogle.bindTopbarAddress(address, {
+        address: site.address,
+        geo: site.geo,
+        hqLabel: site.city || 'Mareil-Marly',
+      });
+    } else if (address) {
+      const span = address.querySelector('.topbar__address-text') || address.querySelector('span');
+      if (span) span.textContent = site.address;
+    }
 
     const fab = document.getElementById('fabPhone');
     if (fab) {
