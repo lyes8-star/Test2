@@ -305,6 +305,7 @@ function articlePageHtml(item) {
   const title = `${item.title} — ${site.name || 'Procept'}`;
   const desc = item.excerpt || site.description || '';
   const bodyHtml = (item.body || []).map((p) => `<p>${esc(p)}</p>`).join('\n          ');
+  const phoneTel = String(site.phone || '01 39 58 28 23').replace(/\s/g, '');
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
@@ -368,10 +369,17 @@ function articlePageHtml(item) {
   <header class="header" id="header">
     <div class="container header__inner">
       <a href="../../" class="logo"><span class="logo__mark">P</span><span class="logo__text">PROCEPT</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
       <nav class="nav" id="nav" aria-label="Navigation principale">
         <a href="../../" class="nav__link">Accueil</a>
         <a href="../" class="nav__link">Actualités</a>
         <a href="../../#contact" class="nav__link">Contact</a>
+        <div class="nav__mobile-cta">
+          <a href="../../#devis" class="btn btn--primary" data-open-chat>Demander un devis</a>
+          <a href="tel:${esc(phoneTel)}" class="btn btn--outline">Appeler Procept</a>
+        </div>
       </nav>
       <a href="../../#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
     </div>
@@ -429,6 +437,31 @@ function articlePageHtml(item) {
       if (window.ProceptChat) {
         window.ProceptChat.init({ email: ${JSON.stringify(site.email || '')}, phone: ${JSON.stringify(site.phone || '')} });
       }
+      var toggle = document.getElementById('navToggle');
+      var nav = document.getElementById('nav');
+      var header = document.getElementById('header');
+      function closeNav() {
+        if (!nav || !toggle) return;
+        nav.classList.remove('open');
+        document.body.classList.remove('nav-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+      if (toggle && nav) {
+        toggle.addEventListener('click', function () {
+          var open = nav.classList.toggle('open');
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+          document.body.classList.toggle('nav-open', open);
+        });
+        nav.querySelectorAll('a').forEach(function (link) {
+          link.addEventListener('click', closeNav);
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeNav();
+        });
+      }
+      window.addEventListener('scroll', function () {
+        if (header) header.classList.toggle('header--scrolled', window.scrollY > 24);
+      }, { passive: true });
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register(new URL('../../sw.js', document.baseURI).href).catch(function () {});
       }

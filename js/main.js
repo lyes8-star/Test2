@@ -266,15 +266,16 @@ function renderZones(zones) {
   const list = document.getElementById('zonesList');
   if (title) title.textContent = zones.title;
   if (intro) intro.textContent = zones.intro;
-  if (list) {
-    list.innerHTML = (zones.cities || []).map((city) =>
-      `<li class="zones__item"><a href="#contact">${escapeHtml(city)}</a></li>`
-    ).join('');
-  }
-  if (window.ProceptMapIdf) {
-    window.ProceptMapIdf.render(document.getElementById('zonesMap'), zones.cities || [], {
-      contactHref: '#contact',
+  if (window.ProceptMapGoogle) {
+    window.ProceptMapGoogle.render(document.getElementById('zonesMap'), zones.cities || [], {
+      geo: content?.site?.geo,
+      hqLabel: content?.site?.city || 'Mareil-Marly',
+      listEl: list,
     });
+  } else if (list) {
+    list.innerHTML = (zones.cities || [])
+      .map((city) => `<li class="zones__item"><a href="#contact">${escapeHtml(city)}</a></li>`)
+      .join('');
   }
 }
 

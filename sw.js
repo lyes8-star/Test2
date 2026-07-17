@@ -1,28 +1,49 @@
-/* Service worker Procept — cache app shell, network-first pour HTML */
-const CACHE = 'procept-shell-v1';
-const SHELL = [
-  '/',
-  '/css/style.css',
-  '/js/main.js',
-  '/js/search.js',
-  '/js/chat.js',
-  '/js/social.js',
-  '/js/map-idf.js',
-  '/manifest.webmanifest',
-  '/favicon.svg',
-];
+/* Service worker Procept — cache app shell (chemins relatifs pour GitHub Pages) */
+const CACHE = 'procept-shell-v2';
+
+function shellUrls() {
+  const base = self.registration.scope;
+  return [
+    './',
+    'css/style.css',
+    'js/main.js',
+    'js/page.js',
+    'js/news.js',
+    'js/search.js',
+    'js/chat.js',
+    'js/social.js',
+    'js/analytics.js',
+    'js/map-google.js',
+    'manifest.webmanifest',
+    'favicon.svg',
+    'icons/icon-192.png',
+    'icons/icon-512.png',
+  ].map((path) => new URL(path, base).href);
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting())
+    caches
+      .open(CACHE)
+      .then((cache) =>
+        Promise.all(
+          shellUrls().map((url) =>
+            cache.add(url).catch(() => {
+              /* ignore missing optional assets */
+            })
+          )
+        )
+      )
+      .then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches
+      .keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
@@ -31,9 +52,12 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/admin')) return;
+  if (url.pathname.includes('/api/') || url.pathname.includes('/admin')) return;
 
-  const isHtml = req.headers.get('accept')?.includes('text/html') || url.pathname.endsWith('.html') || url.pathname.endsWith('/');
+  const isHtml =
+    req.headers.get('accept')?.includes('text/html') ||
+    url.pathname.endsWith('.html') ||
+    url.pathname.endsWith('/');
 
   if (isHtml) {
     event.respondWith(
@@ -43,7 +67,9 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE).then((c) => c.put(req, copy));
           return res;
         })
-        .catch(() => caches.match(req).then((r) => r || caches.match('/')))
+        .catch(() =>
+          caches.match(req).then((r) => r || caches.match(new URL('./', self.registration.scope).href))
+        )
     );
     return;
   }

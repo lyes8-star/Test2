@@ -317,6 +317,15 @@
     const nav = document.getElementById('nav');
     const servicesToggle = document.getElementById('servicesToggle');
     const dropdown = document.getElementById('servicesDropdown');
+
+    function closeNav() {
+      nav?.classList.remove('open');
+      document.body.classList.remove('nav-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+      dropdown?.classList.remove('open');
+      servicesToggle?.setAttribute('aria-expanded', 'false');
+    }
+
     if (toggle && nav) {
       toggle.addEventListener('click', () => {
         const open = nav.classList.toggle('open');
@@ -324,13 +333,7 @@
         document.body.classList.toggle('nav-open', open);
       });
       nav.querySelectorAll('a').forEach((link) => {
-        link.addEventListener('click', () => {
-          nav.classList.remove('open');
-          document.body.classList.remove('nav-open');
-          toggle.setAttribute('aria-expanded', 'false');
-          dropdown?.classList.remove('open');
-          servicesToggle?.setAttribute('aria-expanded', 'false');
-        });
+        link.addEventListener('click', () => closeNav());
       });
     }
     if (servicesToggle && dropdown) {
@@ -339,20 +342,33 @@
         servicesToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
     }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeNav();
+    });
   }
 
   function initScrollUI() {
     const header = document.getElementById('header');
     const progress = document.getElementById('scrollProgress');
     const backTop = document.getElementById('backTop');
+    let lastY = 0;
     window.addEventListener(
       'scroll',
       () => {
         const y = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         if (progress) progress.style.width = `${docHeight > 0 ? (y / docHeight) * 100 : 0}%`;
-        if (header) header.classList.toggle('header--scrolled', y > 50);
+        if (header) {
+          header.classList.toggle('header--scrolled', y > 24);
+          if (y > 40) {
+            if (y > lastY + 2) header.classList.add('header--topbar-hidden');
+            else if (y < lastY - 2) header.classList.remove('header--topbar-hidden');
+          } else {
+            header.classList.remove('header--topbar-hidden');
+          }
+        }
         if (backTop) backTop.hidden = y < 400;
+        lastY = y;
       },
       { passive: true }
     );
