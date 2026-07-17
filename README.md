@@ -1,59 +1,43 @@
 # Procept — Site web moderne avec administration
 
-Site vitrine optimisé pour **Procept**, constructeur de maisons à Saint-Germain-en-Laye, avec interface d'administration pour mettre à jour le contenu et les images en temps réel.
+> **Où est le site ?** Le fichier principal est ici : **[`public/index.html`](public/index.html)**  
+> (pas à la racine du dépôt — c’est normal pour un serveur Node)
 
-## Fonctionnalités
-
-- **Site public moderne** : design responsive, diaporama, galerie photos, formulaire de contact
-- **Interface admin** (`/admin`) : modification des textes, images du diaporama, services et galerie
-- **Persistance réelle** : toutes les modifications sont enregistrées dans `data/content.json` et les images uploadées dans `uploads/`
-- **Aucune dépendance externe** : serveur Node.js natif, zéro npm install requis
-
-## Démarrage
+## Lancer le site
 
 ```bash
 node server.js
 ```
 
-- Site public : http://localhost:3000
-- Administration : http://localhost:3000/admin
+Puis ouvrir :
 
-### Identifiants par défaut
+| Page | URL |
+|------|-----|
+| **Site public** | http://localhost:3000 |
+| **Admin** | http://localhost:3000/admin |
 
-| Champ | Valeur |
-|-------|--------|
-| Utilisateur | `admin` |
-| Mot de passe | `procept2026` |
+Identifiants admin : `admin` / `procept2026`
 
-Modifiables via variables d'environnement :
-
-```bash
-ADMIN_USER=monuser ADMIN_PASSWORD=monmotdepasse node server.js
-```
-
-## Structure
+## Structure des fichiers
 
 ```
-├── server.js           # Serveur HTTP + API
-├── data/
-│   └── content.json    # Contenu du site (textes, URLs images)
-├── uploads/            # Images uploadées via l'admin
-└── public/
-    ├── index.html      # Page d'accueil
-    ├── css/style.css
-    ├── js/main.js
-    └── admin/          # Interface d'administration
+├── README.md                 ← ce fichier
+├── server.js                 ← démarre le site (sert le dossier public/)
+├── data/content.json         ← textes & images (modifiables via admin)
+├── public/
+│   ├── index.html            ← ★ PAGE D’ACCUEIL DU SITE
+│   ├── css/style.css
+│   ├── js/main.js
+│   ├── js/search.js          ← recherche live par mots-clés
+│   └── admin/                ← interface d’administration
+│       └── index.html
+├── uploads/                  ← images uploadées via l’admin
+└── test                      ← ancien export Duda (archive)
 ```
 
-## API
+## Fonctionnalités
 
-| Endpoint | Méthode | Description |
-|----------|---------|-------------|
-| `/api/content` | GET | Contenu public du site |
-| `/api/admin/login` | POST | Connexion admin |
-| `/api/admin/content` | PUT | Sauvegarder le contenu |
-| `/api/admin/upload` | POST | Upload d'image |
-
-## Ancien site
-
-L'export HTML Duda original est conservé dans le fichier `test` à la racine du dépôt.
+- Site moderne responsive (diaporama, services, galerie, contact)
+- Navigation à 2 niveaux + mega-menu Services + recherche en direct
+- Admin pour changer textes et images avec **sauvegarde réelle** (`data/content.json` + `uploads/`)
+- Aucune dépendance npm : `node server.js` suffit

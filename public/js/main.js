@@ -1,12 +1,18 @@
 let content = null;
 let currentSlide = 0;
 let slideInterval = null;
+let lastScrollY = 0;
 const GALLERY_VISIBLE = 6;
 
 async function loadContent() {
   const res = await fetch('/api/content');
   content = await res.json();
   renderSite();
+  if (window.ProceptSearch) {
+    window.ProceptSearch.init(content);
+  }
+  initReveal();
+  initScrollSpy();
 }
 
 function renderSite() {
@@ -15,14 +21,30 @@ function renderSite() {
   document.title = `${site.name} — ${site.tagline}`;
   document.querySelector('meta[name="description"]').content = site.description;
 
-  document.getElementById('headerPhone').textContent = site.phone;
-  document.getElementById('headerPhone').href = `tel:${site.phone.replace(/\s/g, '')}`;
+  const phoneHref = `tel:${site.phone.replace(/\s/g, '')}`;
+
+  const topbarPhone = document.getElementById('topbarPhone');
+  topbarPhone.querySelector('span').textContent = site.phone;
+  topbarPhone.href = phoneHref;
+
+  const topbarEmail = document.getElementById('topbarEmail');
+  topbarEmail.querySelector('span').textContent = site.email;
+  topbarEmail.href = `mailto:${site.email}`;
+
+  document.getElementById('topbarHours').querySelector('span').textContent = site.hours;
+  document.getElementById('topbarAddress').querySelector('span').textContent = site.address;
+
+  const fab = document.getElementById('fabPhone');
+  fab.href = phoneHref;
+  fab.setAttribute('aria-label', `Appeler ${site.phone}`);
+
   document.getElementById('heroEyebrow').textContent = site.tagline;
   document.getElementById('heroTitle').textContent = site.name;
 
   renderHero(hero.slides);
   renderServices(services);
   renderGallery(gallery);
+  renderMarquee(site.keywords || []);
 
   document.getElementById('aboutTitle').textContent = about.title;
   document.getElementById('aboutText').textContent = about.text;
@@ -30,12 +52,30 @@ function renderSite() {
 
   document.getElementById('contactAddress').textContent = site.address;
   document.getElementById('contactPhone').textContent = site.phone;
-  document.getElementById('contactPhone').href = `tel:${site.phone.replace(/\s/g, '')}`;
+  document.getElementById('contactPhone').href = phoneHref;
   document.getElementById('contactFax').textContent = site.fax;
   document.getElementById('contactEmail').textContent = site.email;
   document.getElementById('contactEmail').href = `mailto:${site.email}`;
   document.getElementById('contactHours').textContent = site.hours;
   document.getElementById('footerAddress').textContent = site.address;
+}
+
+function renderMarquee(keywords) {
+  const track = document.getElementById('marqueeTrack');
+  if (!track) return;
+  const words = keywords.length
+    ? keywords
+    : ['Construction', 'Rénovation', 'Extension', 'Promotion immobilière', 'Versailles', 'Saint-Germain-en-Laye', 'RE2020', 'Clé en main'];
+
+  const items = words.map((w) => `<span class="marquee__item">${escapeHtml(w)}</span>`).join('<span class="marquee__sep">·</span>');
+  // Duplicate for seamless loop
+  track.innerHTML = `${items}<span class="marquee__sep">·</span>${items}<span class="marquee__sep">·</span>${items}<span class="marquee__sep">·</span>${items}`;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 function renderHero(slides) {
@@ -83,7 +123,7 @@ function resetSlideshow(total) {
 function renderServices(services) {
   const grid = document.getElementById('servicesGrid');
   grid.innerHTML = services.map((s) => `
-    <article class="service-card" id="${s.id}">
+    <article class="service-card reveal" id="${s.id}" data-keywords="${(s.keywords || []).join(',')}">
       <div class="service-card__image">
         <img src="${s.image}" alt="${s.title}" loading="lazy">
       </div>
@@ -93,12 +133,13 @@ function renderServices(services) {
       </div>
     </article>
   `).join('');
+  initReveal();
 }
 
 function renderGallery(items) {
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = items.map((item, i) => `
-    <div class="gallery__item${i >= GALLERY_VISIBLE ? ' hidden' : ''}" data-index="${i}">
+    <div class="gallery__item reveal${i >= GALLERY_VISIBLE ? ' hidden' : ''}" data-index="${i}" data-id="${item.id}">
       <img src="${item.image}" alt="${item.caption}" loading="lazy">
       <span class="gallery__caption">${item.caption}</span>
     </div>
@@ -119,8 +160,10 @@ function renderGallery(items) {
     moreBtn.onclick = () => {
       grid.querySelectorAll('.gallery__item.hidden').forEach((el) => el.classList.remove('hidden'));
       moreBtn.style.display = 'none';
+      initReveal();
     };
   }
+  initReveal();
 }
 
 function openLightbox(item) {
@@ -136,22 +179,152 @@ function closeLightbox() {
   document.body.style.overflow = '';
 }
 
-// Header scroll
+/* —— Scroll UX —— */
 const header = document.getElementById('header');
-window.addEventListener('scroll', () => {
-  header.classList.toggle('header--scrolled', window.scrollY > 50);
+const topbar = document.getElementById('topbar');
+const progress = document.getElementById('scrollProgress');
+const backTop = document.getElementById('backTop');
+
+function updateScrollUI() {
+  const y = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (y / docHeight) * 100 : 0;
+
+  progress.style.width = `${pct}%`;
+  header.classList.toggle('header--scrolled', y > 50);
+  backTop.hidden = y < 400;
+
+  // Auto-hide topbar on scroll down, show on scroll up
+  if (y > 80) {
+    if (y > lastScrollY + 4) {
+      header.classList.add('header--topbar-hidden');
+    } else if (y < lastScrollY - 4) {
+      header.classList.remove('header--topbar-hidden');
+    }
+  } else {
+    header.classList.remove('header--topbar-hidden');
+  }
+
+  lastScrollY = y;
+}
+
+window.addEventListener('scroll', updateScrollUI, { passive: true });
+updateScrollUI();
+
+backTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Mobile nav
-document.getElementById('navToggle').addEventListener('click', () => {
-  document.getElementById('nav').classList.toggle('open');
+/* —— Reveal animations —— */
+let revealObserver = null;
+
+function initReveal() {
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+  }
+  document.querySelectorAll('.reveal:not(.revealed)').forEach((el) => {
+    revealObserver.observe(el);
+  });
+}
+
+/* —— Scroll spy —— */
+function initScrollSpy() {
+  const sections = ['accueil', 'services', 'apropos', 'realisations', 'contact']
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+
+  const links = document.querySelectorAll('.nav__link[data-section]');
+
+  const spy = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        links.forEach((link) => {
+          link.classList.toggle('active', link.dataset.section === id);
+        });
+      });
+    },
+    { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
+  );
+
+  sections.forEach((s) => spy.observe(s));
+}
+
+/* —— Mobile nav + mega menu —— */
+const nav = document.getElementById('nav');
+const navToggle = document.getElementById('navToggle');
+const servicesToggle = document.getElementById('servicesToggle');
+const servicesDropdown = document.getElementById('servicesDropdown');
+
+navToggle.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', open);
+  document.body.classList.toggle('nav-open', open);
 });
 
-document.querySelectorAll('.nav a').forEach((link) => {
-  link.addEventListener('click', () => document.getElementById('nav').classList.remove('open'));
+function closeMobileNav() {
+  nav.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('nav-open');
+  servicesDropdown?.classList.remove('open');
+  servicesToggle?.setAttribute('aria-expanded', 'false');
+}
+
+document.querySelectorAll('.nav__link:not(.nav__link--parent), .nav__mega-item, .nav__mega-all').forEach((link) => {
+  link.addEventListener('click', () => closeMobileNav());
 });
 
-// Hero arrows
+servicesToggle.addEventListener('click', (e) => {
+  // On desktop, hover handles it; on mobile/touch, toggle accordion
+  if (window.matchMedia('(max-width: 900px)').matches) {
+    e.preventDefault();
+    const open = servicesDropdown.classList.toggle('open');
+    servicesToggle.setAttribute('aria-expanded', open);
+  } else {
+    // Desktop: navigate to services
+    document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+/* —— Desktop search toggle —— */
+const searchToggle = document.getElementById('searchToggle');
+const searchPanel = document.getElementById('searchPanel');
+const searchInput = document.getElementById('searchInput');
+
+searchToggle.addEventListener('click', () => {
+  const open = searchPanel.classList.toggle('search__panel--open');
+  searchToggle.setAttribute('aria-expanded', open);
+  if (open) {
+    searchInput.focus();
+  } else {
+    searchInput.value = '';
+    document.getElementById('searchResults').hidden = true;
+    document.getElementById('searchClear').hidden = true;
+    window.ProceptSearch?.clearPageHighlight();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search') && !e.target.closest('.nav__mobile-search')) {
+    searchPanel.classList.remove('search__panel--open');
+    searchToggle.setAttribute('aria-expanded', 'false');
+    const results = document.getElementById('searchResults');
+    if (results) results.hidden = true;
+  }
+});
+
+/* —— Hero arrows —— */
 document.getElementById('heroPrev').addEventListener('click', () => {
   if (content) goToSlide(currentSlide - 1, content.hero.slides.length);
 });
@@ -159,16 +332,19 @@ document.getElementById('heroNext').addEventListener('click', () => {
   if (content) goToSlide(currentSlide + 1, content.hero.slides.length);
 });
 
-// Lightbox
+/* —— Lightbox —— */
 document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
 document.getElementById('lightbox').addEventListener('click', (e) => {
   if (e.target.id === 'lightbox') closeLightbox();
 });
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'Escape') {
+    closeLightbox();
+    closeMobileNav();
+  }
 });
 
-// Contact form
+/* —— Contact form —— */
 document.getElementById('contactForm').addEventListener('submit', (e) => {
   e.preventDefault();
   document.getElementById('formSuccess').hidden = false;

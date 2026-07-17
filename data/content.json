@@ -7,7 +7,21 @@
     "fax": "01 39 58 33 93",
     "email": "procept@procept.fr",
     "address": "29 Rue des Closeaux, 78750 Mareil-Marly",
-    "hours": "Lun - Ven : 9h00 - 18h00"
+    "hours": "Lun - Ven : 9h00 - 18h00",
+    "keywords": [
+      "construction",
+      "rénovation",
+      "extension",
+      "promotion immobilière",
+      "Versailles",
+      "Saint-Germain-en-Laye",
+      "Rueil-Malmaison",
+      "Marly-le-Roi",
+      "Yvelines",
+      "RE2020",
+      "clé en main",
+      "Mareil-Marly"
+    ]
   },
   "hero": {
     "slides": [
@@ -48,21 +62,24 @@
       "title": "Construction",
       "description": "Maisons neuves clé en main pour particuliers et professionnels. Matériaux haut de gamme, certification RE2020. De l'avant-projet à la livraison, nous construisons la maison de vos rêves.",
       "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/d087c20bb4ca4f8d9a3cb5c3fd8f2204-960w.jpg",
-      "link": "#construction"
+      "link": "#construction",
+      "keywords": ["construction", "maison neuve", "clé en main", "RE2020", "haut de gamme"]
     },
     {
       "id": "renovation",
       "title": "Rénovation",
       "description": "Rénovation, agrandissement de maisons, construction de piscines, toits-terrasses végétalisés, terrasses et vérandas. Nous concevons sur plans avec diagnostic au préalable.",
       "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/8d166e67a73c450dbdf3612d4bcbb75e-960w.jpg",
-      "link": "#renovation"
+      "link": "#renovation",
+      "keywords": ["rénovation", "agrandissement", "extension", "véranda", "terrasse", "piscine"]
     },
     {
       "id": "promotion",
       "title": "Promotion immobilière",
       "description": "Acteur de la construction immobilière, Procept est également promoteur : achat de terrain, conception des plans, permis de construire. Création de maisons haut de gamme clé en main.",
       "image": "https://le-de.cdn-website.com/9bdba6e4f18d4cb7b9974844089681b1/dms3rep/multi/opt/71b1908f8e2547c1840f2df3fe31d69a-960w.jpg",
-      "link": "#promotion"
+      "link": "#promotion",
+      "keywords": ["promotion immobilière", "terrain", "permis de construire", "plans", "Versailles"]
     }
   ],
   "gallery": [
