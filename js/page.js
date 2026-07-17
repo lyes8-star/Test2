@@ -61,6 +61,13 @@
       window.ProceptSearch.init(content, { basePath: '../' });
       window.ProceptSearch.loadLexicon?.('../data/seo-keywords.json');
     }
+    if (window.ProceptChat) {
+      window.ProceptChat.init({
+        cities: content.zones?.cities || [],
+        email: content.site?.email,
+        phone: content.site?.phone,
+      });
+    }
     initReveal();
     initNav();
     initScrollUI();

@@ -29,6 +29,13 @@ function afterLoad() {
     window.ProceptSearch.init(content);
     window.ProceptSearch.loadLexicon?.('data/seo-keywords.json');
   }
+  if (window.ProceptChat) {
+    window.ProceptChat.init({
+      cities: content.zones?.cities || [],
+      email: content.site?.email,
+      phone: content.site?.phone,
+    });
+  }
   initReveal();
   initScrollSpy();
   initGalleryFilters();
@@ -101,9 +108,30 @@ function applySeo(data) {
       name: city,
     })),
     priceRange: '€€€',
+    sameAs: Object.values(site.social || {}).filter(Boolean),
   };
 
   document.getElementById('jsonldBusiness').textContent = JSON.stringify(business);
+
+  const websiteLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${url}#website`,
+    name: site.name,
+    url,
+    description: desc,
+    publisher: { '@id': `${url}#business` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${url}?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+  const elWebsite = document.getElementById('jsonldWebsite');
+  if (elWebsite) elWebsite.textContent = JSON.stringify(websiteLd);
 
   if (faq?.length) {
     const faqLd = {
@@ -630,13 +658,6 @@ document.addEventListener('keydown', (e) => {
     closeLightbox();
     closeMobileNav();
   }
-});
-
-document.getElementById('contactForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  document.getElementById('formSuccess').hidden = false;
-  e.target.reset();
-  setTimeout(() => { document.getElementById('formSuccess').hidden = true; }, 5000);
 });
 
 loadContent();

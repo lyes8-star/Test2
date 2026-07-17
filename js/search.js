@@ -256,6 +256,15 @@ window.ProceptSearch = (function () {
       target: 'actualites/',
     });
 
+    pushEntry({
+      id: 'assistant-devis',
+      type: 'Devis',
+      title: 'Assistant devis Procept',
+      excerpt: 'Posez vos questions et préparez une demande de devis par email',
+      keywords: ['devis', 'assistant', 'chat', 'robot', 'demande de devis', 'contact'],
+      target: '#devis',
+    });
+
     // Entrées dédiées aux mots-clés site (suggestions rapides)
     siteKeywords.forEach((kw) => {
       pushEntry({
@@ -374,6 +383,14 @@ window.ProceptSearch = (function () {
     const hashIdx = target.indexOf('#');
     const pathPart = hashIdx === -1 ? target : target.slice(0, hashIdx);
     const hashPart = hashIdx === -1 ? '' : target.slice(hashIdx);
+
+    // Assistant devis
+    if (hashPart === '#devis' || target.endsWith('#devis')) {
+      if (window.ProceptChat) {
+        window.ProceptChat.open();
+        return;
+      }
+    }
 
     // Cible purement locale (#section)
     if (!pathPart && hashPart) {
