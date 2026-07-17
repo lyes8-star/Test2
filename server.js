@@ -7,7 +7,7 @@ const { URL } = require('url');
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data', 'content.json');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
-const PUBLIC_DIR = path.join(__dirname, 'public');
+const ROOT_DIR = __dirname;
 
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'procept2026';
@@ -282,8 +282,22 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // Static: public files
-  let filePath = path.join(PUBLIC_DIR, pathname === '/' ? 'index.html' : pathname);
+  // Block sensitive files
+  const blocked = ['/server.js', '/package.json', '/.gitignore', '/data/.admin-hash'];
+  if (blocked.includes(pathname) || pathname.startsWith('/.git')) {
+    res.writeHead(404);
+    res.end('Not found');
+    return;
+  }
+
+  // Static files from repo root (GitHub Pages layout)
+  let filePath = path.join(ROOT_DIR, pathname === '/' ? 'index.html' : pathname);
+  // Prevent path traversal
+  if (!filePath.startsWith(ROOT_DIR)) {
+    res.writeHead(403);
+    res.end('Forbidden');
+    return;
+  }
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     sendFile(res, filePath);
     return;
@@ -291,7 +305,7 @@ const server = http.createServer(async (req, res) => {
 
   // SPA fallback for admin
   if (pathname.startsWith('/admin')) {
-    const adminPath = path.join(PUBLIC_DIR, 'admin', 'index.html');
+    const adminPath = path.join(ROOT_DIR, 'admin', 'index.html');
     if (fs.existsSync(adminPath)) {
       sendFile(res, adminPath);
       return;

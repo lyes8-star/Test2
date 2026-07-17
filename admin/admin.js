@@ -51,7 +51,17 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 });
 
 async function loadContent() {
-  const res = await fetch('/api/content');
+  // API locale si serveur Node, sinon fichier statique (GitHub Pages)
+  try {
+    const apiRes = await fetch('/api/content');
+    if (apiRes.ok) {
+      content = await apiRes.json();
+      populateForms();
+      return;
+    }
+  } catch (_) { /* ignore */ }
+
+  const res = await fetch('../data/content.json');
   content = await res.json();
   populateForms();
 }
@@ -67,6 +77,7 @@ function populateForms() {
   document.getElementById('siteEmail').value = site.email;
   document.getElementById('siteHours').value = site.hours;
   document.getElementById('siteAddress').value = site.address;
+  document.getElementById('siteKeywords').value = (site.keywords || []).join(', ');
 
   document.getElementById('aboutTitle').value = about.title;
   document.getElementById('aboutText').value = about.text;
@@ -87,6 +98,10 @@ function collectContent() {
     email: document.getElementById('siteEmail').value,
     hours: document.getElementById('siteHours').value,
     address: document.getElementById('siteAddress').value,
+    keywords: document.getElementById('siteKeywords').value
+      .split(',')
+      .map((k) => k.trim())
+      .filter(Boolean),
   };
 
   content.about = {
@@ -293,6 +308,10 @@ function renderServicesEditor() {
             <label>Description</label>
             <textarea class="service-desc" rows="4">${escapeHtml(service.description)}</textarea>
           </div>
+          <div class="form-group">
+            <label>Mots-clés (virgules)</label>
+            <input type="text" class="service-keywords" value="${escapeHtml((service.keywords || []).join(', '))}">
+          </div>
         </div>
       </div>
     `;
@@ -307,6 +326,12 @@ function renderServicesEditor() {
     });
     el.querySelector('.service-desc').addEventListener('input', (e) => {
       content.services[index].description = e.target.value;
+    });
+    el.querySelector('.service-keywords').addEventListener('input', (e) => {
+      content.services[index].keywords = e.target.value
+        .split(',')
+        .map((k) => k.trim())
+        .filter(Boolean);
     });
 
     container.appendChild(el);
