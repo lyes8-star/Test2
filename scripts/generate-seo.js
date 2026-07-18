@@ -640,7 +640,7 @@ function articlePageHtml(item) {
   <script src="../../js/consent.js?v=4" defer></script>
   <script src="../../js/social.js?v=5" defer></script>
   <script src="../../js/analytics.js?v=4" defer></script>
-  <script src="../../js/a11y.js?v=15" defer></script>
+  <script src="../../js/a11y.js?v=16" defer></script>
   <script src="../../js/protect.js?v=19" defer></script>
   <script src="../../js/chat.js?v=18" defer></script>
   <script src="../../js/search.js?v=14" defer></script>

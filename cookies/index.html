@@ -20,7 +20,7 @@
   <script>
     (function () {
       try {
-        var p = JSON.parse(localStorage.getItem('procept-a11y-v1') || '{}');
+        var p = JSON.parse(localStorage.getItem('procept-a11y-v2') || '{}');
         var r = document.documentElement;
         if (p.fontScale && p.fontScale !== 100) r.classList.add('a11y-font-' + p.fontScale);
         if (p.contrast) r.classList.add('a11y-contrast');
@@ -103,7 +103,7 @@
   </footer>
   <script defer src="../js/consent.js?v=5"></script>
   <script defer src="../js/analytics.js?v=4"></script>
-    <script defer src="../js/a11y.js?v=15"></script>
+    <script defer src="../js/a11y.js?v=16"></script>
   <script defer src="../js/protect.js?v=20"></script>
 <script defer src="../js/chat.js?v=18"></script>
   <script>
