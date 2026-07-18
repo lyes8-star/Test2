@@ -349,12 +349,11 @@ let faqTickerList = [];
 let faqTickerPanel = null;
 let faqTickerQEl = null;
 let faqTickerAEl = null;
+let slideKickTimer = null;
 
-function prefersReducedMotion() {
-  return (
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-    document.documentElement.classList.contains('a11y-motion')
-  );
+/** Autoplay contenu : uniquement la préférence OS live (pas la classe a11y-motion / localStorage). */
+function shouldPauseAutoplay() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 function stopFaqTicker() {
@@ -384,7 +383,7 @@ function advanceFaqTicker() {
 
 function startFaqTicker() {
   stopFaqTicker();
-  if (document.hidden || prefersReducedMotion()) return;
+  if (document.hidden || shouldPauseAutoplay()) return;
   if (faqTickerList.length < 2) return;
   faqTickerTimer = setInterval(advanceFaqTicker, 4000);
 }
@@ -451,7 +450,7 @@ function renderHero(slides) {
   currentSlide = 0;
   slideTotal = list.length;
   updateHeroText(list[0]);
-  startSlideshow(slideTotal);
+  startSlideshow(slideTotal, { kick: true });
 
   dots.querySelectorAll('.hero__dot').forEach((dot) => {
     dot.addEventListener('click', (e) => {
@@ -530,47 +529,53 @@ function goToSlide(index, total) {
 }
 
 function stopSlideshow() {
+  if (slideKickTimer) {
+    clearTimeout(slideKickTimer);
+    slideKickTimer = null;
+  }
   if (slideInterval) {
     clearInterval(slideInterval);
     slideInterval = null;
   }
 }
 
-function startSlideshow(total) {
+function startSlideshow(total, opts) {
   stopSlideshow();
   const n = total || slideTotal || 0;
   slideTotal = n;
-  if (n < 2 || document.hidden || prefersReducedMotion()) return;
+  if (n < 2 || document.hidden || shouldPauseAutoplay()) return;
+  const kick = !!(opts && opts.kick);
+  // Premier changement plus tôt une seule fois (pas à chaque reset)
+  if (kick) {
+    slideKickTimer = setTimeout(() => {
+      slideKickTimer = null;
+      if (document.hidden || shouldPauseAutoplay()) return;
+      goToSlide(currentSlide + 1, n);
+    }, 2000);
+  }
   slideInterval = setInterval(() => {
-    if (document.hidden || prefersReducedMotion()) return;
+    if (document.hidden || shouldPauseAutoplay()) return;
     goToSlide(currentSlide + 1, n);
   }, 3500);
 }
 
 function resetSlideshow(total) {
-  startSlideshow(total || slideTotal);
+  startSlideshow(total || slideTotal, { kick: false });
 }
 
 function restartAutoplay() {
-  if (document.hidden || prefersReducedMotion()) {
+  if (document.hidden || shouldPauseAutoplay()) {
     stopSlideshow();
     stopFaqTicker();
     return;
   }
-  startSlideshow(slideTotal);
+  startSlideshow(slideTotal, { kick: true });
   startFaqTicker();
 }
 
-window.addEventListener('procept:a11y-motion', (e) => {
-  const reduced =
-    e?.detail?.reduced === true ||
-    (e?.detail?.reduced !== false && prefersReducedMotion());
-  if (reduced) {
-    stopSlideshow();
-    stopFaqTicker();
-  } else {
-    restartAutoplay();
-  }
+window.addEventListener('procept:a11y-motion', () => {
+  // Les animations CSS suivent a11y-motion ; l’autoplay contenu suit l’OS.
+  restartAutoplay();
 });
 
 document.addEventListener('visibilitychange', () => {

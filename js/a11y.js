@@ -3,7 +3,7 @@
  * Persistance localStorage + panneau dialog clavier.
  */
 window.ProceptA11y = (function () {
-  const STORAGE_KEY = 'procept-a11y-v1';
+  const STORAGE_KEY = 'procept-a11y-v2';
   const FONT_STEPS = [100, 112, 125, 150];
 
   const DEFAULTS = {
@@ -310,11 +310,10 @@ window.ProceptA11y = (function () {
         return null;
       }
     })();
+    // Contraste OS au 1er chargement seulement — ne pas persister prefers-reduced-motion
+    // (sinon prefs.motion reste coincé et coupe l’autoplay même si l’OS change).
     if (!stored && window.matchMedia('(prefers-contrast: more)').matches) {
       prefs.contrast = true;
-    }
-    if (!stored && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      prefs.motion = true;
     }
 
     applyPrefs(prefs);
