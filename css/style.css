@@ -1971,17 +1971,17 @@ html.reveals-on .reveal:not(.revealed) {
   box-shadow: var(--shadow-lg);
 }
 
-/* FAB contact / chat (bas droite) — robot + bulle d’incitation */
+/* FAB contact / chat (bas droite) — robot + bulle à gauche (évite back-top) */
 .fab-nudge {
   position: fixed;
-  bottom: calc(4.65rem + var(--safe-bottom) + var(--cookie-fab-lift));
-  right: 1rem;
+  bottom: calc(1rem + var(--safe-bottom) + var(--cookie-fab-lift));
+  right: calc(1rem + 56px + 0.65rem);
   z-index: 140;
-  max-width: min(220px, calc(100vw - 5.5rem));
+  max-width: min(210px, calc(100vw - 7.5rem));
   margin: 0;
   padding: 0.65rem 0.85rem;
   border: 1px solid rgba(196, 163, 90, 0.35);
-  border-radius: 14px 14px 4px 14px;
+  border-radius: 14px 14px 14px 4px;
   background: #fff;
   color: var(--color-primary-dark);
   font-family: var(--font-body);
@@ -1991,34 +1991,39 @@ html.reveals-on .reveal:not(.revealed) {
   text-align: left;
   cursor: pointer;
   box-shadow: 0 10px 28px rgba(20, 40, 30, 0.16), 0 0 0 1px rgba(44, 74, 62, 0.06);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .fab-nudge::after {
   content: '';
   position: absolute;
-  right: 1.1rem;
-  bottom: -7px;
+  right: -6px;
+  bottom: 1.1rem;
   width: 12px;
   height: 12px;
   background: #fff;
   border-right: 1px solid rgba(196, 163, 90, 0.35);
-  border-bottom: 1px solid rgba(196, 163, 90, 0.35);
+  border-top: 1px solid rgba(196, 163, 90, 0.35);
   transform: rotate(45deg);
 }
 
 .fab-nudge--tick {
-  animation: fabNudgeIn 0.35s ease;
+  animation: fabNudgeIn 0.4s ease;
+}
+
+.fab-nudge--fade {
+  opacity: 0;
+  transform: translateX(8px);
 }
 
 @keyframes fabNudgeIn {
   from {
-    opacity: 0.35;
-    transform: translateY(6px);
+    opacity: 0;
+    transform: translateX(12px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0) scale(1);
   }
 }
 
@@ -2064,6 +2069,34 @@ body.chat-open .fab-nudge {
 .fab-contact:hover .chat__avatar-svg,
 .fab-contact:focus-visible .chat__avatar-svg {
   transform: scale(1.06);
+}
+
+.fab-contact .chat__avatar-svg .robot-eye,
+.fab-contact .chat__avatar-svg .robot-mouth {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.fab-contact .chat__avatar-svg[data-face='talk'] .robot-mouth {
+  animation: robotTalk 0.4s ease-in-out infinite alternate;
+}
+
+.fab-contact .chat__avatar-svg[data-face='blink'] .robot-eye {
+  transform: scaleY(0.12);
+}
+
+.fab-contact[data-face='think'] .chat__avatar-svg,
+.fab-contact .chat__avatar-svg[data-face='think'] {
+  transform: rotate(-3deg);
+}
+
+@keyframes robotTalk {
+  from {
+    transform: scaleY(0.65);
+  }
+  to {
+    transform: scaleY(1.2);
+  }
 }
 
 /* FAB recherche (bas gauche) — au-dessus du téléphone sur mobile */
@@ -2140,14 +2173,30 @@ body.chat-open .fab-nudge {
   }
 
   .fab-nudge {
-    bottom: calc(5.15rem + var(--safe-bottom) + var(--cookie-fab-lift));
-    right: 1.5rem;
+    bottom: calc(1.5rem + var(--safe-bottom) + var(--cookie-fab-lift));
+    right: calc(1.5rem + 56px + 0.65rem);
   }
 }
 
 
 .fab-contact--pulse {
   animation: fabPulse 2.4s ease-in-out infinite;
+}
+
+.fab-contact.fab-contact--face-pop {
+  animation: fabFacePop 0.4s ease;
+}
+
+@keyframes fabFacePop {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  40% {
+    transform: scale(1.12) rotate(-6deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 @keyframes fabPulse {
@@ -2646,9 +2695,9 @@ body.chat-open {
   }
 
   .fab-nudge {
-    bottom: calc(4.85rem + var(--safe-bottom) + var(--cookie-fab-lift));
-    right: 1.25rem;
-    max-width: min(200px, calc(100vw - 5rem));
+    bottom: calc(1.25rem + var(--safe-bottom) + var(--cookie-fab-lift));
+    right: calc(1.25rem + 52px + 0.55rem);
+    max-width: min(15.5rem, calc(100vw - 5.5rem));
   }
 
   .back-top {
@@ -2671,8 +2720,8 @@ body.chat-open {
   }
 
   .fab-nudge {
-    bottom: calc(5.35rem + var(--safe-bottom) + var(--cookie-fab-lift));
-    right: 1.75rem;
+    bottom: calc(1.75rem + var(--safe-bottom) + var(--cookie-fab-lift));
+    right: calc(1.75rem + 56px + 0.7rem);
   }
 
   .back-top {
