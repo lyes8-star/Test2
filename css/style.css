@@ -1937,7 +1937,68 @@ html.reveals-on .reveal:not(.revealed) {
   box-shadow: var(--shadow-lg);
 }
 
-/* FAB contact / chat (bas droite) — robot seul */
+/* FAB contact / chat (bas droite) — robot + bulle d’incitation */
+.fab-nudge {
+  position: fixed;
+  bottom: calc(4.65rem + var(--safe-bottom) + var(--cookie-fab-lift));
+  right: 1rem;
+  z-index: 140;
+  max-width: min(220px, calc(100vw - 5.5rem));
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgba(196, 163, 90, 0.35);
+  border-radius: 14px 14px 4px 14px;
+  background: #fff;
+  color: var(--color-primary-dark);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(20, 40, 30, 0.16), 0 0 0 1px rgba(44, 74, 62, 0.06);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.fab-nudge::after {
+  content: '';
+  position: absolute;
+  right: 1.1rem;
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-right: 1px solid rgba(196, 163, 90, 0.35);
+  border-bottom: 1px solid rgba(196, 163, 90, 0.35);
+  transform: rotate(45deg);
+}
+
+.fab-nudge--tick {
+  animation: fabNudgeIn 0.35s ease;
+}
+
+@keyframes fabNudgeIn {
+  from {
+    opacity: 0.35;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fab-nudge[hidden] {
+  display: none !important;
+}
+
+body.nav-open .fab-nudge,
+body.chat-open .fab-nudge {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
 .fab-contact {
   position: fixed;
   bottom: calc(1rem + var(--safe-bottom) + var(--cookie-fab-lift));
@@ -1960,6 +2021,15 @@ html.reveals-on .reveal:not(.revealed) {
     0 2px 6px rgba(20, 40, 30, 0.15);
   font-family: var(--font-body);
   transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fab-contact .chat__avatar-svg {
+  transition: transform 0.3s ease;
+}
+
+.fab-contact:hover .chat__avatar-svg,
+.fab-contact:focus-visible .chat__avatar-svg {
+  transform: scale(1.06);
 }
 
 /* FAB recherche (bas gauche) — au-dessus du téléphone sur mobile */
@@ -2032,6 +2102,11 @@ html.reveals-on .reveal:not(.revealed) {
 
   .fab-contact {
     bottom: calc(1.5rem + var(--safe-bottom) + var(--cookie-fab-lift));
+    right: 1.5rem;
+  }
+
+  .fab-nudge {
+    bottom: calc(5.15rem + var(--safe-bottom) + var(--cookie-fab-lift));
     right: 1.5rem;
   }
 }
@@ -2535,6 +2610,12 @@ body.chat-open {
     right: 1.25rem;
   }
 
+  .fab-nudge {
+    bottom: calc(4.85rem + var(--safe-bottom) + var(--cookie-fab-lift));
+    right: 1.25rem;
+    max-width: min(200px, calc(100vw - 5rem));
+  }
+
   .back-top {
     bottom: 6.5rem;
     right: 1.25rem;
@@ -2551,6 +2632,11 @@ body.chat-open {
 @media (min-width: 901px) {
   .fab-contact {
     bottom: 1.75rem;
+    right: 1.75rem;
+  }
+
+  .fab-nudge {
+    bottom: calc(5.35rem + var(--safe-bottom) + var(--cookie-fab-lift));
     right: 1.75rem;
   }
 

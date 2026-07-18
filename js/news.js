@@ -353,7 +353,7 @@
           ${(item.body || []).map((p) => `<p>${escapeHtml(p)}</p>`).join('')}
         </div>
         <div class="news-detail__cta">
-          <a href="../#contact" class="btn btn--primary">Demander un devis</a>
+          <a href="../#contact" class="btn btn--primary">Parler à l'assistant</a>
         </div>
       </article>`;
   }
