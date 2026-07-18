@@ -8,6 +8,7 @@ window.ProceptChat = (function () {
     type: 'type',
     context: 'context',
     city: 'city',
+    details: 'details',
     coords: 'coords',
     summary: 'summary',
   };
@@ -16,6 +17,9 @@ window.ProceptChat = (function () {
     type: '',
     context: '',
     city: '',
+    surface: '',
+    budget: '',
+    timing: '',
     name: '',
     phone: '',
     email: '',
@@ -34,7 +38,7 @@ window.ProceptChat = (function () {
 
   const NUDGE_LINES = [
     { text: 'Besoin d’un devis ? Discutez avec moi', face: 'smile' },
-    { text: '4 questions et j’envoie votre demande', face: 'talk' },
+    { text: 'Quelques questions et j’envoie votre demande', face: 'talk' },
     { text: 'Cliquez, je m’occupe de la suite', face: 'wink' },
     { text: 'Étude gratuite — je prépare votre demande', face: 'surprise' },
     { text: 'Maison, rénovation, extension… je vous guide', face: 'think' },
@@ -90,6 +94,58 @@ window.ProceptChat = (function () {
     urgent: 'Devis urgent',
   };
 
+  const SURFACE_OPTIONS = [
+    { value: 'lt80', label: 'Moins de 80 m²' },
+    { value: '80-120', label: '80 – 120 m²' },
+    { value: '120-180', label: '120 – 180 m²' },
+    { value: '180-250', label: '180 – 250 m²' },
+    { value: 'gt250', label: 'Plus de 250 m²' },
+    { value: 'unknown', label: 'Je ne sais pas encore' },
+  ];
+
+  const SURFACE_LABELS = {
+    lt80: 'Moins de 80 m²',
+    '80-120': '80 – 120 m²',
+    '120-180': '120 – 180 m²',
+    '180-250': '180 – 250 m²',
+    gt250: 'Plus de 250 m²',
+    unknown: 'À préciser',
+  };
+
+  const BUDGET_OPTIONS = [
+    { value: 'lt150', label: 'Moins de 150 k€' },
+    { value: '150-300', label: '150 – 300 k€' },
+    { value: '300-500', label: '300 – 500 k€' },
+    { value: '500-800', label: '500 – 800 k€' },
+    { value: 'gt800', label: 'Plus de 800 k€' },
+    { value: 'unknown', label: 'À définir' },
+  ];
+
+  const BUDGET_LABELS = {
+    lt150: 'Moins de 150 k€',
+    '150-300': '150 – 300 k€',
+    '300-500': '300 – 500 k€',
+    '500-800': '500 – 800 k€',
+    gt800: 'Plus de 800 k€',
+    unknown: 'À définir',
+  };
+
+  const TIMING_OPTIONS = [
+    { value: 'asap', label: 'Dès que possible' },
+    { value: '6m', label: 'Sous 6 mois' },
+    { value: '6-12m', label: '6 – 12 mois' },
+    { value: '12m+', label: 'Dans plus de 12 mois' },
+    { value: 'thinking', label: 'En réflexion' },
+  ];
+
+  const TIMING_LABELS = {
+    asap: 'Dès que possible',
+    '6m': 'Sous 6 mois',
+    '6-12m': '6 – 12 mois',
+    '12m+': 'Dans plus de 12 mois',
+    thinking: 'En réflexion',
+  };
+
   function contextQuestion() {
     switch (state.type) {
       case 'construction':
@@ -103,6 +159,33 @@ window.ProceptChat = (function () {
       default:
         return 'Précisez le contexte de votre projet :';
     }
+  }
+
+  function surfaceQuestion() {
+    switch (state.type) {
+      case 'extension':
+        return 'Quelle surface souhaitez-vous ajouter approximativement ?';
+      case 'promotion':
+        return 'Quelle est la surface approximative du terrain ?';
+      case 'renovation':
+        return 'Quelle est la surface approximative du bien à rénover ?';
+      default:
+        return 'Quelle surface habitable visez-vous approximativement ?';
+    }
+  }
+
+  function emptyProjectState() {
+    return {
+      type: '',
+      context: '',
+      city: '',
+      surface: '',
+      budget: '',
+      timing: '',
+      name: '',
+      phone: '',
+      email: '',
+    };
   }
 
   function escapeHtml(str) {
@@ -132,14 +215,21 @@ window.ProceptChat = (function () {
   function buildMessage() {
     const typeLabel = TYPE_LABELS[state.type] || state.type || 'Projet';
     const ctxLabel = CONTEXT_LABELS[state.context] || state.context || '';
+    const surfaceLabel = SURFACE_LABELS[state.surface] || state.surface || '';
+    const budgetLabel = BUDGET_LABELS[state.budget] || state.budget || '';
+    const timingLabel = TIMING_LABELS[state.timing] || state.timing || '';
     const lines = [
       `Bonjour Procept,`,
       ``,
       `Je souhaite obtenir un devis pour : ${typeLabel}.`,
       ctxLabel ? `Contexte : ${ctxLabel}.` : '',
       state.city ? `Ville / secteur : ${state.city}.` : '',
+      surfaceLabel ? `Surface approximative : ${surfaceLabel}.` : '',
+      budgetLabel ? `Budget indicatif : ${budgetLabel}.` : '',
+      timingLabel ? `Délai souhaité : ${timingLabel}.` : '',
       ``,
       `Pouvez-vous me recontacter pour une étude gratuite ?`,
+      `Je pourrai joindre plans ou photos si besoin.`,
       ``,
       state.name ? `Nom : ${state.name}` : '',
       state.phone ? `Téléphone : ${state.phone}` : '',
@@ -517,6 +607,36 @@ window.ProceptChat = (function () {
     });
   }
 
+  function choiceGroup(title, field, items, selected) {
+    return `<div class="chat__detail-group" data-field="${escapeHtml(field)}">
+      <p class="chat__detail-title">${escapeHtml(title)}</p>
+      <div class="chat__choices chat__choices--wrap">
+        ${items
+          .map(
+            (it) =>
+              `<button type="button" class="chat__choice chat__choice--sm${selected === it.value ? ' is-selected' : ''}" data-field="${escapeHtml(field)}" data-value="${escapeHtml(it.value)}">${escapeHtml(it.label)}</button>`
+          )
+          .join('')}
+      </div>
+    </div>`;
+  }
+
+  function bindDetailChoices() {
+    document.querySelectorAll('#chatBody .chat__choice[data-field]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const field = btn.dataset.field;
+        const value = btn.dataset.value;
+        if (!field || !value) return;
+        state[field] = value;
+        document.querySelectorAll(`#chatBody .chat__choice[data-field="${field}"]`).forEach((el) => {
+          el.classList.toggle('is-selected', el.dataset.value === value);
+        });
+        const err = document.getElementById('chatDetailsError');
+        if (err) err.hidden = true;
+      });
+    });
+  }
+
   function bindBack(step) {
     document.querySelector('#chatFooter [data-back]')?.addEventListener('click', () => renderStep(step));
   }
@@ -527,7 +647,7 @@ window.ProceptChat = (function () {
     if (step === STEPS.welcome) {
       setBody(
         bubble('Bonjour, je suis l’assistant chantier Procept.', 'bot') +
-          bubble('Je prépare votre demande de devis en 4 questions (ouest parisien).', 'bot') +
+          bubble('Je prépare votre demande de devis en quelques questions (ouest parisien) : type, surface, budget et délai.', 'bot') +
           choices([{ value: 'start', label: 'Commencer →' }])
       );
       setFooter('');
@@ -549,6 +669,9 @@ window.ProceptChat = (function () {
       bindChoices((v) => {
         state.type = v;
         state.context = '';
+        state.surface = '';
+        state.budget = '';
+        state.timing = '';
         renderStep(STEPS.context);
       });
       bindBack(STEPS.welcome);
@@ -578,7 +701,7 @@ window.ProceptChat = (function () {
         bubble('Dans quelle commune se situe le projet ?', 'bot') +
           `<div class="chat__field">
             <label class="sr-only" for="chatCity">Commune</label>
-            <input type="text" id="chatCity" class="chat__input" placeholder="Ex. Versailles, Croissy-sur-Seine…" list="chatCityList" autocomplete="address-level2">
+            <input type="text" id="chatCity" class="chat__input" placeholder="Ex. Versailles, Croissy-sur-Seine…" list="chatCityList" autocomplete="address-level2" value="${escapeHtml(state.city)}">
             <datalist id="chatCityList">${suggestions.map((c) => `<option value="${escapeHtml(c)}"></option>`).join('')}</datalist>
           </div>` +
           (suggestions.length
@@ -598,10 +721,37 @@ window.ProceptChat = (function () {
       document.getElementById('chatCityNext')?.addEventListener('click', () => {
         const input = document.getElementById('chatCity');
         state.city = (input?.value || '').trim() || 'Ouest parisien';
-        renderStep(STEPS.coords);
+        renderStep(STEPS.details);
       });
       bindBack(STEPS.context);
       document.getElementById('chatCity')?.focus({ preventScroll: true });
+      return;
+    }
+
+    if (step === STEPS.details) {
+      setBody(
+        bubble('Pour un devis plus précis, indiquez surface, budget et délai (approximatifs).', 'bot') +
+          choiceGroup(surfaceQuestion(), 'surface', SURFACE_OPTIONS, state.surface) +
+          choiceGroup('Quel est votre budget indicatif ?', 'budget', BUDGET_OPTIONS, state.budget) +
+          choiceGroup('Quel délai souhaitez-vous ?', 'timing', TIMING_OPTIONS, state.timing) +
+          `<p class="chat__error" id="chatDetailsError" hidden></p>` +
+          `<button type="button" class="btn btn--primary btn--sm chat__next" id="chatDetailsNext">Continuer</button>`
+      );
+      setFooter(`<button type="button" class="chat__link" data-back>← Retour</button>`);
+      bindDetailChoices();
+      document.getElementById('chatDetailsNext')?.addEventListener('click', () => {
+        const err = document.getElementById('chatDetailsError');
+        if (!state.surface || !state.budget || !state.timing) {
+          if (err) {
+            err.hidden = false;
+            err.textContent = 'Choisissez une option pour la surface, le budget et le délai (y compris « Je ne sais pas » / « À définir »).';
+          }
+          return;
+        }
+        if (err) err.hidden = true;
+        renderStep(STEPS.coords);
+      });
+      bindBack(STEPS.city);
       return;
     }
 
@@ -638,7 +788,7 @@ window.ProceptChat = (function () {
         if (err) err.hidden = true;
         renderStep(STEPS.summary);
       });
-      bindBack(STEPS.city);
+      bindBack(STEPS.details);
       return;
     }
 
@@ -646,12 +796,18 @@ window.ProceptChat = (function () {
       const preview = escapeHtml(buildMessage()).replace(/\n/g, '<br>');
       const typeLabel = TYPE_LABELS[state.type] || state.type;
       const ctxLabel = CONTEXT_LABELS[state.context] || state.context;
+      const surfaceLabel = SURFACE_LABELS[state.surface] || state.surface;
+      const budgetLabel = BUDGET_LABELS[state.budget] || state.budget;
+      const timingLabel = TIMING_LABELS[state.timing] || state.timing;
       setBody(
         bubble('Votre demande de devis est prête. Choisissez comment l’envoyer :', 'bot') +
           `<div class="chat__recap" role="status">
             <p><strong>Projet</strong> ${escapeHtml(typeLabel)}</p>
             <p><strong>Contexte</strong> ${escapeHtml(ctxLabel || '—')}</p>
             <p><strong>Ville</strong> ${escapeHtml(state.city || '—')}</p>
+            <p><strong>Surface</strong> ${escapeHtml(surfaceLabel || '—')}</p>
+            <p><strong>Budget</strong> ${escapeHtml(budgetLabel || '—')}</p>
+            <p><strong>Délai</strong> ${escapeHtml(timingLabel || '—')}</p>
             <p><strong>Contact</strong> ${escapeHtml([state.name, state.phone, state.email].filter(Boolean).join(' · ') || 'Non renseigné')}</p>
           </div>` +
           `<div class="chat__preview" id="chatPreview">${preview}</div>` +
@@ -696,7 +852,7 @@ window.ProceptChat = (function () {
       document.getElementById('chatToForm')?.addEventListener('click', goToContactForm);
       bindBack(STEPS.coords);
       document.getElementById('chatRestart')?.addEventListener('click', () => {
-        state = { type: '', context: '', city: '', name: '', phone: '', email: '' };
+        state = emptyProjectState();
         renderStep(STEPS.welcome);
       });
     }

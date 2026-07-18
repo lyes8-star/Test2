@@ -2512,6 +2512,25 @@ body.chat-open {
   font-weight: 600;
 }
 
+.chat__choice.is-selected {
+  border-color: var(--color-accent);
+  background: linear-gradient(180deg, #fffdf6 0%, #f7f1e4 100%);
+  color: var(--color-primary-dark);
+  box-shadow: 0 0 0 1px rgba(196, 163, 90, 0.35);
+}
+
+.chat__detail-group {
+  margin: 0.85rem 0 0.35rem;
+}
+
+.chat__detail-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  line-height: 1.35;
+}
+
 .chat__field,
 .chat__fields {
   display: flex;
