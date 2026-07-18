@@ -1,6 +1,7 @@
 let content = null;
 let currentSlide = 0;
 let slideInterval = null;
+let slideTotal = 0;
 let lastScrollY = 0;
 let galleryFilter = 'all';
 let galleryStatus = 'all';
@@ -344,58 +345,69 @@ function initFaqAccordion() {
 
 let faqTickerTimer = null;
 let faqTickerIndex = 0;
+let faqTickerList = [];
+let faqTickerPanel = null;
+let faqTickerQEl = null;
+let faqTickerAEl = null;
 
-function renderFaqTicker(items) {
-  const root = document.getElementById('faqTicker');
-  const qEl = document.getElementById('faqTickerQuestion');
-  const aEl = document.getElementById('faqTickerAnswer');
-  const panel = document.querySelector('.faq-ticker__content');
-  if (!root || !qEl || !aEl) return;
+function prefersReducedMotion() {
+  return (
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    document.documentElement.classList.contains('a11y-motion')
+  );
+}
 
-  const list = (items || []).filter((item) => item && item.question && item.answer);
-  if (!list.length) {
-    root.hidden = true;
-    return;
-  }
-  root.hidden = false;
-
-  const show = (index) => {
-    const item = list[((index % list.length) + list.length) % list.length];
-    qEl.textContent = item.question;
-    aEl.textContent = item.answer;
-  };
-
-  const goNext = () => {
-    if (panel) panel.classList.add('is-swap');
-    window.setTimeout(() => {
-      faqTickerIndex = (faqTickerIndex + 1) % list.length;
-      show(faqTickerIndex);
-      if (panel) panel.classList.remove('is-swap');
-    }, 420);
-  };
-
+function stopFaqTicker() {
   if (faqTickerTimer) {
     clearInterval(faqTickerTimer);
     faqTickerTimer = null;
   }
-
-  faqTickerIndex = 0;
-  show(0);
-
-  const reduceMotion =
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-    document.documentElement.classList.contains('a11y-motion');
-  if (reduceMotion) return;
-
-  faqTickerTimer = setInterval(goNext, 7000);
 }
 
-window.addEventListener('procept:a11y-motion', () => {
-  if (document.documentElement.classList.contains('a11y-motion') && faqTickerTimer) {
-    clearInterval(faqTickerTimer);
-    faqTickerTimer = null;
+function showFaqTicker(index) {
+  if (!faqTickerList.length || !faqTickerQEl || !faqTickerAEl) return;
+  const item = faqTickerList[((index % faqTickerList.length) + faqTickerList.length) % faqTickerList.length];
+  if (!item) return;
+  faqTickerQEl.textContent = item.question;
+  faqTickerAEl.textContent = item.answer;
+}
+
+function advanceFaqTicker() {
+  if (!faqTickerList.length || faqTickerList.length < 2) return;
+  if (faqTickerPanel) faqTickerPanel.classList.add('is-swap');
+  window.setTimeout(() => {
+    faqTickerIndex = (faqTickerIndex + 1) % faqTickerList.length;
+    showFaqTicker(faqTickerIndex);
+    if (faqTickerPanel) faqTickerPanel.classList.remove('is-swap');
+  }, 420);
+}
+
+function startFaqTicker() {
+  stopFaqTicker();
+  if (document.hidden || prefersReducedMotion()) return;
+  if (faqTickerList.length < 2) return;
+  faqTickerTimer = setInterval(advanceFaqTicker, 4000);
+}
+
+function renderFaqTicker(items) {
+  const root = document.getElementById('faqTicker');
+  faqTickerQEl = document.getElementById('faqTickerQuestion');
+  faqTickerAEl = document.getElementById('faqTickerAnswer');
+  faqTickerPanel = document.querySelector('.faq-ticker__content');
+  if (!root || !faqTickerQEl || !faqTickerAEl) return;
+
+  faqTickerList = (items || []).filter((item) => item && item.question && item.answer);
+  if (!faqTickerList.length) {
+    root.hidden = true;
+    stopFaqTicker();
+    return;
   }
-});
+  root.hidden = false;
+
+  faqTickerIndex = 0;
+  showFaqTicker(0);
+  startFaqTicker();
+}
 
 function escapeHtml(str) {
   const div = document.createElement('div');
@@ -410,31 +422,41 @@ function renderHero(slides) {
   const lcp = document.getElementById('heroLcp');
   const displayPath = window.ProceptContent?.displayImagePath || ((p) => String(p || '').replace(/-full(?=\.jpe?g$)/i, ''));
   const fullPath = window.ProceptContent?.fullImagePath || ((p) => p);
+  const list = Array.isArray(slides) ? slides.filter((s) => s && s.image) : [];
 
-  container.innerHTML = slides.map((slide, i) => {
+  if (!container || !dots) return;
+  if (!list.length) {
+    stopSlideshow();
+    slideTotal = 0;
+    return;
+  }
+
+  container.innerHTML = list.map((slide, i) => {
     const display = displayPath(slide.image);
     const webp = window.ProceptContent?.webpSrcset?.(display) || '';
     const bg = `style="background-image:url('${display}')"`;
     const picture = webp
       ? `<picture><source type="image/webp" srcset="${webp}" sizes="(max-width: 900px) 100vw, 60vw"><img src="${display}" alt="" width="1200" height="750" decoding="async"></picture>`
       : '';
-    return `<div class="hero__slide${i === 0 ? ' active' : ''}" ${bg} data-index="${i}" role="img" aria-label="${escapeHtml(slide.title)}">${picture}</div>`;
+    return `<div class="hero__slide${i === 0 ? ' active' : ''}" ${bg} data-index="${i}" role="img" aria-label="${escapeHtml(slide.title || '')}">${picture}</div>`;
   }).join('');
 
   if (lcp) lcp.hidden = true;
   if (frame) frame.classList.add('hero__frame--ready');
 
-  dots.innerHTML = slides.map((_, i) =>
+  dots.innerHTML = list.map((_, i) =>
     `<button type="button" class="hero__dot${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="Slide ${i + 1}"></button>`
   ).join('');
 
-  updateHeroText(slides[0]);
-  startSlideshow(slides.length);
+  currentSlide = 0;
+  slideTotal = list.length;
+  updateHeroText(list[0]);
+  startSlideshow(slideTotal);
 
   dots.querySelectorAll('.hero__dot').forEach((dot) => {
     dot.addEventListener('click', (e) => {
       e.stopPropagation();
-      goToSlide(+dot.dataset.index, slides.length);
+      goToSlide(+dot.dataset.index, slideTotal);
     });
   });
 
@@ -473,8 +495,8 @@ function renderHero(slides) {
         const dx = t.clientX - touchX;
         const dy = t.clientY - touchY;
         if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-        if (dx < 0) goToSlide(currentSlide + 1, slides.length);
-        else goToSlide(currentSlide - 1, slides.length);
+        if (dx < 0) goToSlide(currentSlide + 1, slideTotal);
+        else goToSlide(currentSlide - 1, slideTotal);
       },
       { passive: true }
     );
@@ -482,14 +504,18 @@ function renderHero(slides) {
 }
 
 function updateHeroText(slide) {
-  document.getElementById('heroDesc').textContent = slide.description;
+  if (!slide) return;
+  const desc = document.getElementById('heroDesc');
+  if (desc) desc.textContent = slide.description || '';
   const subtitle = document.getElementById('heroSubtitle');
-  if (subtitle) subtitle.textContent = slide.title;
+  if (subtitle) subtitle.textContent = slide.title || '';
   // H1 (#heroTitle) reste la marque Procept — ne pas l'écraser
 }
 
 function goToSlide(index, total) {
-  currentSlide = ((index % total) + total) % total;
+  const n = total || slideTotal || content?.hero?.slides?.length || 0;
+  if (n < 1) return;
+  currentSlide = ((index % n) + n) % n;
   document.querySelectorAll('.hero__slide').forEach((s, i) => {
     const on = i === currentSlide;
     if (on) {
@@ -499,30 +525,62 @@ function goToSlide(index, total) {
     s.classList.toggle('active', on);
   });
   document.querySelectorAll('.hero__dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
-  updateHeroText(content.hero.slides[currentSlide]);
-  resetSlideshow(total);
+  updateHeroText(content?.hero?.slides?.[currentSlide]);
+  resetSlideshow(n);
 }
 
-function startSlideshow(total) {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (document.documentElement.classList.contains('a11y-motion')) return;
-  slideInterval = setInterval(() => {
-    if (document.documentElement.classList.contains('a11y-motion')) return;
-    goToSlide(currentSlide + 1, total);
-  }, 3500);
-}
-
-window.addEventListener('procept:a11y-motion', () => {
-  if (document.documentElement.classList.contains('a11y-motion') && slideInterval) {
+function stopSlideshow() {
+  if (slideInterval) {
     clearInterval(slideInterval);
     slideInterval = null;
   }
-});
+}
+
+function startSlideshow(total) {
+  stopSlideshow();
+  const n = total || slideTotal || 0;
+  slideTotal = n;
+  if (n < 2 || document.hidden || prefersReducedMotion()) return;
+  slideInterval = setInterval(() => {
+    if (document.hidden || prefersReducedMotion()) return;
+    goToSlide(currentSlide + 1, n);
+  }, 3500);
+}
 
 function resetSlideshow(total) {
-  clearInterval(slideInterval);
-  startSlideshow(total);
+  startSlideshow(total || slideTotal);
 }
+
+function restartAutoplay() {
+  if (document.hidden || prefersReducedMotion()) {
+    stopSlideshow();
+    stopFaqTicker();
+    return;
+  }
+  startSlideshow(slideTotal);
+  startFaqTicker();
+}
+
+window.addEventListener('procept:a11y-motion', (e) => {
+  const reduced =
+    e?.detail?.reduced === true ||
+    (e?.detail?.reduced !== false && prefersReducedMotion());
+  if (reduced) {
+    stopSlideshow();
+    stopFaqTicker();
+  } else {
+    restartAutoplay();
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    stopSlideshow();
+    stopFaqTicker();
+  } else {
+    restartAutoplay();
+  }
+});
 
 function renderServices(services) {
   const grid = document.getElementById('servicesGrid');
