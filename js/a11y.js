@@ -62,12 +62,13 @@ window.ProceptA11y = (function () {
     savePrefs();
     syncPanelUI();
 
-    if (root.classList.contains('a11y-motion')) {
+    const reduced = root.classList.contains('a11y-motion');
+    if (reduced) {
       document.querySelectorAll('.fab-contact--pulse').forEach((el) => {
         el.classList.remove('fab-contact--pulse');
       });
-      window.dispatchEvent(new CustomEvent('procept:a11y-motion', { detail: { reduced: true } }));
     }
+    window.dispatchEvent(new CustomEvent('procept:a11y-motion', { detail: { reduced } }));
   }
 
   function syncPanelUI() {
