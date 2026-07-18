@@ -448,9 +448,9 @@ window.ProceptChat = (function () {
 
     if (step === STEPS.welcome) {
       setBody(
-        bubble('Bonjour, je suis l’assistant devis Procept.', 'bot') +
-          bubble('Je prépare votre devis en 4 questions (ouest parisien).', 'bot') +
-          choices([{ value: 'start', label: 'Commencer le devis →' }])
+        bubble('Bonjour, je suis l’assistant chantier Procept.', 'bot') +
+          bubble('Je prépare votre demande de devis en 4 questions (ouest parisien).', 'bot') +
+          choices([{ value: 'start', label: 'Commencer →' }])
       );
       setFooter('');
       bindChoices(() => renderStep(STEPS.type));
@@ -542,7 +542,7 @@ window.ProceptChat = (function () {
             </label>
           </div>
           <p class="chat__error" id="chatCoordsError" hidden></p>
-          <button type="button" class="btn btn--primary btn--sm chat__next" id="chatCoordsNext">Voir mon devis →</button>`
+          <button type="button" class="btn btn--primary btn--sm chat__next" id="chatCoordsNext">Voir ma demande →</button>`
       );
       setFooter(`<button type="button" class="chat__link" data-back>← Retour</button>`);
       document.getElementById('chatCoordsNext')?.addEventListener('click', () => {

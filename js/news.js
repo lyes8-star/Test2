@@ -481,7 +481,9 @@
       () => {
         const y = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        if (progress) progress.style.width = `${docHeight > 0 ? (y / docHeight) * 100 : 0}%`;
+        if (progress) {
+          progress.style.transform = `scaleX(${docHeight > 0 ? Math.min(1, y / docHeight) : 0})`;
+        }
         if (header) {
           header.classList.toggle('header--scrolled', y > 24);
           if (y > 40) {

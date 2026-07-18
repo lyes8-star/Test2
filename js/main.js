@@ -721,7 +721,7 @@ function updateScrollUI() {
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
   const pct = docHeight > 0 ? (y / docHeight) * 100 : 0;
 
-  progress.style.width = `${pct}%`;
+  progress.style.transform = `scaleX(${Math.min(1, Math.max(0, pct / 100))})`;
   header.classList.toggle('header--scrolled', y > 24);
   backTop.hidden = y < 400;
 

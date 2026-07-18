@@ -1,0 +1,13 @@
+{
+  "detector": {
+    "ignoreRules": [
+      "design-system-font-size",
+      "design-system-color",
+      "design-system-radius",
+      "design-system-spacing"
+    ],
+    "designSystem": {
+      "enabled": true
+    }
+  }
+}

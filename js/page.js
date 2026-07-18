@@ -532,7 +532,9 @@
       () => {
         const max = document.documentElement.scrollHeight - window.innerHeight;
         if (progress && max > 0) {
-          progress.style.width = `${(window.scrollY / max) * 100}%`;
+          progress.style.transform = `scaleX(${Math.min(1, window.scrollY / max)})`;
+        } else if (progress) {
+          progress.style.transform = 'scaleX(0)';
         }
         if (backTop) backTop.hidden = window.scrollY < 400;
       },
