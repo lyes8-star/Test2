@@ -27,6 +27,7 @@ window.ProceptChat = (function () {
   let currentStep = STEPS.welcome;
   let bound = false;
   let nudgeTimer = null;
+  let nudgeKickTimer = null;
   let blinkTimer = null;
   let nudgeIndex = 0;
   let currentFace = 'smile';
@@ -258,11 +259,17 @@ window.ProceptChat = (function () {
     </svg>`;
   }
 
+  /** Anims décoratives (fade, face-pop, blink) : OS ou checkbox a11y. */
   function prefersReducedMotion() {
     return (
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
       document.documentElement.classList.contains('a11y-motion')
     );
+  }
+
+  /** Cycle des phrases : uniquement la préférence OS live (comme hero/FAQ). */
+  function shouldPauseNudgeCycle() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
   function applyFabFace(expression, { pop = false } = {}) {
@@ -330,7 +337,17 @@ window.ProceptChat = (function () {
     }, 3000);
   }
 
+  function advanceNudge() {
+    if (open || document.hidden || shouldPauseNudgeCycle()) return;
+    nudgeIndex = (nudgeIndex + 1) % NUDGE_LINES.length;
+    renderNudge(nudgeIndex, { animate: true });
+  }
+
   function stopNudgeCycle() {
+    if (nudgeKickTimer) {
+      clearTimeout(nudgeKickTimer);
+      nudgeKickTimer = null;
+    }
     if (nudgeTimer) {
       clearInterval(nudgeTimer);
       nudgeTimer = null;
@@ -345,12 +362,13 @@ window.ProceptChat = (function () {
     setNudgeVisible(true);
     renderNudge(nudgeIndex);
     startBlinkIdle();
-    if (prefersReducedMotion()) return;
-    nudgeTimer = setInterval(() => {
-      if (open || document.hidden) return;
-      nudgeIndex = (nudgeIndex + 1) % NUDGE_LINES.length;
-      renderNudge(nudgeIndex, { animate: true });
-    }, 3800);
+    if (shouldPauseNudgeCycle() || document.hidden) return;
+    // Premier changement plus tôt, puis rythme ~3,8 s
+    nudgeKickTimer = setTimeout(() => {
+      nudgeKickTimer = null;
+      advanceNudge();
+    }, 2000);
+    nudgeTimer = setInterval(advanceNudge, 3800);
   }
 
   function ensureDom() {
