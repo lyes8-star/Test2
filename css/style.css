@@ -482,10 +482,13 @@ a {
   top: 0;
   left: 0;
   height: 3px;
-  width: 0;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
   background: var(--color-accent);
   z-index: 200;
-  transition: width 0.05s linear;
+  transition: transform 0.05s linear;
+  will-change: transform;
 }
 
 /* Header */
@@ -569,13 +572,12 @@ body.mega-open .nav-mega-backdrop {
 }
 
 .header--scrolled .logo__mark {
-  width: 36px;
-  height: 36px;
+  transform: scale(0.86);
   font-size: 1.1rem;
 }
 
 .header--scrolled .logo__text {
-  font-size: 1.12rem;
+  transform: scale(0.88);
 }
 
 .header--scrolled .header__cta {
@@ -583,12 +585,13 @@ body.mega-open .nav-mega-backdrop {
 }
 
 .header--topbar-hidden .topbar {
-  max-height: 0;
+  max-height: none;
   opacity: 0;
   padding-top: 0;
   padding-bottom: 0;
-  overflow: hidden;
   border: none;
+  transform: translateY(-100%);
+  pointer-events: none;
 }
 
 .topbar {
@@ -598,7 +601,8 @@ body.mega-open .nav-mega-backdrop {
   letter-spacing: 0.02em;
   max-height: 32px;
   overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+  transform: translateY(0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -737,7 +741,8 @@ body.mega-open .nav-mega-backdrop {
   font-size: 1.28rem;
   border-radius: 10px;
   box-shadow: 0 0 0 1px rgba(196, 163, 90, 0.45), 0 6px 16px rgba(30, 51, 41, 0.22);
-  transition: width 0.25s ease, height 0.25s ease, font-size 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, font-size 0.25s ease;
+  transform-origin: left center;
 }
 
 .logo__text {
@@ -746,7 +751,8 @@ body.mega-open .nav-mega-backdrop {
   font-size: 1.28rem;
   letter-spacing: 0.16em;
   color: var(--color-primary);
-  transition: font-size 0.25s ease;
+  transition: transform 0.25s ease;
+  transform-origin: left center;
 }
 
 .nav {
@@ -2508,7 +2514,8 @@ body.chat-open {
 
 .chat__recap {
   background: #faf8f5;
-  border-left: 3px solid var(--color-accent, #c4a35a);
+  border: 1px solid rgba(196, 163, 90, 0.28);
+  border-top: 2px solid var(--color-accent, #c4a35a);
   border-radius: 8px;
   padding: 0.85rem 0.95rem;
   font-family: var(--font-body);
@@ -3198,7 +3205,7 @@ body.chat-open {
   border-radius: calc(var(--radius) * 2);
   box-shadow: var(--shadow);
   text-align: center;
-  border-left: 4px solid var(--color-accent);
+  border-top: 2px solid var(--color-accent);
 }
 
 .stat__number {
