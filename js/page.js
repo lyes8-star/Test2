@@ -425,6 +425,65 @@
     bindAccordion(servicesToggle, servicesDropdown, exploreToggle, exploreDropdown);
     bindAccordion(exploreToggle, exploreDropdown, servicesToggle, servicesDropdown);
 
+    (function bindMegaBackdrop() {
+      const mq = window.matchMedia('(min-width: 901px)');
+      let leaveTimer = null;
+
+      function ensureBackdrop() {
+        let el = document.getElementById('navMegaBackdrop');
+        if (el) return el;
+        el = document.createElement('div');
+        el.className = 'nav-mega-backdrop';
+        el.id = 'navMegaBackdrop';
+        el.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(el);
+        return el;
+      }
+
+      function setMegaOpen(on) {
+        if (!mq.matches) on = false;
+        document.body.classList.toggle('mega-open', !!on);
+        ensureBackdrop().setAttribute('aria-hidden', on ? 'false' : 'true');
+      }
+
+      function openMega() {
+        if (leaveTimer) {
+          clearTimeout(leaveTimer);
+          leaveTimer = null;
+        }
+        setMegaOpen(true);
+      }
+
+      function scheduleCloseMega() {
+        if (leaveTimer) clearTimeout(leaveTimer);
+        leaveTimer = setTimeout(() => {
+          const still =
+            document.querySelector('.nav__dropdown:hover') ||
+            document.querySelector('.nav__dropdown:focus-within');
+          if (!still) setMegaOpen(false);
+        }, 120);
+      }
+
+      ensureBackdrop();
+      document.querySelectorAll('.nav__dropdown').forEach((dd) => {
+        dd.addEventListener('mouseenter', openMega);
+        dd.addEventListener('mouseleave', scheduleCloseMega);
+        dd.addEventListener('focusin', openMega);
+        dd.addEventListener('focusout', scheduleCloseMega);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.body.classList.contains('mega-open')) {
+          setMegaOpen(false);
+          document.activeElement?.blur?.();
+        }
+      });
+
+      mq.addEventListener('change', () => {
+        if (!mq.matches) setMegaOpen(false);
+      });
+    })();
+
     nav?.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => closeNav());
     });
