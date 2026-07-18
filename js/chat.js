@@ -27,13 +27,17 @@ window.ProceptChat = (function () {
   let currentStep = STEPS.welcome;
   let bound = false;
   let nudgeTimer = null;
+  let blinkTimer = null;
   let nudgeIndex = 0;
+  let currentFace = 'smile';
 
   const NUDGE_LINES = [
     { text: 'Besoin d’un devis ? Discutez avec moi', face: 'smile' },
     { text: '4 questions et j’envoie votre demande', face: 'talk' },
     { text: 'Cliquez, je m’occupe de la suite', face: 'wink' },
     { text: 'Étude gratuite — je prépare votre demande', face: 'surprise' },
+    { text: 'Maison, rénovation, extension… je vous guide', face: 'think' },
+    { text: 'Réponse rapide — ouvrez le chat', face: 'talk' },
   ];
 
   const TYPE_LABELS = {
@@ -204,29 +208,46 @@ window.ProceptChat = (function () {
   function robotSvg(expression = 'smile') {
     const faces = {
       smile: {
-        leftEye: '<rect x="18" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
-        rightEye: '<rect x="36" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
-        mouth: '<path d="M24 42 Q32 48 40 42" fill="none" stroke="#e8efe9" stroke-width="2.5" stroke-linecap="round"/>',
+        brows: '',
+        leftEye: '<ellipse class="robot-eye" cx="22" cy="30" rx="5.5" ry="6" fill="#c4a35a"/>',
+        rightEye: '<ellipse class="robot-eye" cx="42" cy="30" rx="5.5" ry="6" fill="#c4a35a"/>',
+        mouth: '<path class="robot-mouth" d="M22 42 Q32 52 42 42" fill="none" stroke="#e8efe9" stroke-width="3" stroke-linecap="round"/>',
       },
       wink: {
-        leftEye: '<rect x="18" y="28" width="10" height="3" rx="1.5" fill="#c4a35a"/>',
-        rightEye: '<rect x="36" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
-        mouth: '<path d="M24 42 Q32 47 40 42" fill="none" stroke="#e8efe9" stroke-width="2.5" stroke-linecap="round"/>',
+        brows: '',
+        leftEye: '<path class="robot-eye" d="M16 30 Q22 26 28 30" fill="none" stroke="#c4a35a" stroke-width="3.5" stroke-linecap="round"/>',
+        rightEye: '<ellipse class="robot-eye" cx="42" cy="30" rx="5.5" ry="6" fill="#c4a35a"/>',
+        mouth: '<path class="robot-mouth" d="M23 43 Q32 50 41 43" fill="none" stroke="#e8efe9" stroke-width="3" stroke-linecap="round"/>',
       },
       surprise: {
-        leftEye: '<circle cx="23" cy="30" r="5" fill="#c4a35a"/>',
-        rightEye: '<circle cx="41" cy="30" r="5" fill="#c4a35a"/>',
-        mouth: '<ellipse cx="32" cy="44" rx="5" ry="4" fill="#e8efe9"/>',
+        brows: '<path d="M16 20 Q22 16 28 20" fill="none" stroke="#8fad9a" stroke-width="2" stroke-linecap="round"/><path d="M36 20 Q42 16 48 20" fill="none" stroke="#8fad9a" stroke-width="2" stroke-linecap="round"/>',
+        leftEye: '<circle class="robot-eye" cx="22" cy="30" r="7" fill="#c4a35a"/><circle cx="22" cy="30" r="2.5" fill="#1e3329"/>',
+        rightEye: '<circle class="robot-eye" cx="42" cy="30" r="7" fill="#c4a35a"/><circle cx="42" cy="30" r="2.5" fill="#1e3329"/>',
+        mouth: '<ellipse class="robot-mouth" cx="32" cy="45" rx="6" ry="7" fill="#e8efe9"/>',
       },
       talk: {
-        leftEye: '<rect x="18" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
-        rightEye: '<rect x="36" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
-        mouth: '<ellipse cx="32" cy="44" rx="7" ry="5" fill="#e8efe9"/>',
+        brows: '',
+        leftEye: '<ellipse class="robot-eye" cx="22" cy="29" rx="5" ry="5.5" fill="#c4a35a"/>',
+        rightEye: '<ellipse class="robot-eye" cx="42" cy="29" rx="5" ry="5.5" fill="#c4a35a"/>',
+        mouth: '<ellipse class="robot-mouth" cx="32" cy="45" rx="8" ry="6" fill="#e8efe9"/>',
+      },
+      think: {
+        brows: '<path d="M15 22 Q22 18 29 23" fill="none" stroke="#8fad9a" stroke-width="2.5" stroke-linecap="round"/>',
+        leftEye: '<ellipse class="robot-eye" cx="22" cy="31" rx="5.5" ry="3.5" fill="#c4a35a"/>',
+        rightEye: '<ellipse class="robot-eye" cx="42" cy="31" rx="5.5" ry="3.5" fill="#c4a35a"/>',
+        mouth: '<path class="robot-mouth" d="M24 44 Q32 41 40 45" fill="none" stroke="#e8efe9" stroke-width="2.5" stroke-linecap="round"/>',
+      },
+      blink: {
+        brows: '',
+        leftEye: '<rect class="robot-eye" x="17" y="29" width="10" height="2.5" rx="1.2" fill="#c4a35a"/>',
+        rightEye: '<rect class="robot-eye" x="37" y="29" width="10" height="2.5" rx="1.2" fill="#c4a35a"/>',
+        mouth: '<path class="robot-mouth" d="M24 43 Q32 48 40 43" fill="none" stroke="#e8efe9" stroke-width="2.5" stroke-linecap="round"/>',
       },
     };
     const face = faces[expression] || faces.smile;
     return `<svg class="chat__avatar-svg" data-face="${escapeHtml(expression)}" viewBox="0 0 64 64" width="40" height="40" aria-hidden="true">
       <rect x="12" y="18" width="40" height="32" rx="8" fill="#2c4a3e"/>
+      ${face.brows || ''}
       ${face.leftEye}
       ${face.rightEye}
       ${face.mouth}
@@ -244,11 +265,20 @@ window.ProceptChat = (function () {
     );
   }
 
-  function applyFabFace(expression) {
+  function applyFabFace(expression, { pop = false } = {}) {
+    const fab = document.getElementById('chatFab');
     const icon = document.querySelector('#chatFab .fab-contact__icon');
     if (icon) icon.innerHTML = robotSvg(expression);
+    if (fab) fab.setAttribute('data-face', expression);
+    currentFace = expression;
     const avatar = document.querySelector('#chatPanel .chat__avatar');
     if (avatar && open) avatar.innerHTML = robotSvg(expression);
+    if (pop && fab && !prefersReducedMotion()) {
+      fab.classList.remove('fab-contact--face-pop');
+      void fab.offsetWidth;
+      fab.classList.add('fab-contact--face-pop');
+      window.setTimeout(() => fab.classList.remove('fab-contact--face-pop'), 420);
+    }
   }
 
   function setNudgeVisible(show) {
@@ -258,12 +288,46 @@ window.ProceptChat = (function () {
     nudge.setAttribute('aria-hidden', show ? 'false' : 'true');
   }
 
-  function renderNudge(index) {
+  function renderNudge(index, { animate = false } = {}) {
     const nudge = document.getElementById('chatFabNudge');
     const line = NUDGE_LINES[index % NUDGE_LINES.length];
     if (!nudge || !line) return;
-    nudge.textContent = line.text;
-    applyFabFace(line.face);
+    const applyText = () => {
+      nudge.textContent = line.text;
+      applyFabFace(line.face, { pop: animate });
+    };
+    if (!animate || prefersReducedMotion()) {
+      applyText();
+      return;
+    }
+    nudge.classList.add('fab-nudge--fade');
+    window.setTimeout(() => {
+      applyText();
+      nudge.classList.remove('fab-nudge--fade');
+      nudge.classList.remove('fab-nudge--tick');
+      void nudge.offsetWidth;
+      nudge.classList.add('fab-nudge--tick');
+    }, 180);
+  }
+
+  function stopBlinkIdle() {
+    if (blinkTimer) {
+      clearInterval(blinkTimer);
+      blinkTimer = null;
+    }
+  }
+
+  function startBlinkIdle() {
+    stopBlinkIdle();
+    if (open || prefersReducedMotion()) return;
+    blinkTimer = setInterval(() => {
+      if (open || document.hidden || prefersReducedMotion()) return;
+      const restore = currentFace === 'blink' ? 'smile' : currentFace;
+      applyFabFace('blink');
+      window.setTimeout(() => {
+        if (!open) applyFabFace(restore);
+      }, 140);
+    }, 3000);
   }
 
   function stopNudgeCycle() {
@@ -271,6 +335,7 @@ window.ProceptChat = (function () {
       clearInterval(nudgeTimer);
       nudgeTimer = null;
     }
+    stopBlinkIdle();
   }
 
   function startNudgeCycle() {
@@ -279,18 +344,13 @@ window.ProceptChat = (function () {
     ensureDom();
     setNudgeVisible(true);
     renderNudge(nudgeIndex);
+    startBlinkIdle();
     if (prefersReducedMotion()) return;
     nudgeTimer = setInterval(() => {
       if (open || document.hidden) return;
       nudgeIndex = (nudgeIndex + 1) % NUDGE_LINES.length;
-      const nudge = document.getElementById('chatFabNudge');
-      if (nudge) {
-        nudge.classList.remove('fab-nudge--tick');
-        void nudge.offsetWidth;
-        nudge.classList.add('fab-nudge--tick');
-      }
-      renderNudge(nudgeIndex);
-    }, 5500);
+      renderNudge(nudgeIndex, { animate: true });
+    }, 3800);
   }
 
   function ensureDom() {
