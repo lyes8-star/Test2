@@ -509,6 +509,16 @@ body.mega-open .header {
   z-index: 120;
 }
 
+body.mega-open .header::after {
+  opacity: 0;
+  visibility: hidden;
+}
+
+body.mega-open .header::before {
+  border-bottom-color: transparent;
+  box-shadow: 0 8px 28px rgba(20, 40, 30, 0.06);
+}
+
 /* Assombrissement page (desktop) quand mega-menu ouvert — même teinte que la recherche */
 .nav-mega-backdrop {
   position: fixed;
@@ -552,12 +562,13 @@ body.mega-open .nav-mega-backdrop {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -2px;
+  bottom: 0;
   height: 2px;
   z-index: 0; /* sous .header > * / mega-menu (sinon la barre traverse le dropdown) */
   background: linear-gradient(90deg, transparent 0%, var(--color-accent) 18%, #d4b56a 50%, var(--color-primary) 82%, transparent 100%);
   pointer-events: none;
   opacity: 0.9;
+  transition: opacity 0.22s ease, visibility 0.22s;
 }
 
 .header > * {
@@ -714,6 +725,7 @@ body.mega-open .nav-mega-backdrop {
   justify-content: space-between;
   height: 66px;
   gap: 1rem;
+  z-index: 2;
 }
 
 .logo {
