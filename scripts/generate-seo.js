@@ -575,7 +575,7 @@ function articlePageHtml(item) {
   <link rel="preload" href="../../fonts/font-2.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../../fonts/font-5.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../../fonts/fonts.css?v=24">
-  <link rel="stylesheet" href="../../css/style.css?v=29">
+  <link rel="stylesheet" href="../../css/style.css?v=30">
 </head>
 <body class="page-service" data-news-slug="${esc(item.slug)}">
   <a class="skip-link" href="#main">Aller au contenu</a>
@@ -589,11 +589,9 @@ function articlePageHtml(item) {
         <a href="../" class="nav__link">Actualités</a>
         <a href="../../#contact" class="nav__link">Contact</a>
         <div class="nav__mobile-cta">
-          <a href="../../#devis" class="btn btn--primary" data-open-chat>Demander un devis</a>
           <a href="tel:${esc(phoneTel)}" class="btn btn--outline">Appeler Procept</a>
         </div>
       </nav>
-      <a href="../../#devis" class="btn btn--primary btn--sm header__cta" data-open-chat>Demander un devis</a>
     </div>
   </header>
   <main id="main">
@@ -614,7 +612,7 @@ function articlePageHtml(item) {
           ${bodyHtml}
           </div>
           <div class="news-detail__cta">
-            <a href="../../#devis" class="btn btn--primary" data-open-chat>Demander un devis</a>
+            <a href="../../#devis" class="btn btn--primary" data-open-chat>Parler à l'assistant</a>
             <a href="../" class="btn btn--outline">← Toutes les actualités</a>
           </div>
         </article>
@@ -644,7 +642,7 @@ function articlePageHtml(item) {
   <script src="../../js/analytics.js?v=4" defer></script>
   <script src="../../js/a11y.js?v=14" defer></script>
   <script src="../../js/protect.js?v=19" defer></script>
-  <script src="../../js/chat.js?v=15" defer></script>
+  <script src="../../js/chat.js?v=16" defer></script>
   <script src="../../js/search.js?v=14" defer></script>
   <script src="../../js/pwa-install.js?v=4" defer></script>
   <script>

@@ -26,6 +26,15 @@ window.ProceptChat = (function () {
   let open = false;
   let currentStep = STEPS.welcome;
   let bound = false;
+  let nudgeTimer = null;
+  let nudgeIndex = 0;
+
+  const NUDGE_LINES = [
+    { text: 'Besoin d’un devis ? Discutez avec moi', face: 'smile' },
+    { text: '4 questions et j’envoie votre demande', face: 'talk' },
+    { text: 'Cliquez, je m’occupe de la suite', face: 'wink' },
+    { text: 'Étude gratuite — je prépare votre demande', face: 'surprise' },
+  ];
 
   const TYPE_LABELS = {
     construction: 'Maison neuve (construction)',
@@ -192,17 +201,96 @@ window.ProceptChat = (function () {
     window.location.href = `${basePath()}#contact`;
   }
 
-  function robotSvg() {
-    return `<svg class="chat__avatar-svg" viewBox="0 0 64 64" width="40" height="40" aria-hidden="true">
+  function robotSvg(expression = 'smile') {
+    const faces = {
+      smile: {
+        leftEye: '<rect x="18" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
+        rightEye: '<rect x="36" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
+        mouth: '<path d="M24 42 Q32 48 40 42" fill="none" stroke="#e8efe9" stroke-width="2.5" stroke-linecap="round"/>',
+      },
+      wink: {
+        leftEye: '<rect x="18" y="28" width="10" height="3" rx="1.5" fill="#c4a35a"/>',
+        rightEye: '<rect x="36" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
+        mouth: '<path d="M24 42 Q32 47 40 42" fill="none" stroke="#e8efe9" stroke-width="2.5" stroke-linecap="round"/>',
+      },
+      surprise: {
+        leftEye: '<circle cx="23" cy="30" r="5" fill="#c4a35a"/>',
+        rightEye: '<circle cx="41" cy="30" r="5" fill="#c4a35a"/>',
+        mouth: '<ellipse cx="32" cy="44" rx="5" ry="4" fill="#e8efe9"/>',
+      },
+      talk: {
+        leftEye: '<rect x="18" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
+        rightEye: '<rect x="36" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>',
+        mouth: '<ellipse cx="32" cy="44" rx="7" ry="5" fill="#e8efe9"/>',
+      },
+    };
+    const face = faces[expression] || faces.smile;
+    return `<svg class="chat__avatar-svg" data-face="${escapeHtml(expression)}" viewBox="0 0 64 64" width="40" height="40" aria-hidden="true">
       <rect x="12" y="18" width="40" height="32" rx="8" fill="#2c4a3e"/>
-      <rect x="18" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>
-      <rect x="36" y="26" width="10" height="8" rx="2" fill="#c4a35a"/>
-      <rect x="24" y="40" width="16" height="4" rx="2" fill="#e8efe9"/>
+      ${face.leftEye}
+      ${face.rightEye}
+      ${face.mouth}
       <rect x="26" y="8" width="12" height="10" rx="2" fill="#c4a35a"/>
       <circle cx="32" cy="6" r="3" fill="#8fad9a"/>
       <rect x="6" y="28" width="6" height="14" rx="2" fill="#8fad9a"/>
       <rect x="52" y="28" width="6" height="14" rx="2" fill="#8fad9a"/>
     </svg>`;
+  }
+
+  function prefersReducedMotion() {
+    return (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.documentElement.classList.contains('a11y-motion')
+    );
+  }
+
+  function applyFabFace(expression) {
+    const icon = document.querySelector('#chatFab .fab-contact__icon');
+    if (icon) icon.innerHTML = robotSvg(expression);
+    const avatar = document.querySelector('#chatPanel .chat__avatar');
+    if (avatar && open) avatar.innerHTML = robotSvg(expression);
+  }
+
+  function setNudgeVisible(show) {
+    const nudge = document.getElementById('chatFabNudge');
+    if (!nudge) return;
+    nudge.hidden = !show;
+    nudge.setAttribute('aria-hidden', show ? 'false' : 'true');
+  }
+
+  function renderNudge(index) {
+    const nudge = document.getElementById('chatFabNudge');
+    const line = NUDGE_LINES[index % NUDGE_LINES.length];
+    if (!nudge || !line) return;
+    nudge.textContent = line.text;
+    applyFabFace(line.face);
+  }
+
+  function stopNudgeCycle() {
+    if (nudgeTimer) {
+      clearInterval(nudgeTimer);
+      nudgeTimer = null;
+    }
+  }
+
+  function startNudgeCycle() {
+    stopNudgeCycle();
+    if (open) return;
+    ensureDom();
+    setNudgeVisible(true);
+    renderNudge(nudgeIndex);
+    if (prefersReducedMotion()) return;
+    nudgeTimer = setInterval(() => {
+      if (open || document.hidden) return;
+      nudgeIndex = (nudgeIndex + 1) % NUDGE_LINES.length;
+      const nudge = document.getElementById('chatFabNudge');
+      if (nudge) {
+        nudge.classList.remove('fab-nudge--tick');
+        void nudge.offsetWidth;
+        nudge.classList.add('fab-nudge--tick');
+      }
+      renderNudge(nudgeIndex);
+    }, 5500);
   }
 
   function ensureDom() {
@@ -219,6 +307,18 @@ window.ProceptChat = (function () {
         if (panel) existing.insertBefore(backdrop, panel);
         else existing.appendChild(backdrop);
       }
+      if (!document.getElementById('chatFabNudge')) {
+        const fab = document.getElementById('chatFab');
+        if (fab) {
+          const nudge = document.createElement('button');
+          nudge.type = 'button';
+          nudge.className = 'fab-nudge';
+          nudge.id = 'chatFabNudge';
+          nudge.setAttribute('aria-controls', 'chatPanel');
+          nudge.setAttribute('aria-label', 'Ouvrir l’assistant chantier');
+          fab.insertAdjacentElement('beforebegin', nudge);
+        }
+      }
       return;
     }
 
@@ -226,17 +326,18 @@ window.ProceptChat = (function () {
     wrap.id = 'proceptChat';
     wrap.className = 'chat';
     wrap.innerHTML = `
+      <button type="button" class="fab-nudge" id="chatFabNudge" aria-controls="chatPanel" aria-label="Ouvrir l’assistant chantier"></button>
       <button type="button" class="fab-contact fab-contact--pulse" id="chatFab" aria-label="Ouvrir l’assistant chantier" aria-expanded="false" aria-controls="chatPanel">
-        <span class="fab-contact__icon" aria-hidden="true">${robotSvg()}</span>
+        <span class="fab-contact__icon" aria-hidden="true">${robotSvg('smile')}</span>
       </button>
       <div class="chat__backdrop" id="chatBackdrop" hidden data-close-chat tabindex="-1"></div>
       <div class="chat__panel" id="chatPanel" role="dialog" aria-modal="true" aria-labelledby="chatTitle" hidden>
         <header class="chat__header">
           <div class="chat__header-brand">
-            <span class="chat__avatar" aria-hidden="true">${robotSvg()}</span>
+            <span class="chat__avatar" aria-hidden="true">${robotSvg('smile')}</span>
             <div class="chat__header-text">
               <p class="chat__title" id="chatTitle">Assistant chantier</p>
-              <p class="chat__subtitle">Procept — devis gratuit</p>
+              <p class="chat__subtitle">Procept — demande de devis</p>
             </div>
           </div>
           <button type="button" class="chat__close" id="chatClose" aria-label="Fermer le chat">×</button>
@@ -263,6 +364,8 @@ window.ProceptChat = (function () {
 
     if (open) {
       stopFabPulse();
+      stopNudgeCycle();
+      setNudgeVisible(false);
       if (!wasOpen) {
         track('generate_lead', { method: opts.source || 'chat_open' });
       }
@@ -300,6 +403,7 @@ window.ProceptChat = (function () {
       fab.setAttribute('aria-expanded', 'false');
       fab.classList.remove('is-open');
       document.body.classList.remove('chat-open');
+      startNudgeCycle();
     }
   }
 
@@ -599,11 +703,11 @@ window.ProceptChat = (function () {
         return;
       }
 
-      const fab = e.target.closest('#chatFab');
+      const fab = e.target.closest('#chatFab, #chatFabNudge');
       if (fab) {
         e.preventDefault();
         stopFabPulse();
-        setOpen(!open, { source: 'fab' });
+        setOpen(!open, { source: fab.id === 'chatFabNudge' ? 'nudge' : 'fab' });
         return;
       }
 
@@ -632,6 +736,17 @@ window.ProceptChat = (function () {
     hydrateFormFromStorage();
     wireContactForm();
     wireGlobalEvents();
+    startNudgeCycle();
+
+    window.addEventListener('procept:a11y-motion', () => {
+      if (open) return;
+      startNudgeCycle();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopNudgeCycle();
+      else if (!open) startNudgeCycle();
+    });
 
     if (window.location.hash === '#devis' || /[?&]devis=1/.test(window.location.search)) {
       setTimeout(() => setOpen(true), 300);
